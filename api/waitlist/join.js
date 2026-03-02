@@ -1,19 +1,14 @@
 const db = require('../_db');
 const {
   generateCode, MAX_WAITLIST, BOOST_PER_REFERRAL,
-  REWARD_MILESTONES, getNextReward, displayName, userPayload,
+  REWARD_MILESTONES, displayName, userPayload,
 } = require('../_utils');
 
-async function computeRank(userId, total) {
-  const user = await db.getOne('waitlist_users', `id=eq.${userId}`);
-  if (!user) return total;
-  const ahead = await db.getAll(
-    'waitlist_users',
-    `or=(boost_points.gt.${user.boost_points},and(boost_points.eq.${user.boost_points},created_at.lt.${user.created_at}))`,
-    'id'
-  );
-  const pos = ahead.length + 1;
-  return MAX_WAITLIST - total + pos;
+function findPosition(sortedUsers, userId) {
+  for (let i = 0; i < sortedUsers.length; i++) {
+    if (sortedUsers[i].id === userId) return i + 1;
+  }
+  return sortedUsers.length;
 }
 
 module.exports = async function handler(req, res) {
@@ -30,25 +25,29 @@ module.exports = async function handler(req, res) {
     if (!full_name || !full_name.trim()) return res.status(400).json({ error: 'Full name is required.' });
     if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return res.status(400).json({ error: 'Invalid email format.' });
 
-    const existing = await db.getOne('waitlist_users', `email=eq.${encodeURIComponent(email)}`);
-    if (existing) {
-      const total = await db.count('waitlist_users');
-      const rank = await computeRank(existing.id, total);
+    const existingRows = await db.get(`waitlist_users?select=*&email=eq.${encodeURIComponent(email)}&limit=1`);
+    if (existingRows.length > 0) {
+      const existing = existingRows[0];
+      const allUsers = await db.get('waitlist_users?select=id,boost_points,created_at&order=boost_points.desc,created_at.asc');
+      const total = allUsers.length;
+      const pos = findPosition(allUsers, existing.id);
+      const rank = MAX_WAITLIST - total + pos;
       return res.json({ already_joined: true, ...userPayload(existing, rank, total) });
     }
 
-    const total = await db.count('waitlist_users');
-    if (total >= MAX_WAITLIST) return res.status(409).json({ error: 'Waitlist is full. Stay tuned for launch!' });
+    const allBefore = await db.get('waitlist_users?select=id');
+    if (allBefore.length >= MAX_WAITLIST) return res.status(409).json({ error: 'Waitlist is full. Stay tuned for launch!' });
 
     let referrer = null;
     if (referral_code) {
-      referrer = await db.getOne('waitlist_users', `referral_code=eq.${encodeURIComponent(referral_code)}`);
+      const refRows = await db.get(`waitlist_users?select=*&referral_code=eq.${encodeURIComponent(referral_code)}&limit=1`);
+      referrer = refRows[0] || null;
       if (!referrer) return res.status(400).json({ error: 'Invalid referral code.' });
       if (referrer.email && referrer.email === email) return res.status(400).json({ error: 'You cannot refer yourself.' });
     }
 
     const newCode = generateCode();
-    const inserted = await db.insert('waitlist_users', {
+    const inserted = await db.post('waitlist_users', {
       full_name: full_name.trim(),
       email: email || null,
       phone: phone || null,
@@ -58,50 +57,46 @@ module.exports = async function handler(req, res) {
     const user = inserted[0];
 
     if (referrer) {
-      await db.insert('referrals', { referrer_id: referrer.id, referred_user_id: user.id });
-      await db.update('waitlist_users', `id=eq.${referrer.id}`, {
+      try { await db.post('referrals', { referrer_id: referrer.id, referred_user_id: user.id }); } catch (_) {}
+      await db.patch('waitlist_users', `id=eq.${referrer.id}`, {
         referral_count: referrer.referral_count + 1,
         boost_points: referrer.boost_points + BOOST_PER_REFERRAL,
       });
 
-      const updatedReferrer = await db.getOne('waitlist_users', `id=eq.${referrer.id}`);
+      const updatedRef = (await db.get(`waitlist_users?select=*&id=eq.${referrer.id}&limit=1`))[0];
       for (const m of REWARD_MILESTONES) {
-        if (updatedReferrer.referral_count >= m.threshold) {
-          const already = await db.getOne('reward_events', `user_id=eq.${referrer.id}&type=eq.${m.type}`);
-          if (!already) {
-            await db.insert('reward_events', { user_id: referrer.id, type: m.type, amount: m.credits });
-            if (m.credits > 0) {
-              await db.update('waitlist_users', `id=eq.${referrer.id}`, {
-                credits_earned: updatedReferrer.credits_earned + m.credits,
-              });
-            }
-            if (m.vip) {
-              await db.update('waitlist_users', `id=eq.${referrer.id}`, { vip_badge: true });
-            }
+        if (updatedRef.referral_count >= m.threshold) {
+          const alreadyRows = await db.get(`reward_events?select=id&user_id=eq.${referrer.id}&type=eq.${encodeURIComponent(m.type)}&limit=1`);
+          if (alreadyRows.length === 0) {
+            await db.post('reward_events', { user_id: referrer.id, type: m.type, amount: m.credits });
+            if (m.credits > 0) await db.patch('waitlist_users', `id=eq.${referrer.id}`, { credits_earned: updatedRef.credits_earned + m.credits });
+            if (m.vip) await db.patch('waitlist_users', `id=eq.${referrer.id}`, { vip_badge: true });
           }
         }
       }
     }
 
-    const newTotal = await db.count('waitlist_users');
-    const rank = await computeRank(user.id, newTotal);
+    const freshUser = (await db.get(`waitlist_users?select=*&id=eq.${user.id}&limit=1`))[0];
+    const allUsers = await db.get('waitlist_users?select=id,full_name,email,boost_points,referral_count,vip_badge,created_at&order=boost_points.desc,created_at.asc');
+    const total = allUsers.length;
+    const pos = findPosition(allUsers, user.id);
+    const rank = MAX_WAITLIST - total + pos;
 
-    const topRows = await db.getAll('waitlist_users', '', '*', 'boost_points.desc,created_at.asc&limit=10');
-    const top10 = topRows.map((u, i) => ({
-      rank: MAX_WAITLIST - newTotal + i + 1,
+    const top10 = allUsers.slice(0, 10).map((u, i) => ({
+      rank: MAX_WAITLIST - total + i + 1,
       display_name: displayName(u),
       referrals: u.referral_count,
       boost_points: u.boost_points,
       badge: !!u.vip_badge,
     }));
 
-    const response = { ...userPayload(user, rank, newTotal), leaderboard_preview: top10 };
+    const response = { ...userPayload(freshUser, rank, total), leaderboard_preview: top10 };
 
     if (referrer) {
-      const rr = await db.getOne('waitlist_users', `id=eq.${referrer.id}`);
-      const rRank = await computeRank(referrer.id, newTotal);
+      const rr = (await db.get(`waitlist_users?select=*&id=eq.${referrer.id}&limit=1`))[0];
+      const rPos = findPosition(allUsers, referrer.id);
       response.referrer_update = {
-        referrer_new_rank: rRank,
+        referrer_new_rank: MAX_WAITLIST - total + rPos,
         referrer_boost_points: rr.boost_points,
         referrer_referral_count: rr.referral_count,
       };
@@ -109,7 +104,7 @@ module.exports = async function handler(req, res) {
 
     return res.status(201).json(response);
   } catch (err) {
-    console.error('JOIN ERROR:', err);
+    console.error('JOIN ERROR:', err.message);
     if (err.message && err.message.includes('duplicate')) {
       return res.status(409).json({ error: 'This email is already on the waitlist.' });
     }

@@ -1293,6 +1293,16 @@
         refWrap.appendChild(refInput);
         form.appendChild(refWrap);
 
+        var hpField = document.createElement('input');
+        hpField.type = 'text';
+        hpField.name = 'website';
+        hpField.tabIndex = -1;
+        hpField.autocomplete = 'off';
+        hpField.style.cssText = 'position:absolute;left:-9999px;opacity:0;height:0;width:0;pointer-events:none;';
+        form.appendChild(hpField);
+
+        var formLoadedAt = Date.now();
+
         var submitBtn = document.createElement('button');
         submitBtn.type = 'submit';
         submitBtn.id = 'ok-wl-submit';
@@ -1303,18 +1313,46 @@
         errorEl.className = 'ok-wl-error';
         form.appendChild(errorEl);
 
+        var _submitCount = 0;
+
         form.onsubmit = function(e) {
           e.preventDefault();
           errorEl.textContent = '';
+
+          if (hpField.value) return;
+
+          var elapsed = Date.now() - formLoadedAt;
+          if (elapsed < 2000) {
+            errorEl.textContent = 'Please wait a moment before submitting.';
+            return;
+          }
+
+          _submitCount++;
+          if (_submitCount > 5) {
+            errorEl.textContent = 'Too many attempts. Please refresh the page.';
+            return;
+          }
+
           var name = nameInput.value.trim();
-          var email = emailInput.value.trim();
-          if (!name) { errorEl.textContent = 'Please enter your name.'; return; }
+          var email = emailInput.value.trim().toLowerCase();
+          if (!name || name.length < 2) { errorEl.textContent = 'Please enter your full name.'; return; }
+          if (name.length > 100) { errorEl.textContent = 'Name is too long.'; return; }
           if (!email) { errorEl.textContent = 'Please enter your email.'; return; }
+          if (!/^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/.test(email)) {
+            errorEl.textContent = 'Please enter a valid email address.';
+            return;
+          }
+
           submitBtn.disabled = true;
           submitBtn.textContent = 'Joining...';
 
-          var body = { full_name: name, email: email };
-          var code = refInput.value.trim();
+          var body = {
+            full_name: name,
+            email: email,
+            _ts: formLoadedAt,
+            _hp: hpField.value
+          };
+          var code = refInput.value.trim().toUpperCase();
           if (code) body.referral_code = code;
 
           fetch(OK_API + '/join', {

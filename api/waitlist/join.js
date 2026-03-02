@@ -3,6 +3,10 @@ const {
   generateCode, MAX_WAITLIST, BOOST_PER_REFERRAL,
   REWARD_MILESTONES, displayName, userPayload,
 } = require('../_utils');
+const {
+  getClientIP, isDisposableEmail, validateEmail, validateName,
+  checkHoneypot, checkTimestamp, rateLimit,
+} = require('../_security');
 
 function calcRank(allUsers, userId) {
   const sorted = [...allUsers].sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
@@ -24,13 +28,41 @@ module.exports = async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
+    const ip = getClientIP(req);
+
+    if (!rateLimit(ip, 5, 3600000)) {
+      return res.status(429).json({ error: 'Too many signup attempts. Please try again later.' });
+    }
+
+    if (checkHoneypot(req.body)) {
+      return res.status(400).json({ error: 'Signup failed.' });
+    }
+
+    if (!checkTimestamp(req.body)) {
+      return res.status(400).json({ error: 'Please fill the form properly and try again.' });
+    }
+
     const { full_name, email, phone, referral_code } = req.body;
 
-    if (!email && !phone) return res.status(400).json({ error: 'Email or phone is required.' });
-    if (!full_name || !full_name.trim()) return res.status(400).json({ error: 'Full name is required.' });
-    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return res.status(400).json({ error: 'Invalid email format.' });
+    if (!full_name || !validateName(full_name)) {
+      return res.status(400).json({ error: 'Please enter a valid full name (at least 2 characters).' });
+    }
 
-    const existingRows = await db.get(`waitlist_users?select=*&email=eq.${encodeURIComponent(email)}&limit=1`);
+    if (!email && !phone) {
+      return res.status(400).json({ error: 'Email is required.' });
+    }
+
+    const cleanEmail = email ? email.trim().toLowerCase() : null;
+
+    if (cleanEmail && !validateEmail(cleanEmail)) {
+      return res.status(400).json({ error: 'Please enter a valid email address.' });
+    }
+
+    if (cleanEmail && isDisposableEmail(cleanEmail)) {
+      return res.status(400).json({ error: 'Please use a permanent email address (temporary/disposable emails are not allowed).' });
+    }
+
+    const existingRows = await db.get(`waitlist_users?select=*&email=eq.${encodeURIComponent(cleanEmail)}&limit=1`);
     if (existingRows.length > 0) {
       const existing = existingRows[0];
       const allUsers = await db.get('waitlist_users?select=id,boost_points,created_at&order=created_at.asc');
@@ -40,21 +72,26 @@ module.exports = async function handler(req, res) {
     }
 
     const allBefore = await db.get('waitlist_users?select=id');
-    if (allBefore.length >= MAX_WAITLIST) return res.status(409).json({ error: 'Waitlist is full. Stay tuned for launch!' });
+    if (allBefore.length >= MAX_WAITLIST) {
+      return res.status(409).json({ error: 'Waitlist is full. Stay tuned for launch!' });
+    }
 
     let referrer = null;
-    if (referral_code) {
-      const refRows = await db.get(`waitlist_users?select=*&referral_code=eq.${encodeURIComponent(referral_code)}&limit=1`);
+    if (referral_code && referral_code.trim()) {
+      const cleanCode = referral_code.trim().toUpperCase();
+      const refRows = await db.get(`waitlist_users?select=*&referral_code=eq.${encodeURIComponent(cleanCode)}&limit=1`);
       referrer = refRows[0] || null;
       if (!referrer) return res.status(400).json({ error: 'Invalid referral code.' });
-      if (referrer.email && referrer.email === email) return res.status(400).json({ error: 'You cannot refer yourself.' });
+      if (referrer.email && referrer.email === cleanEmail) {
+        return res.status(400).json({ error: 'You cannot refer yourself.' });
+      }
     }
 
     const prefix = full_name.trim().replace(/[^A-Za-z]/g, '').slice(0, 2).toUpperCase();
     const newCode = prefix + generateCode();
     const inserted = await db.post('waitlist_users', {
       full_name: full_name.trim(),
-      email: email || null,
+      email: cleanEmail,
       phone: phone || null,
       referral_code: newCode,
       referrer_id: referrer ? referrer.id : null,

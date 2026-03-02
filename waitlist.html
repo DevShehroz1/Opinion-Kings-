@@ -317,6 +317,52 @@
       margin-top: 12px;
     }
 
+    .ok-wl-live-bar {
+      font-family: "Manrope", sans-serif;
+      font-size: 14px;
+      color: rgba(255,255,255,0.7);
+      text-align: center;
+      margin-top: 16px;
+      padding: 10px 16px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .ok-wl-live-bar strong { color: #D3B17C; }
+    .ok-live-dot {
+      display: inline-block;
+      width: 8px; height: 8px;
+      background: #22c55e;
+      border-radius: 50%;
+      margin-right: 6px;
+      animation: okPulse 1.5s ease-in-out infinite;
+      vertical-align: middle;
+    }
+    @keyframes okPulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    .ok-wl-live-preview {
+      width: 100%;
+      margin-top: 12px;
+      padding: 10px 14px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.06);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .ok-wl-live-row {
+      display: flex;
+      align-items: center;
+      font-family: "Manrope", sans-serif;
+      font-size: 13px;
+      color: rgba(255,255,255,0.6);
+      gap: 10px;
+    }
+    .ok-lp-rank { color: #D3B17C; font-weight: 700; min-width: 50px; }
+    .ok-lp-name { flex: 1; color: rgba(255,255,255,0.8); }
+    .ok-lp-refs { color: rgba(255,255,255,0.4); font-size: 12px; }
+
     /* ── Dashboard (post-signup) ──────────────────── */
     #ok-dashboard {
       width: 100%;
@@ -1256,11 +1302,39 @@
         };
 
         app.appendChild(form);
+
+        var liveBar = document.createElement('div');
+        liveBar.className = 'ok-wl-live-bar';
+        liveBar.innerHTML = '<span class="ok-live-dot"></span> Loading live positions...';
+        app.appendChild(liveBar);
+
         var micro = document.createElement('p');
         micro.className = 'ok-wl-micro';
         micro.textContent = 'Early access. Trading credits. Founder status.';
         app.appendChild(micro);
         container.appendChild(app);
+
+        fetch(OK_API + '/leaderboard?limit=5')
+          .then(function(r) { return r.json(); })
+          .then(function(lb) {
+            var total = lb.total_users || 0;
+            var nextPos = 5000 - total;
+            liveBar.innerHTML = '<span class="ok-live-dot"></span> <strong>' + total + '</strong> people joined &mdash; your position: <strong>#' + (5000 - total + 1).toLocaleString() + '</strong>';
+            if (lb.leaderboard && lb.leaderboard.length) {
+              var preview = document.createElement('div');
+              preview.className = 'ok-wl-live-preview';
+              lb.leaderboard.slice(0, 5).forEach(function(u) {
+                var row = document.createElement('div');
+                row.className = 'ok-wl-live-row';
+                row.innerHTML = '<span class="ok-lp-rank">#' + u.rank + '</span><span class="ok-lp-name">' + u.display_name + '</span><span class="ok-lp-refs">' + u.referrals + ' refs</span>';
+                preview.appendChild(row);
+              });
+              liveBar.parentNode.insertBefore(preview, micro);
+            }
+          })
+          .catch(function() {
+            liveBar.innerHTML = '<span class="ok-live-dot"></span> Join now to secure your spot!';
+          });
 
         setTimeout(function() { nameInput.focus(); }, 400);
       }
@@ -1272,8 +1346,14 @@
         heading.innerHTML = '';
         heading.style.cssText = 'display:flex;flex-direction:column;align-items:center;padding:20px 20px 60px;';
 
+        var ref = getRef();
         var savedId = null;
         try { savedId = localStorage.getItem('ok_user_id'); } catch(e) {}
+
+        if (ref) {
+          buildForm(heading);
+          return;
+        }
 
         if (savedId) {
           fetch(OK_API + '/me?user_id=' + savedId)

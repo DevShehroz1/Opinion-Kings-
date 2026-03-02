@@ -317,6 +317,29 @@
       margin-top: 12px;
     }
 
+    #ok-wl-fallback {
+      width: 100%;
+      min-height: 60vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px 60px;
+    }
+
+    .ok-dash-notyou {
+      font-family: "Manrope", sans-serif;
+      font-size: 13px;
+      color: rgba(255,255,255,0.35);
+      text-align: center;
+      margin-top: 8px;
+    }
+    .ok-dash-notyou a {
+      color: #D3B17C;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
     .ok-wl-live-bar {
       font-family: "Manrope", sans-serif;
       font-size: 14px;
@@ -1203,12 +1226,24 @@
           dash.appendChild(lb);
         }
 
+        var notYou = document.createElement('div');
+        notYou.className = 'ok-dash-notyou';
+        notYou.innerHTML = 'Not you? <a href="#" id="ok-switch-user">Sign up with a different account</a>';
+        dash.appendChild(notYou);
+
         container.appendChild(dash);
         setTimeout(function() {
           dash.classList.add('ok-dash-visible');
           animateNumber(document.getElementById('ok-rank-num'), 5000, data.rank, 1800);
         }, 80);
         try { localStorage.setItem('ok_user_id', data.user_id); } catch(e) {}
+
+        document.getElementById('ok-switch-user').onclick = function(e) {
+          e.preventDefault();
+          try { localStorage.removeItem('ok_user_id'); } catch(ex) {}
+          container.innerHTML = '';
+          buildForm(container);
+        };
       }
 
       function buildForm(container) {
@@ -1339,9 +1374,21 @@
         setTimeout(function() { nameInput.focus(); }, 400);
       }
 
+      var _initAttempts = 0;
       function init() {
-        var heading = document.querySelector('.framer-1gqivqc[data-framer-name="Bottom"]');
-        if (!heading) { setTimeout(init, 200); return; }
+        var heading = document.querySelector('.framer-1gqivqc[data-framer-name="Bottom"]')
+          || document.querySelector('[data-framer-name="Bottom"]')
+          || document.querySelector('.framer-1gqivqc');
+
+        _initAttempts++;
+        if (!heading && _initAttempts < 30) { setTimeout(init, 300); return; }
+
+        if (!heading) {
+          heading = document.createElement('div');
+          heading.id = 'ok-wl-fallback';
+          var main = document.getElementById('main') || document.body;
+          main.appendChild(heading);
+        }
 
         heading.innerHTML = '';
         heading.style.cssText = 'display:flex;flex-direction:column;align-items:center;padding:20px 20px 60px;';

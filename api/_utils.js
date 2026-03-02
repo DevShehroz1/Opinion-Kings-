@@ -1,6 +1,6 @@
 const { customAlphabet } = require('nanoid');
 
-const generateCode = customAlphabet('ABCDEFGHJKLMNPQRSTUVWXYZ23456789', 8);
+const generateCode = customAlphabet('ABCDEFGHJKLMNPQRSTUVWXYZ23456789', 4);
 
 const MAX_WAITLIST = 5000;
 const BOOST_PER_REFERRAL = 100;
@@ -32,9 +32,9 @@ function displayName(user) {
 }
 
 function userPayload(user, displayRank, totalUsers) {
-  const base = process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : (process.env.BASE_URL || 'http://localhost:3000');
+  const base = process.env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    : (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : (process.env.BASE_URL || 'http://localhost:3000'));
   return {
     user_id: user.id,
     full_name: user.full_name,

@@ -46,7 +46,8 @@ module.exports = async function handler(req, res) {
       if (referrer.email && referrer.email === email) return res.status(400).json({ error: 'You cannot refer yourself.' });
     }
 
-    const newCode = generateCode();
+    const prefix = full_name.trim().replace(/[^A-Za-z]/g, '').slice(0, 2).toUpperCase();
+    const newCode = prefix + generateCode();
     const inserted = await db.post('waitlist_users', {
       full_name: full_name.trim(),
       email: email || null,

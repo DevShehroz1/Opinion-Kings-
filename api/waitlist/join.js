@@ -34,12 +34,27 @@ module.exports = async function handler(req, res) {
       return res.status(429).json({ error: 'Too many signup attempts. Please try again later.' });
     }
 
-    if (checkHoneypot(req.body)) {
-      return res.status(400).json({ error: 'Signup failed.' });
+    const isGoogleSignIn = !!req.body.google_credential;
+
+    if (!isGoogleSignIn) {
+      if (checkHoneypot(req.body)) {
+        return res.status(400).json({ error: 'Signup failed.' });
+      }
+      if (!checkTimestamp(req.body)) {
+        return res.status(400).json({ error: 'Please fill the form properly and try again.' });
+      }
     }
 
-    if (!checkTimestamp(req.body)) {
-      return res.status(400).json({ error: 'Please fill the form properly and try again.' });
+    if (isGoogleSignIn && process.env.GOOGLE_CLIENT_ID) {
+      try {
+        const tokenRes = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${req.body.google_credential}`);
+        const tokenData = await tokenRes.json();
+        if (tokenData.aud !== process.env.GOOGLE_CLIENT_ID) {
+          return res.status(400).json({ error: 'Invalid Google sign-in.' });
+        }
+      } catch (_) {
+        return res.status(400).json({ error: 'Google verification failed.' });
+      }
     }
 
     const { full_name, email, phone, referral_code } = req.body;

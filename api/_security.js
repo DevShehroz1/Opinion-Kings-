@@ -65,9 +65,9 @@ function checkHoneypot(body) {
 
 function checkTimestamp(body) {
   const ts = Number(body._ts);
-  if (!ts) return false;
-  const elapsed = Date.now() - ts;
-  return elapsed >= 1500 && elapsed < 3600000;
+  if (!ts || isNaN(ts)) return false;
+  if (ts < 1700000000000 || ts > 2000000000000) return false;
+  return true;
 }
 
 const ipBuckets = new Map();

@@ -232,6 +232,325 @@
       });
     })();
   </script>
+  <style>
+    .framer-rf0grw { display: none !important; }
+    .framer-1p5hx3f { display: none !important; }
+
+    #ok-wl-app {
+      width: 100%;
+      max-width: 440px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+    #ok-wl-form {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .ok-wl-input-wrap {
+      display: flex;
+      width: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      transition: border-color 0.2s;
+    }
+    .ok-wl-input-wrap:focus-within {
+      border-color: rgba(211,177,124,0.4);
+    }
+    .ok-wl-input-wrap input {
+      flex: 1;
+      padding: 14px 18px;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #fff;
+      font-family: "Manrope", sans-serif;
+      font-size: 15px;
+      letter-spacing: -0.01em;
+    }
+    .ok-wl-input-wrap input::placeholder {
+      color: rgba(255,255,255,0.35);
+    }
+    .ok-wl-ref-label {
+      font-family: "Manrope", sans-serif;
+      font-size: 12px;
+      color: rgba(255,255,255,0.35);
+      padding: 0 4px;
+    }
+    #ok-wl-submit {
+      width: 100%;
+      padding: 16px 28px;
+      background: #D3B17C;
+      border: none;
+      color: #000;
+      font-family: "Manrope", sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      box-shadow: 0 8px 20px rgba(211,177,124,0.32);
+    }
+    #ok-wl-submit:hover { background: #c9a46e; transform: translateY(-1px); }
+    #ok-wl-submit:active { transform: translateY(0); }
+    #ok-wl-submit:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+    .ok-wl-error {
+      font-family: "Manrope", sans-serif;
+      font-size: 13px;
+      color: #ef4444;
+      text-align: center;
+      min-height: 20px;
+      margin-top: 4px;
+    }
+    .ok-wl-micro {
+      font-family: "Manrope", sans-serif;
+      font-size: 13px;
+      color: rgba(255,255,255,0.35);
+      text-align: center;
+      margin-top: 12px;
+    }
+
+    /* ── Dashboard (post-signup) ──────────────────── */
+    #ok-dashboard {
+      width: 100%;
+      max-width: 440px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    #ok-dashboard.ok-dash-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .ok-dash-badge {
+      display: inline-block;
+      background: rgba(211,177,124,0.15);
+      color: #D3B17C;
+      font-family: "Manrope", sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 6px 18px;
+      border-radius: 100px;
+    }
+    .ok-dash-rank-row {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+    #ok-rank-num {
+      font-family: "Manrope", sans-serif;
+      font-size: 72px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: #fff;
+      line-height: 1;
+    }
+    .ok-rank-sub {
+      font-family: "Manrope", sans-serif;
+      font-size: 15px;
+      color: rgba(255,255,255,0.4);
+    }
+    .ok-dash-boost {
+      background: rgba(34,197,94,0.12);
+      color: #22c55e;
+      font-family: "Manrope", sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 8px;
+      animation: ok-pulse 2s ease-in-out 3;
+    }
+    @keyframes ok-pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+    .ok-dash-stats {
+      display: flex;
+      gap: 28px;
+    }
+    .ok-dash-stat {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      min-width: 80px;
+    }
+    .ok-dash-stat-label {
+      font-family: "Manrope", sans-serif;
+      font-size: 11px;
+      color: rgba(255,255,255,0.35);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 600;
+    }
+    .ok-dash-stat-value {
+      font-family: "Manrope", sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.02em;
+    }
+    .ok-dash-vip {
+      display: inline-block;
+      background: rgba(211,177,124,0.15);
+      color: #D3B17C;
+      font-family: "Manrope", sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 6px 16px;
+      border-radius: 6px;
+    }
+    .ok-dash-next {
+      font-family: "Manrope", sans-serif;
+      font-size: 13px;
+      color: rgba(255,255,255,0.5);
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+      padding: 10px 18px;
+      border-radius: 10px;
+      text-align: center;
+    }
+    .ok-dash-refbox {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .ok-dash-reflabel {
+      font-family: "Manrope", sans-serif;
+      font-size: 12px;
+      color: rgba(255,255,255,0.4);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-weight: 600;
+    }
+    .ok-dash-refrow {
+      display: flex;
+      gap: 0;
+      border-radius: 12px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .ok-dash-refrow input {
+      flex: 1;
+      padding: 12px 16px;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #fff;
+      font-family: "Manrope", sans-serif;
+      font-size: 13px;
+    }
+    .ok-dash-refrow button {
+      padding: 12px 20px;
+      background: #D3B17C;
+      border: none;
+      color: #000;
+      font-family: "Manrope", sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .ok-dash-refrow button:hover { background: #c9a46e; }
+    .ok-dash-share {
+      display: flex;
+      gap: 10px;
+      margin-top: 4px;
+    }
+    .ok-share-btn {
+      flex: 1;
+      text-align: center;
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-family: "Manrope", sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+    .ok-share-btn:hover { opacity: 0.85; }
+    .ok-share-btn.tw { background: #1d9bf0; color: #fff; }
+    .ok-share-btn.wa { background: #25d366; color: #fff; }
+    .ok-dash-lb {
+      width: 100%;
+      margin-top: 8px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .ok-dash-lb-title {
+      font-family: "Manrope", sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.4);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 14px 18px 8px;
+    }
+    .ok-dash-lb-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 18px;
+      border-top: 1px solid rgba(255,255,255,0.04);
+    }
+    .ok-lb-rank {
+      font-family: "Manrope", sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: #D3B17C;
+      min-width: 36px;
+    }
+    .ok-lb-name {
+      flex: 1;
+      font-family: "Manrope", sans-serif;
+      font-size: 14px;
+      color: rgba(255,255,255,0.7);
+    }
+    .ok-lb-refs {
+      font-family: "Manrope", sans-serif;
+      font-size: 12px;
+      color: rgba(255,255,255,0.35);
+    }
+    .ok-lb-badge {
+      display: inline-block;
+      background: rgba(211,177,124,0.15);
+      color: #D3B17C;
+      font-family: "Manrope", sans-serif;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    @media (max-width: 809px) {
+      #ok-rank-num { font-size: 52px; }
+      .ok-dash-stats { gap: 16px; }
+      .ok-dash-stat-value { font-size: 18px; }
+      .ok-dash-share { flex-direction: column; }
+    }
+  </style>
     <!-- End of headStart -->
   <style id="color-override">
     #__framer-badge-container, .__framer-badge, .framer-7sj3kl-container { display: none !important; visibility: hidden !important; opacity: 0 !important; pointer-events: none !important; }
@@ -688,6 +1007,297 @@
         removeBadges();
       });
       logoObserver.observe(document.documentElement, { childList: true, subtree: true });
+    })();
+  </script>
+  <script>
+    (function() {
+      var OK_API = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+        ? window.location.origin + '/api/waitlist'
+        : '/api/waitlist';
+
+      function getRef() {
+        try { return new URLSearchParams(window.location.search).get('ref') || ''; } catch(e) { return ''; }
+      }
+
+      function animateNumber(el, from, to, duration) {
+        var start = performance.now();
+        var diff = to - from;
+        function tick(now) {
+          var t = Math.min((now - start) / duration, 1);
+          var ease = 1 - Math.pow(1 - t, 4);
+          el.textContent = '#' + Math.round(from + diff * ease).toLocaleString();
+          if (t < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+      }
+
+      function buildDashboard(container, data) {
+        container.innerHTML = '';
+        var dash = document.createElement('div');
+        dash.id = 'ok-dashboard';
+
+        var badge = document.createElement('div');
+        badge.className = 'ok-dash-badge';
+        badge.textContent = data.already_joined ? 'Welcome Back' : "You're In!";
+        dash.appendChild(badge);
+
+        var rankRow = document.createElement('div');
+        rankRow.className = 'ok-dash-rank-row';
+        var rankNum = document.createElement('span');
+        rankNum.id = 'ok-rank-num';
+        rankNum.textContent = '#5000';
+        rankRow.appendChild(rankNum);
+        var rankSub = document.createElement('span');
+        rankSub.className = 'ok-rank-sub';
+        rankSub.textContent = 'out of 5,000 spots';
+        rankRow.appendChild(rankSub);
+        dash.appendChild(rankRow);
+
+        if (!data.already_joined && data.referrer_update) {
+          var bt = document.createElement('div');
+          bt.className = 'ok-dash-boost';
+          bt.textContent = 'Your referrer moved up +100 spots!';
+          dash.appendChild(bt);
+        }
+
+        var stats = document.createElement('div');
+        stats.className = 'ok-dash-stats';
+        [['Referrals', data.referral_count || 0],
+         ['Boost', '+' + (data.boost_points || 0)],
+         ['Credits', '$' + ((data.credits_earned || 0) / 100).toFixed(0)]
+        ].forEach(function(p) {
+          var s = document.createElement('div');
+          s.className = 'ok-dash-stat';
+          var lbl = document.createElement('span');
+          lbl.className = 'ok-dash-stat-label';
+          lbl.textContent = p[0];
+          var val = document.createElement('span');
+          val.className = 'ok-dash-stat-value';
+          val.textContent = p[1];
+          s.appendChild(lbl); s.appendChild(val);
+          stats.appendChild(s);
+        });
+        dash.appendChild(stats);
+
+        if (data.vip_badge) {
+          var vip = document.createElement('div');
+          vip.className = 'ok-dash-vip';
+          vip.textContent = 'VIP Founder';
+          dash.appendChild(vip);
+        }
+
+        var nextR = data.next_reward;
+        if (nextR && nextR.referrals_needed > 0) {
+          var prog = document.createElement('div');
+          prog.className = 'ok-dash-next';
+          prog.textContent = nextR.referrals_needed + ' more referral' + (nextR.referrals_needed > 1 ? 's' : '') + ' to unlock: ' + nextR.reward;
+          dash.appendChild(prog);
+        }
+
+        var refBox = document.createElement('div');
+        refBox.className = 'ok-dash-refbox';
+        var rl = document.createElement('span');
+        rl.className = 'ok-dash-reflabel';
+        rl.textContent = 'Your referral link';
+        refBox.appendChild(rl);
+        var rr = document.createElement('div');
+        rr.className = 'ok-dash-refrow';
+        var ri = document.createElement('input');
+        ri.type = 'text'; ri.readOnly = true; ri.value = data.referral_link || '';
+        rr.appendChild(ri);
+        var cb = document.createElement('button');
+        cb.textContent = 'Copy';
+        cb.onclick = function() {
+          navigator.clipboard.writeText(ri.value).then(function() {
+            cb.textContent = 'Copied!';
+            setTimeout(function() { cb.textContent = 'Copy'; }, 2000);
+          });
+        };
+        rr.appendChild(cb);
+        refBox.appendChild(rr);
+
+        var sr = document.createElement('div');
+        sr.className = 'ok-dash-share';
+        var shareText = encodeURIComponent('I just joined the Opinion Kings waitlist — the first social prediction market. Join me and skip the line! ' + data.referral_link);
+        var tw = document.createElement('a');
+        tw.href = 'https://twitter.com/intent/tweet?text=' + shareText;
+        tw.target = '_blank'; tw.className = 'ok-share-btn tw'; tw.textContent = 'Share on X';
+        sr.appendChild(tw);
+        var wa = document.createElement('a');
+        wa.href = 'https://wa.me/?text=' + shareText;
+        wa.target = '_blank'; wa.className = 'ok-share-btn wa'; wa.textContent = 'WhatsApp';
+        sr.appendChild(wa);
+        refBox.appendChild(sr);
+        dash.appendChild(refBox);
+
+        if (data.leaderboard_preview && data.leaderboard_preview.length) {
+          var lb = document.createElement('div');
+          lb.className = 'ok-dash-lb';
+          var lbt = document.createElement('div');
+          lbt.className = 'ok-dash-lb-title';
+          lbt.textContent = 'Live Leaderboard';
+          lb.appendChild(lbt);
+          data.leaderboard_preview.slice(0, 5).forEach(function(u) {
+            var row = document.createElement('div');
+            row.className = 'ok-dash-lb-row';
+            var rk = document.createElement('span');
+            rk.className = 'ok-lb-rank'; rk.textContent = '#' + u.rank;
+            row.appendChild(rk);
+            var nm = document.createElement('span');
+            nm.className = 'ok-lb-name'; nm.textContent = u.display_name;
+            row.appendChild(nm);
+            var rf = document.createElement('span');
+            rf.className = 'ok-lb-refs'; rf.textContent = u.referrals + ' refs';
+            row.appendChild(rf);
+            if (u.badge) {
+              var bdg = document.createElement('span');
+              bdg.className = 'ok-lb-badge'; bdg.textContent = 'VIP';
+              row.appendChild(bdg);
+            }
+            lb.appendChild(row);
+          });
+          dash.appendChild(lb);
+        }
+
+        container.appendChild(dash);
+        setTimeout(function() {
+          dash.classList.add('ok-dash-visible');
+          animateNumber(document.getElementById('ok-rank-num'), 5000, data.rank, 1800);
+        }, 80);
+        try { localStorage.setItem('ok_user_id', data.user_id); } catch(e) {}
+      }
+
+      function buildForm(container) {
+        var ref = getRef();
+
+        var app = document.createElement('div');
+        app.id = 'ok-wl-app';
+
+        var form = document.createElement('form');
+        form.id = 'ok-wl-form';
+
+        var nameWrap = document.createElement('div');
+        nameWrap.className = 'ok-wl-input-wrap';
+        var nameInput = document.createElement('input');
+        nameInput.type = 'text';
+        nameInput.name = 'full_name';
+        nameInput.placeholder = 'Full name';
+        nameInput.required = true;
+        nameInput.autocomplete = 'name';
+        nameWrap.appendChild(nameInput);
+        form.appendChild(nameWrap);
+
+        var emailWrap = document.createElement('div');
+        emailWrap.className = 'ok-wl-input-wrap';
+        var emailInput = document.createElement('input');
+        emailInput.type = 'email';
+        emailInput.name = 'email';
+        emailInput.placeholder = 'Email address';
+        emailInput.required = true;
+        emailInput.autocomplete = 'email';
+        emailWrap.appendChild(emailInput);
+        form.appendChild(emailWrap);
+
+        var refLabel = document.createElement('div');
+        refLabel.className = 'ok-wl-ref-label';
+        refLabel.textContent = 'Have a referral code? (optional)';
+        form.appendChild(refLabel);
+
+        var refWrap = document.createElement('div');
+        refWrap.className = 'ok-wl-input-wrap';
+        var refInput = document.createElement('input');
+        refInput.type = 'text';
+        refInput.name = 'referral_code';
+        refInput.placeholder = 'Referral code';
+        refInput.autocomplete = 'off';
+        if (ref) refInput.value = ref;
+        refWrap.appendChild(refInput);
+        form.appendChild(refWrap);
+
+        var submitBtn = document.createElement('button');
+        submitBtn.type = 'submit';
+        submitBtn.id = 'ok-wl-submit';
+        submitBtn.textContent = 'Join the Waitlist';
+        form.appendChild(submitBtn);
+
+        var errorEl = document.createElement('div');
+        errorEl.className = 'ok-wl-error';
+        form.appendChild(errorEl);
+
+        form.onsubmit = function(e) {
+          e.preventDefault();
+          errorEl.textContent = '';
+          var name = nameInput.value.trim();
+          var email = emailInput.value.trim();
+          if (!name) { errorEl.textContent = 'Please enter your name.'; return; }
+          if (!email) { errorEl.textContent = 'Please enter your email.'; return; }
+          submitBtn.disabled = true;
+          submitBtn.textContent = 'Joining...';
+
+          var body = { full_name: name, email: email };
+          var code = refInput.value.trim();
+          if (code) body.referral_code = code;
+
+          fetch(OK_API + '/join', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+          }).then(function(r) { return r.json(); }).then(function(data) {
+            if (data.error) {
+              errorEl.textContent = data.error;
+              submitBtn.disabled = false;
+              submitBtn.textContent = 'Join the Waitlist';
+              return;
+            }
+            buildDashboard(container, data);
+          }).catch(function() {
+            errorEl.textContent = 'Network error — please try again.';
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Join the Waitlist';
+          });
+        };
+
+        app.appendChild(form);
+        var micro = document.createElement('p');
+        micro.className = 'ok-wl-micro';
+        micro.textContent = 'Early access. Trading credits. Founder status.';
+        app.appendChild(micro);
+        container.appendChild(app);
+
+        setTimeout(function() { nameInput.focus(); }, 400);
+      }
+
+      function init() {
+        var heading = document.querySelector('.framer-1gqivqc[data-framer-name="Bottom"]');
+        if (!heading) { setTimeout(init, 200); return; }
+
+        heading.innerHTML = '';
+        heading.style.cssText = 'display:flex;flex-direction:column;align-items:center;padding:20px 20px 60px;';
+
+        var savedId = null;
+        try { savedId = localStorage.getItem('ok_user_id'); } catch(e) {}
+
+        if (savedId) {
+          fetch(OK_API + '/me?user_id=' + savedId)
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+              if (data && data.user_id) {
+                buildDashboard(heading, data);
+              } else {
+                buildForm(heading);
+              }
+            })
+            .catch(function() { buildForm(heading); });
+        } else {
+          buildForm(heading);
+        }
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() { setTimeout(init, 300); });
+      } else {
+        setTimeout(init, 300);
+      }
     })();
   </script>
     <!-- End of bodyEnd -->

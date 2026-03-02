@@ -384,7 +384,7 @@
         var grid = document.createElement('div');
         grid.className = 'ok-rewards-grid';
         var tiers = [
-          { refs: '1 Referral', value: 'Skip 1,000', desc: 'spots on the waitlist' },
+          { refs: '1 Referral', value: 'Skip 100', desc: 'spots on the waitlist' },
           { refs: '5 Referrals', value: '$10', desc: 'in trading credits' },
           { refs: '25 Referrals', value: '$75', desc: 'in trading credits' },
           { refs: '50 Referrals', value: '$300', desc: '+ VIP badge', vip: true }
@@ -416,7 +416,7 @@
         var ctaWrap = document.createElement('div');
         ctaWrap.id = 'ok-referral-cta';
         var cta = document.createElement('a');
-        cta.href = '#home';
+        cta.href = 'waitlist.html';
         cta.textContent = 'Join & Start Climbing';
         ctaWrap.appendChild(cta);
         sec.appendChild(ctaWrap);
@@ -471,6 +471,11 @@
         tag.textContent = 'Simple. Fast. Social.';
         cards.parentNode.insertBefore(tag, cards.nextSibling);
       }
+      function goToWaitlist() {
+        var ref = '';
+        try { ref = new URLSearchParams(window.location.search).get('ref') || ''; } catch(e) {}
+        window.location.href = 'waitlist.html' + (ref ? '?ref=' + encodeURIComponent(ref) : '');
+      }
       function injectWaitlistForm() {
         if (!document.body) return;
         if (document.getElementById('ok-waitlist-wrapper')) return;
@@ -478,30 +483,23 @@
         if (!ctaDiv) return;
         var wrapper = document.createElement('div');
         wrapper.id = 'ok-waitlist-wrapper';
-        var form = document.createElement('form');
-        form.id = 'ok-waitlist-form';
-        form.onsubmit = function(e) {
-          e.preventDefault();
-          var email = form.querySelector('input').value;
-          if (email) {
-            form.querySelector('button').textContent = 'You\'re In!';
-            form.querySelector('input').value = '';
-            setTimeout(function() { form.querySelector('button').textContent = 'Join the Waitlist'; }, 3000);
-          }
-        };
-        var input = document.createElement('input');
-        input.type = 'email';
-        input.placeholder = 'Enter your email address';
-        input.required = true;
-        var btn = document.createElement('button');
-        btn.type = 'submit';
+        wrapper.onclick = goToWaitlist;
+        wrapper.style.cursor = 'pointer';
+
+        var fakeForm = document.createElement('div');
+        fakeForm.id = 'ok-waitlist-form';
+        var fakeInput = document.createElement('div');
+        fakeInput.style.cssText = 'flex:1;padding:14px 20px;color:rgba(255,255,255,0.4);font-family:Manrope,sans-serif;font-size:15px;letter-spacing:-0.01em;pointer-events:none;user-select:none;';
+        fakeInput.textContent = 'Enter your email address';
+        var btn = document.createElement('div');
+        btn.style.cssText = 'padding:14px 28px;background:#D3B17C;color:#000;font-family:Manrope,sans-serif;font-weight:600;font-size:15px;white-space:nowrap;pointer-events:none;user-select:none;';
         btn.textContent = 'Join the Waitlist';
-        form.appendChild(input);
-        form.appendChild(btn);
+        fakeForm.appendChild(fakeInput);
+        fakeForm.appendChild(btn);
         var micro = document.createElement('p');
         micro.id = 'ok-microcopy';
         micro.textContent = 'Early access. Trading credits. Founder status.';
-        wrapper.appendChild(form);
+        wrapper.appendChild(fakeForm);
         wrapper.appendChild(micro);
         ctaDiv.parentNode.insertBefore(wrapper, ctaDiv);
       }
@@ -1025,6 +1023,7 @@
       .ok-compliance-grid { grid-template-columns: 1fr; }
       .ok-compliance-card { padding: 24px 20px; }
     }
+
   </style>
   <meta name="viewport" content="width=device-width">
   

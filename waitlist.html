@@ -1166,12 +1166,6 @@
         rankRow.appendChild(rankSub);
         dash.appendChild(rankRow);
 
-        if (!data.already_joined && data.referrer_update) {
-          var bt = document.createElement('div');
-          bt.className = 'ok-dash-boost';
-          bt.textContent = 'Your referrer moved up +100 spots!';
-          dash.appendChild(bt);
-        }
 
         var stats = document.createElement('div');
         stats.className = 'ok-dash-stats';
@@ -1292,7 +1286,8 @@
         };
       }
 
-      function submitToAPI(container, body, errorEl, submitBtn) {
+      function submitToAPI(container, body, errorEl, submitBtn, btnLabel) {
+        var label = btnLabel || 'Join the Waitlist';
         fetch(OK_API + '/join', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -1300,13 +1295,13 @@
         }).then(function(r) { return r.json(); }).then(function(data) {
           if (data.error) {
             errorEl.textContent = data.error;
-            if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Join the Waitlist'; }
+            if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = label; }
             return;
           }
           buildDashboard(container, data);
         }).catch(function() {
           errorEl.textContent = 'Network error — please try again.';
-          if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Join the Waitlist'; }
+          if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = label; }
         });
       }
 
@@ -1348,7 +1343,7 @@
               if (code) body.referral_code = code;
               googleBtn.disabled = true;
               googleBtn.textContent = 'Joining...';
-              submitToAPI(container, body, errorEl, null);
+              submitToAPI(container, body, errorEl, googleBtn, 'Continue with Google');
             }
           });
           google.accounts.id.prompt();
@@ -1480,15 +1475,18 @@
           .then(function(r) { return r.json(); })
           .then(function(lb) {
             var total = lb.total_users || 0;
-            var nextPos = 5000 - total;
-            liveBar.innerHTML = '<span class="ok-live-dot"></span> <strong>' + total + '</strong> people joined &mdash; your position: <strong>#' + (5000 - total + 1).toLocaleString() + '</strong>';
+            var spotsLeft = 5000 - total;
+            liveBar.innerHTML = '<span class="ok-live-dot"></span> <strong>' + total.toLocaleString() + '</strong> people joined &mdash; <strong>' + spotsLeft.toLocaleString() + '</strong> spots left';
             if (lb.leaderboard && lb.leaderboard.length) {
               var preview = document.createElement('div');
               preview.className = 'ok-wl-live-preview';
               lb.leaderboard.slice(0, 5).forEach(function(u) {
                 var row = document.createElement('div');
                 row.className = 'ok-wl-live-row';
-                row.innerHTML = '<span class="ok-lp-rank">#' + u.rank + '</span><span class="ok-lp-name">' + u.display_name + '</span><span class="ok-lp-refs">' + u.referrals + ' refs</span>';
+                var rk = document.createElement('span'); rk.className = 'ok-lp-rank'; rk.textContent = '#' + u.rank;
+                var nm = document.createElement('span'); nm.className = 'ok-lp-name'; nm.textContent = u.display_name;
+                var rf = document.createElement('span'); rf.className = 'ok-lp-refs'; rf.textContent = u.referrals + ' refs';
+                row.appendChild(rk); row.appendChild(nm); row.appendChild(rf);
                 preview.appendChild(row);
               });
               liveBar.parentNode.insertBefore(preview, micro);
@@ -1501,7 +1499,7 @@
         setTimeout(function() { nameInput.focus(); }, 400);
       }
 
-      var _okInitDone = false;
+      var _okInjecting = false;
 
       function findHeading() {
         return document.querySelector('.framer-1gqivqc[data-framer-name="Bottom"]')
@@ -1523,6 +1521,13 @@
         }
 
         if (savedId) {
+          // Mark as loading so ensureForm doesn't re-trigger during fetch
+          var loader = document.createElement('div');
+          loader.id = 'ok-wl-loading';
+          loader.textContent = 'Loading...';
+          loader.style.cssText = 'color:rgba(255,255,255,0.5);font-family:Manrope,sans-serif;padding:40px;text-align:center;';
+          heading.appendChild(loader);
+
           fetch(OK_API + '/me?user_id=' + savedId)
             .then(function(r) { return r.json(); })
             .then(function(data) {
@@ -1539,44 +1544,37 @@
       }
 
       function ensureForm() {
+        if (_okInjecting) return;
         var heading = findHeading();
-        if (!heading) return;
-        if (heading.querySelector('#ok-wl-app, #ok-dashboard')) return;
-        inject(heading);
-      }
-
-      function init() {
-        if (_okInitDone) return;
-        var heading = findHeading();
-
         if (!heading) {
-          heading = document.createElement('div');
-          heading.id = 'ok-wl-fallback';
-          var main = document.getElementById('main') || document.body;
-          main.appendChild(heading);
+          // Fallback: create container if Framer never renders the target
+          if (document.body && !document.getElementById('ok-wl-fallback')) {
+            heading = document.createElement('div');
+            heading.id = 'ok-wl-fallback';
+            var main = document.getElementById('main') || document.body;
+            main.appendChild(heading);
+          } else {
+            return;
+          }
         }
-
-        _okInitDone = true;
+        // Already has our content — skip
+        if (heading.querySelector('#ok-wl-app, #ok-dashboard, #ok-wl-loading')) return;
+        _okInjecting = true;
         inject(heading);
-
-        // Watch for Framer re-renders that wipe our form
-        new MutationObserver(function() {
-          ensureForm();
-        }).observe(heading, { childList: true });
+        _okInjecting = false;
       }
 
-      // Try early, retry on DOM ready
+      // Poll every 500ms to ensure the form is present
+      // This is the most reliable approach against Framer's React hydration
+      // which can replace entire DOM elements unpredictably
+      setInterval(ensureForm, 500);
+
+      // Also try as early as possible
       if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', function() { setTimeout(init, 300); });
+        document.addEventListener('DOMContentLoaded', function() { setTimeout(ensureForm, 200); });
       } else {
-        setTimeout(init, 300);
+        setTimeout(ensureForm, 200);
       }
-      // Watch for the target element to appear in the DOM
-      var _okWatcher = new MutationObserver(function() {
-        if (_okInitDone) { _okWatcher.disconnect(); return; }
-        if (findHeading()) init();
-      });
-      _okWatcher.observe(document.documentElement, { childList: true, subtree: true });
     })();
   </script>
     <!-- End of bodyEnd -->

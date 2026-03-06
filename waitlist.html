@@ -238,6 +238,14 @@
   <style>
     .framer-rf0grw { display: none !important; }
     .framer-1p5hx3f { display: none !important; }
+    .framer-1gqivqc[data-framer-name="Bottom"] { display: none !important; }
+    #ok-independent-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 20px 60px;
+      width: 100%;
+    }
 
     #ok-wl-app {
       width: 100%;
@@ -1499,82 +1507,69 @@
         setTimeout(function() { nameInput.focus(); }, 400);
       }
 
-      var _okInjecting = false;
+      var _okDone = false;
 
-      function findHeading() {
-        return document.querySelector('.framer-1gqivqc[data-framer-name="Bottom"]')
-          || document.querySelector('[data-framer-name="Bottom"]')
-          || document.querySelector('.framer-1gqivqc');
+      function getContainer() {
+        var c = document.getElementById('ok-independent-container');
+        if (c) return c;
+        // Create our own container OUTSIDE of Framer's control
+        // Insert it right after the Framer heading section
+        c = document.createElement('div');
+        c.id = 'ok-independent-container';
+        var heading = document.querySelector('.framer-1gqivqc')
+          || document.querySelector('[data-framer-name="Bottom"]');
+        if (heading && heading.parentNode) {
+          heading.parentNode.insertBefore(c, heading.nextSibling);
+        } else {
+          // Last resort: append to main or body
+          var main = document.getElementById('main') || document.body;
+          if (main) main.appendChild(c);
+          else return null;
+        }
+        return c;
       }
 
-      function inject(heading) {
-        heading.innerHTML = '';
-        heading.style.cssText = 'display:flex;flex-direction:column;align-items:center;padding:20px 20px 60px;';
+      function init() {
+        if (_okDone) return;
+        var container = getContainer();
+        if (!container) return;
+        _okDone = true;
 
         var ref = getRef();
         var savedId = null;
         try { savedId = localStorage.getItem('ok_user_id'); } catch(e) {}
 
         if (ref) {
-          buildForm(heading);
+          buildForm(container);
           return;
         }
 
         if (savedId) {
-          // Mark as loading so ensureForm doesn't re-trigger during fetch
-          var loader = document.createElement('div');
-          loader.id = 'ok-wl-loading';
-          loader.textContent = 'Loading...';
-          loader.style.cssText = 'color:rgba(255,255,255,0.5);font-family:Manrope,sans-serif;padding:40px;text-align:center;';
-          heading.appendChild(loader);
-
           fetch(OK_API + '/me?user_id=' + savedId)
             .then(function(r) { return r.json(); })
             .then(function(data) {
               if (data && data.user_id) {
-                buildDashboard(heading, data);
+                buildDashboard(container, data);
               } else {
-                buildForm(heading);
+                buildForm(container);
               }
             })
-            .catch(function() { buildForm(heading); });
+            .catch(function() { buildForm(container); });
         } else {
-          buildForm(heading);
+          buildForm(container);
         }
       }
 
-      function ensureForm() {
-        if (_okInjecting) return;
-        var heading = findHeading();
-        if (!heading) {
-          // Fallback: create container if Framer never renders the target
-          if (document.body && !document.getElementById('ok-wl-fallback')) {
-            heading = document.createElement('div');
-            heading.id = 'ok-wl-fallback';
-            var main = document.getElementById('main') || document.body;
-            main.appendChild(heading);
-          } else {
-            return;
-          }
-        }
-        // Already has our content — skip
-        if (heading.querySelector('#ok-wl-app, #ok-dashboard, #ok-wl-loading')) return;
-        _okInjecting = true;
-        inject(heading);
-        _okInjecting = false;
-      }
-
-      // Poll every 500ms to ensure the form is present
-      // This is the most reliable approach against Framer's React hydration
-      // which can replace entire DOM elements unpredictably
-      setInterval(ensureForm, 500);
-
-      // Also try as early as possible
+      // Try immediately, on DOM ready, and keep polling until successful
+      function tryInit() { if (!_okDone) init(); }
       if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', function() { setTimeout(ensureForm, 200); });
-      } else {
-        setTimeout(ensureForm, 200);
+        document.addEventListener('DOMContentLoaded', function() { tryInit(); });
       }
+      tryInit();
+      var _okTimer = setInterval(function() {
+        tryInit();
+        if (_okDone) clearInterval(_okTimer);
+      }, 300);
     })();
   </script>
     <!-- End of bodyEnd -->

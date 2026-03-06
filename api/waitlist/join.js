@@ -121,12 +121,16 @@ module.exports = async function handler(req, res) {
       });
 
       const updatedRef = (await db.get(`waitlist_users?select=*&id=eq.${referrer.id}&limit=1`))[0];
+      let runningCredits = updatedRef.credits_earned;
       for (const m of REWARD_MILESTONES) {
         if (updatedRef.referral_count >= m.threshold) {
           const alreadyRows = await db.get(`reward_events?select=id&user_id=eq.${referrer.id}&type=eq.${encodeURIComponent(m.type)}&limit=1`);
           if (alreadyRows.length === 0) {
             await db.post('reward_events', { user_id: referrer.id, type: m.type, amount: m.credits });
-            if (m.credits > 0) await db.patch('waitlist_users', `id=eq.${referrer.id}`, { credits_earned: updatedRef.credits_earned + m.credits });
+            if (m.credits > 0) {
+              runningCredits += m.credits;
+              await db.patch('waitlist_users', `id=eq.${referrer.id}`, { credits_earned: runningCredits });
+            }
             if (m.vip) await db.patch('waitlist_users', `id=eq.${referrer.id}`, { vip_badge: true });
           }
         }

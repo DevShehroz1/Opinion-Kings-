@@ -67,6 +67,8 @@ function checkTimestamp(body) {
   const ts = Number(body._ts);
   if (!ts || isNaN(ts)) return false;
   if (ts < 1700000000000 || ts > 2000000000000) return false;
+  const elapsed = Date.now() - ts;
+  if (elapsed < 2000) return false;
   return true;
 }
 

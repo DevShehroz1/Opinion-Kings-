@@ -362,7 +362,7 @@
         sec.appendChild(grid);
         comparison.parentNode.insertBefore(sec, comparison.nextSibling);
         setTimeout(function() {
-          var fills = sec.querySelectorAll('.ok-market-bar-fill');
+          var fills = sec.querySelectorAll('.ok-market-bar-fill'); 
           for (var i = 0; i < fills.length; i++) {
             fills[i].style.width = fills[i].getAttribute('data-pct') + '%';
           }

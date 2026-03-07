@@ -475,7 +475,20 @@
       function goToWaitlist() {
         var ref = '';
         try { ref = new URLSearchParams(window.location.search).get('ref') || ''; } catch(e) {}
-        window.location.href = 'waitlist.html' + (ref ? '?ref=' + encodeURIComponent(ref) : '');
+        var btn = document.querySelector('#ok-waitlist-form div:last-child');
+        if (btn) btn.textContent = 'Checking...';
+        fetch('/api/geo')
+          .then(function(r) { return r.json(); })
+          .then(function(data) {
+            if (data.is_usa) {
+              window.location.href = 'waitlist.html' + (ref ? '?ref=' + encodeURIComponent(ref) : '');
+            } else {
+              window.location.href = 'waitlist-international.html';
+            }
+          })
+          .catch(function() {
+            window.location.href = 'waitlist.html' + (ref ? '?ref=' + encodeURIComponent(ref) : '');
+          });
       }
       function injectWaitlistForm() {
         if (!document.body) return;

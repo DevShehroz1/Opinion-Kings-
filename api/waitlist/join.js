@@ -34,6 +34,15 @@ module.exports = async function handler(req, res) {
       return res.status(429).json({ error: 'Too many signup attempts. Please try again later.' });
     }
 
+    // Geo-restriction: USA only
+    const country = req.headers['x-vercel-ip-country'] || 'US';
+    if (country !== 'US') {
+      return res.status(403).json({
+        error: 'The waitlist is currently available in the USA only.',
+        redirect: '/waitlist-international.html'
+      });
+    }
+
     const isGoogleSignIn = !!req.body.google_credential;
 
     if (!isGoogleSignIn) {

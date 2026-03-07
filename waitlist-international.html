@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Opinion Kings - Coming Soon to Your Region</title>
+  <meta name="description" content="Opinion Kings is currently operating in the USA only. Enter your email to be notified when we expand to your region.">
+  <link href="https://cdn.shopify.com/s/files/1/0920/7591/7591/files/1_682f1f70-234e-4a1d-9c86-260ba44c1387.png?v=1772224679" rel="icon">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: rgb(5,5,5);
+      color: #fff;
+      font-family: "Manrope", sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Logo ──────────────────────────────────────── */
+    .ok-intl-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 48px;
+      text-decoration: none;
+    }
+    .ok-intl-logo img {
+      height: 36px;
+      width: auto;
+    }
+    .ok-intl-logo span {
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.02em;
+    }
+
+    /* ── Card ──────────────────────────────────────── */
+    .ok-intl-card {
+      width: 100%;
+      max-width: 460px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+
+    /* ── Flag badge ───────────────────────────────── */
+    .ok-intl-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(211,177,124,0.12);
+      color: #D3B17C;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 8px 20px;
+      border-radius: 100px;
+      margin-bottom: 28px;
+    }
+
+    /* ── Heading ───────────────────────────────────── */
+    .ok-intl-heading {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      text-align: center;
+      line-height: 1.2;
+      margin-bottom: 14px;
+    }
+    .ok-intl-sub {
+      font-size: 16px;
+      color: rgba(255,255,255,0.5);
+      text-align: center;
+      line-height: 1.6;
+      margin-bottom: 36px;
+      max-width: 380px;
+    }
+
+    /* ── Form ──────────────────────────────────────── */
+    .ok-intl-form {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .ok-intl-input-wrap {
+      display: flex;
+      width: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      transition: border-color 0.2s;
+    }
+    .ok-intl-input-wrap:focus-within {
+      border-color: rgba(211,177,124,0.4);
+    }
+    .ok-intl-input-wrap input {
+      flex: 1;
+      padding: 15px 18px;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #fff;
+      font-family: "Manrope", sans-serif;
+      font-size: 15px;
+      letter-spacing: -0.01em;
+    }
+    .ok-intl-input-wrap input::placeholder {
+      color: rgba(255,255,255,0.35);
+    }
+    .ok-intl-submit {
+      width: 100%;
+      padding: 16px 28px;
+      background: #D3B17C;
+      border: none;
+      color: #000;
+      font-family: "Manrope", sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      box-shadow: 0 8px 20px rgba(211,177,124,0.32);
+    }
+    .ok-intl-submit:hover { background: #c9a46e; transform: translateY(-1px); }
+    .ok-intl-submit:active { transform: translateY(0); }
+    .ok-intl-submit:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+    .ok-intl-error {
+      font-size: 13px;
+      color: #ef4444;
+      text-align: center;
+      min-height: 20px;
+      margin-top: 4px;
+    }
+
+    /* ── Success state ────────────────────────────── */
+    .ok-intl-success {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .ok-intl-success.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .ok-intl-success-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: rgba(34,197,94,0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .ok-intl-success-icon svg {
+      width: 28px;
+      height: 28px;
+      stroke: #22c55e;
+      fill: none;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .ok-intl-success h3 {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .ok-intl-success p {
+      font-size: 15px;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.6;
+      max-width: 340px;
+    }
+
+    /* ── Footer link ──────────────────────────────── */
+    .ok-intl-footer {
+      margin-top: 40px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.3);
+      text-align: center;
+    }
+    .ok-intl-footer a {
+      color: #D3B17C;
+      text-decoration: none;
+    }
+    .ok-intl-footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 480px) {
+      .ok-intl-heading { font-size: 26px; }
+      .ok-intl-sub { font-size: 15px; }
+    }
+  </style>
+</head>
+<body>
+
+  <a href="index.html" class="ok-intl-logo">
+    <img src="https://cdn.shopify.com/s/files/1/0920/7591/7591/files/7_5244414e-055a-4786-a3ad-34dbdd940e0e.png?v=1772224401" alt="Opinion Kings">
+    <span>Opinion Kings</span>
+  </a>
+
+  <div class="ok-intl-card" id="ok-intl-card">
+    <div class="ok-intl-badge">USA Only</div>
+    <h1 class="ok-intl-heading">We're Currently Operating in the USA Only</h1>
+    <p class="ok-intl-sub">Opinion Kings is launching in the United States first. Enter your email below and we'll notify you as soon as we expand to your region.</p>
+
+    <form class="ok-intl-form" id="ok-intl-form">
+      <div class="ok-intl-input-wrap">
+        <input type="email" id="ok-intl-email" placeholder="Enter your email address" required autocomplete="email">
+      </div>
+      <button type="submit" class="ok-intl-submit" id="ok-intl-btn">Notify Me</button>
+      <div class="ok-intl-error" id="ok-intl-error"></div>
+    </form>
+  </div>
+
+  <div class="ok-intl-footer">
+    <a href="index.html">Back to homepage</a>
+  </div>
+
+  <script>
+    (function() {
+      var form = document.getElementById('ok-intl-form');
+      var emailInput = document.getElementById('ok-intl-email');
+      var btn = document.getElementById('ok-intl-btn');
+      var errorEl = document.getElementById('ok-intl-error');
+      var card = document.getElementById('ok-intl-card');
+
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        errorEl.textContent = '';
+
+        var email = emailInput.value.trim().toLowerCase();
+        if (!email) { errorEl.textContent = 'Please enter your email.'; return; }
+        if (!/^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/.test(email)) {
+          errorEl.textContent = 'Please enter a valid email address.';
+          return;
+        }
+
+        btn.disabled = true;
+        btn.textContent = 'Submitting...';
+
+        fetch('/api/waitlist/international', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: email })
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (data.error) {
+            errorEl.textContent = data.error;
+            btn.disabled = false;
+            btn.textContent = 'Notify Me';
+            return;
+          }
+          // Show success state
+          card.innerHTML = '';
+          var success = document.createElement('div');
+          success.className = 'ok-intl-success';
+          success.innerHTML =
+            '<div class="ok-intl-success-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>' +
+            '<h3>' + (data.already_registered ? "You're already on the list!" : "You're on the list!") + '</h3>' +
+            '<p>' + (data.message || "We are currently operating in the USA only. We'll let you know through email when we start operating in your country.") + '</p>';
+          card.appendChild(success);
+          setTimeout(function() { success.classList.add('visible'); }, 50);
+        })
+        .catch(function() {
+          errorEl.textContent = 'Network error. Please try again.';
+          btn.disabled = false;
+          btn.textContent = 'Notify Me';
+        });
+      });
+
+      setTimeout(function() { emailInput.focus(); }, 300);
+    })();
+  </script>
+</body>
+</html>

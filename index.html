@@ -610,10 +610,34 @@
             '<div class="ok-rt-label">REFERRAL REWARDS</div>' +
             '<h2 class="ok-rt-heading">Share More. <span>Earn More.</span></h2>' +
             '<div class="ok-rt-grid">' +
-              '<div class="ok-rt-card"><div class="ok-rt-milestone">1</div><div class="ok-rt-ref">Referral</div><div class="ok-rt-reward">Skip 100 spots on the waitlist</div></div>' +
-              '<div class="ok-rt-card"><div class="ok-rt-milestone">5</div><div class="ok-rt-ref">Referrals</div><div class="ok-rt-reward">$10 trading credit bonus</div></div>' +
-              '<div class="ok-rt-card"><div class="ok-rt-milestone">25</div><div class="ok-rt-ref">Referrals</div><div class="ok-rt-reward">$75 trading credit bonus</div></div>' +
-              '<div class="ok-rt-card"><div class="ok-rt-milestone">50</div><div class="ok-rt-ref">Referrals</div><div class="ok-rt-reward">$300 credit + VIP Founding Trader badge</div></div>' +
+              '<div class="ok-rt-card">' +
+                '<div class="ok-rt-ref green">1 REFERRAL</div>' +
+                '<div class="ok-rt-reward-val">Skip 100</div>' +
+                '<p class="ok-rt-desc">Jump 100 positions the moment your first invite joins.</p>' +
+                '<div class="ok-rt-badge green"><span>&#8593;</span> QUEUE BOOST</div>' +
+                '<div class="ok-rt-accent-bar"></div>' +
+              '</div>' +
+              '<div class="ok-rt-card">' +
+                '<div class="ok-rt-ref green">5 REFERRALS</div>' +
+                '<div class="ok-rt-reward-val">$10</div>' +
+                '<p class="ok-rt-desc">$10 in trading credits unlocked and held until launch.</p>' +
+                '<div class="ok-rt-badge green"><span>$</span> TRADING CREDIT</div>' +
+                '<div class="ok-rt-accent-bar"></div>' +
+              '</div>' +
+              '<div class="ok-rt-card">' +
+                '<div class="ok-rt-ref green">25 REFERRALS</div>' +
+                '<div class="ok-rt-reward-val">$75</div>' +
+                '<p class="ok-rt-desc">$75 in credits plus priority support and first access to new markets.</p>' +
+                '<div class="ok-rt-badge green"><span>$</span> TRADING CREDIT</div>' +
+                '<div class="ok-rt-accent-bar"></div>' +
+              '</div>' +
+              '<div class="ok-rt-card gold">' +
+                '<div class="ok-rt-ref gold">50 REFERRALS</div>' +
+                '<div class="ok-rt-reward-val gold">$300</div>' +
+                '<p class="ok-rt-desc">$300 in credits, zero fees for 6 months, and a permanent VIP Founder badge on your profile.</p>' +
+                '<div class="ok-rt-badge gold"><span>&#9733;</span> VIP FOUNDER</div>' +
+                '<div class="ok-rt-accent-bar gold"></div>' +
+              '</div>' +
             '</div>' +
           '</div>';
         after.parentNode.insertBefore(sec, after.nextSibling);
@@ -1890,46 +1914,89 @@
     .ok-rt-heading span { color: #D3B17C; }
     .ok-rt-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
     }
     .ok-rt-card {
       background: rgba(13, 13, 13, 0.9);
-      border: 1px solid rgba(211, 177, 124, 0.1);
+      border: 1px solid rgba(211, 177, 124, 0.12);
       border-radius: 16px;
-      padding: 36px 24px;
-      text-align: center;
+      padding: 40px 32px;
+      text-align: left;
       transition: border-color 0.3s, transform 0.2s;
+      display: flex;
+      flex-direction: column;
     }
     .ok-rt-card:hover { border-color: rgba(211, 177, 124, 0.3); transform: translateY(-4px); }
-    .ok-rt-milestone {
-      font-family: "Manrope", sans-serif;
-      font-size: 48px;
-      font-weight: 800;
-      color: #D3B17C;
-      line-height: 1;
-      margin-bottom: 4px;
-    }
+    .ok-rt-card.gold { border-color: rgba(211, 177, 124, 0.35); }
     .ok-rt-ref {
       font-family: "Manrope", sans-serif;
       font-size: 12px;
-      font-weight: 600;
-      color: rgba(255,255,255,0.35);
+      font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-bottom: 18px;
+      letter-spacing: 0.14em;
+      margin-bottom: 12px;
     }
-    .ok-rt-reward {
+    .ok-rt-ref.green { color: #4CAF50; }
+    .ok-rt-ref.gold { color: #D3B17C; }
+    .ok-rt-reward-val {
+      font-family: "Georgia", "Times New Roman", serif;
+      font-size: 64px;
+      font-weight: 400;
+      font-style: italic;
+      color: #fff;
+      line-height: 1;
+      margin-bottom: 16px;
+    }
+    .ok-rt-reward-val.gold { color: #D3B17C; }
+    .ok-rt-desc {
       font-family: "Manrope", sans-serif;
       font-size: 15px;
-      font-weight: 600;
-      color: #fff;
-      line-height: 1.5;
+      font-weight: 400;
+      color: rgba(255,255,255,0.45);
+      line-height: 1.6;
+      margin: 0 0 24px;
+      flex: 1;
+    }
+    .ok-rt-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: "Manrope", sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 10px 20px;
+      border-radius: 8px;
+      width: fit-content;
+      margin-bottom: 24px;
+    }
+    .ok-rt-badge.green {
+      color: #4CAF50;
+      background: rgba(76, 175, 80, 0.1);
+      border: 1px solid rgba(76, 175, 80, 0.25);
+    }
+    .ok-rt-badge.gold {
+      color: #D3B17C;
+      background: rgba(211, 177, 124, 0.1);
+      border: 1px solid rgba(211, 177, 124, 0.25);
+    }
+    .ok-rt-accent-bar {
+      height: 3px;
+      width: 100%;
+      border-radius: 3px;
+      background: linear-gradient(90deg, #4CAF50 60%, transparent 100%);
+    }
+    .ok-rt-accent-bar.gold {
+      background: linear-gradient(90deg, #D3B17C 60%, transparent 100%);
     }
     @media (max-width: 809px) {
       #ok-referral-tiers { padding: 60px 20px; }
       .ok-rt-heading { font-size: 32px; margin-bottom: 36px; }
-      .ok-rt-grid { grid-template-columns: repeat(2, 1fr); }
+      .ok-rt-grid { grid-template-columns: 1fr; }
+      .ok-rt-reward-val { font-size: 48px; }
+      .ok-rt-card { padding: 28px 24px; }
     }
 
     /* ─── FAQ ─── */

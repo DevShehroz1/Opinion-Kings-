@@ -401,57 +401,76 @@
       function injectReferral() {
         if (!document.body) return;
         if (document.getElementById('ok-referral-section')) return;
+        // Hide the Framer "How it Works" section
+        var hiwSections = document.querySelectorAll('section.framer-88c1hq');
+        for (var h = 0; h < hiwSections.length; h++) {
+          var par = hiwSections[h].parentElement;
+          if (par && par.classList.contains('ssr-variant')) { par.style.display = 'none'; }
+          else { hiwSections[h].style.display = 'none'; }
+        }
         var after = document.getElementById('ok-markets-section');
         if (!after) return;
         var sec = document.createElement('section');
         sec.id = 'ok-referral-section';
-        var h2 = document.createElement('h2');
-        h2.textContent = 'Climb the Waitlist. Earn Before Launch.';
-        sec.appendChild(h2);
-        var copy = document.createElement('p');
-        copy.id = 'ok-referral-copy';
-        copy.innerHTML = 'Invite friends. Move up instantly. Unlock trading credits.';
-        sec.appendChild(copy);
-        var grid = document.createElement('div');
-        grid.className = 'ok-rewards-grid';
-        var tiers = [
-          { refs: '1 Referral', value: 'Skip 100', desc: 'spots on the waitlist' },
-          { refs: '5 Referrals', value: '$10', desc: 'in trading credits' },
-          { refs: '25 Referrals', value: '$75', desc: 'in trading credits' },
-          { refs: '50 Referrals', value: '$300', desc: '+ VIP badge', vip: true }
-        ];
-        tiers.forEach(function(t) {
-          var card = document.createElement('div');
-          card.className = 'ok-reward-card' + (t.vip ? ' vip' : '');
-          var refs = document.createElement('p');
-          refs.className = 'ok-reward-referrals';
-          refs.textContent = t.refs;
-          card.appendChild(refs);
-          var val = document.createElement('p');
-          val.className = 'ok-reward-value';
-          val.textContent = t.value;
-          card.appendChild(val);
-          var desc = document.createElement('p');
-          desc.className = 'ok-reward-desc';
-          desc.textContent = t.desc;
-          card.appendChild(desc);
-          if (t.vip) {
-            var badge = document.createElement('span');
-            badge.className = 'ok-vip-badge';
-            badge.textContent = 'VIP Founder';
-            card.appendChild(badge);
-          }
-          grid.appendChild(card);
-        });
-        sec.appendChild(grid);
-        var ctaWrap = document.createElement('div');
-        ctaWrap.id = 'ok-referral-cta';
-        var cta = document.createElement('a');
-        cta.href = 'waitlist.html';
-        cta.textContent = 'Join & Start Climbing';
-        ctaWrap.appendChild(cta);
-        sec.appendChild(ctaWrap);
+        sec.innerHTML =
+          '<div class="ok-rp-layout">' +
+            '<div class="ok-rp-left">' +
+              '<p class="ok-rp-label">REFERRAL PROGRAM</p>' +
+              '<h2 class="ok-rp-heading">CLIMB THE<br><span class="ok-rp-gold">QUEUE.</span><br>GET REWARDED.</h2>' +
+              '<p class="ok-rp-desc">Your position matters. The higher you rank, the earlier you get access — and the bigger your launch bonus. Invite your network and collect rewards as they join.</p>' +
+              '<div class="ok-rp-steps">' +
+                '<div class="ok-rp-step"><span class="ok-rp-step-num">01</span><div><strong>Join the Waitlist</strong><p>Enter your email above to reserve your spot and receive your unique referral link.</p></div></div>' +
+                '<div class="ok-rp-step"><span class="ok-rp-step-num">02</span><div><strong>Share Your Link</strong><p>Send it to anyone who follows markets — crypto, politics, sports, macro. They join, you move up.</p></div></div>' +
+                '<div class="ok-rp-step"><span class="ok-rp-step-num">03</span><div><strong>Earn Your Rank</strong><p>Top 100 referrers get a $50 cash credit. Top 10 get VIP founding tier with zero trading fees for 6 months.</p></div></div>' +
+              '</div>' +
+            '</div>' +
+            '<div class="ok-rp-right">' +
+              '<div class="ok-rp-lb">' +
+                '<div class="ok-rp-lb-header"><span>LEADERBOARD</span><span>REFERRALS</span></div>' +
+                '<div class="ok-rp-lb-rows" id="ok-rp-lb-rows">' +
+                  '<div class="ok-rp-lb-row"><span class="ok-rp-lb-rank">1</span><div class="ok-rp-lb-info"><span class="ok-rp-lb-name">Loading...</span><span class="ok-rp-lb-joined">—</span></div><span class="ok-rp-lb-refs">—</span></div>' +
+                  '<div class="ok-rp-lb-row"><span class="ok-rp-lb-rank">2</span><div class="ok-rp-lb-info"><span class="ok-rp-lb-name">Loading...</span><span class="ok-rp-lb-joined">—</span></div><span class="ok-rp-lb-refs">—</span></div>' +
+                  '<div class="ok-rp-lb-row"><span class="ok-rp-lb-rank">3</span><div class="ok-rp-lb-info"><span class="ok-rp-lb-name">Loading...</span><span class="ok-rp-lb-joined">—</span></div><span class="ok-rp-lb-refs">—</span></div>' +
+                  '<div class="ok-rp-lb-row"><span class="ok-rp-lb-rank">4</span><div class="ok-rp-lb-info"><span class="ok-rp-lb-name">Loading...</span><span class="ok-rp-lb-joined">—</span></div><span class="ok-rp-lb-refs">—</span></div>' +
+                  '<div class="ok-rp-lb-row"><span class="ok-rp-lb-rank">5</span><div class="ok-rp-lb-info"><span class="ok-rp-lb-name">Loading...</span><span class="ok-rp-lb-joined">—</span></div><span class="ok-rp-lb-refs">—</span></div>' +
+                '</div>' +
+                '<div class="ok-rp-lb-you"><span>Your position after joining →</span><span class="ok-rp-lb-you-rank" id="ok-rp-lb-you-rank">#—</span></div>' +
+              '</div>' +
+            '</div>' +
+          '</div>';
         after.parentNode.insertBefore(sec, after.nextSibling);
+        // Fetch live leaderboard
+        fetch('/api/waitlist/leaderboard?limit=5')
+          .then(function(r) { return r.json(); })
+          .then(function(data) {
+            var rows = document.getElementById('ok-rp-lb-rows');
+            if (!rows || !data.leaderboard) return;
+            rows.innerHTML = '';
+            var lb = data.leaderboard;
+            for (var i = 0; i < 5; i++) {
+              var u = lb[i];
+              var row = document.createElement('div');
+              row.className = 'ok-rp-lb-row';
+              if (u) {
+                var ago = '';
+                if (u.joined) {
+                  var diff = Math.floor((Date.now() - new Date(u.joined).getTime()) / 86400000);
+                  ago = diff === 0 ? 'Joined today' : 'Joined ' + diff + ' day' + (diff > 1 ? 's' : '') + ' ago';
+                }
+                row.innerHTML = '<span class="ok-rp-lb-rank">' + (i + 1) + '</span>' +
+                  '<div class="ok-rp-lb-info"><span class="ok-rp-lb-name">' + u.display_name + '</span><span class="ok-rp-lb-joined">' + ago + '</span></div>' +
+                  '<span class="ok-rp-lb-refs">' + u.referrals + '</span>';
+              } else {
+                row.innerHTML = '<span class="ok-rp-lb-rank">' + (i + 1) + '</span>' +
+                  '<div class="ok-rp-lb-info"><span class="ok-rp-lb-name ok-rp-lb-empty">Open spot</span><span class="ok-rp-lb-joined">—</span></div>' +
+                  '<span class="ok-rp-lb-refs">0</span>';
+              }
+              rows.appendChild(row);
+            }
+            var youRank = document.getElementById('ok-rp-lb-you-rank');
+            if (youRank) youRank.textContent = '#' + (data.total_users + 1);
+          })
+          .catch(function() {});
       }
       var complianceItems = [
         { icon: '<svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>', title: 'U.S. Regulatory Framework', desc: 'Actively pursuing licensing within the U.S. regulatory framework.' },
@@ -493,14 +512,7 @@
         after.parentNode.insertBefore(sec, after.nextSibling);
       }
       function injectHiwTagline() {
-        if (!document.body) return;
-        if (document.getElementById('ok-hiw-tagline')) return;
-        var cards = document.querySelector('.framer-bx18va[data-framer-name="Cards"]');
-        if (!cards) return;
-        var tag = document.createElement('p');
-        tag.id = 'ok-hiw-tagline';
-        tag.textContent = 'Simple. Fast. Social.';
-        cards.parentNode.insertBefore(tag, cards.nextSibling);
+        // Removed — How It Works section replaced by Referral Program
       }
       function goToWaitlist() {
         var ref = '';
@@ -1044,119 +1056,188 @@
     }
     #ok-referral-section {
       width: 100%;
-      max-width: 1000px;
+      max-width: 1200px;
       margin: 0 auto;
       padding: 100px 40px;
     }
-    #ok-referral-section h2 {
+    .ok-rp-layout {
+      display: flex;
+      gap: 60px;
+      align-items: flex-start;
+    }
+    .ok-rp-left {
+      flex: 1;
+      min-width: 0;
+    }
+    .ok-rp-right {
+      width: 420px;
+      flex-shrink: 0;
+    }
+    .ok-rp-label {
       font-family: "Manrope", sans-serif;
-      font-size: 48px;
-      font-weight: 500;
-      letter-spacing: -0.04em;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: #D3B17C;
+      text-transform: uppercase;
+      margin: 0 0 20px;
+    }
+    .ok-rp-heading {
+      font-family: "Manrope", sans-serif;
+      font-size: 52px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
       color: #fff;
-      text-align: center;
-      margin: 0 0 16px;
+      line-height: 1.05;
+      margin: 0 0 24px;
+      text-transform: uppercase;
     }
-    #ok-referral-copy {
+    .ok-rp-gold {
+      color: #D3B17C;
+    }
+    .ok-rp-desc {
       font-family: "Manrope", sans-serif;
-      font-size: 18px;
+      font-size: 16px;
       color: rgba(255,255,255,0.5);
-      text-align: center;
       line-height: 1.7;
-      margin: 0 0 48px;
+      margin: 0 0 40px;
+      max-width: 520px;
     }
-    .ok-rewards-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-      margin-bottom: 48px;
+    .ok-rp-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
     }
-    .ok-reward-card {
-      background: rgb(13,13,13);
-      border-radius: 20px;
-      padding: 28px 24px;
-      text-align: center;
-      position: relative;
+    .ok-rp-step {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+      padding: 24px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .ok-rp-step:last-child { border-bottom: none; }
+    .ok-rp-step-num {
+      font-family: "Manrope", sans-serif;
+      font-size: 32px;
+      font-weight: 800;
+      color: #D3B17C;
+      line-height: 1;
+      min-width: 50px;
+    }
+    .ok-rp-step strong {
+      font-family: "Manrope", sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      display: block;
+      margin-bottom: 6px;
+    }
+    .ok-rp-step p {
+      font-family: "Manrope", sans-serif;
+      font-size: 14px;
+      color: rgba(255,255,255,0.4);
+      line-height: 1.5;
+      margin: 0;
+    }
+    /* Leaderboard */
+    .ok-rp-lb {
+      background: rgba(13,13,13,0.9);
+      border: 1px solid rgba(211,177,124,0.15);
+      border-radius: 16px;
       overflow: hidden;
-      box-shadow: inset 0 1px 0 0 rgba(255,255,255,0.04), 0 1px 3px rgba(0,0,0,0.4);
-      transition: transform 0.25s ease, box-shadow 0.25s ease;
     }
-    .ok-reward-card:hover {
-      transform: translateY(-4px);
-      box-shadow: inset 0 1px 0 0 rgba(211,177,124,0.12), 0 8px 24px rgba(0,0,0,0.5);
+    .ok-rp-lb-header {
+      display: flex;
+      justify-content: space-between;
+      padding: 18px 24px;
+      font-family: "Manrope", sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.4);
+      text-transform: uppercase;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
     }
-    .ok-reward-card.vip {
-      border: 1px solid rgba(211,177,124,0.3);
+    .ok-rp-lb-header span:last-child { color: #D3B17C; }
+    .ok-rp-lb-row {
+      display: flex;
+      align-items: center;
+      padding: 16px 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      transition: background 0.2s;
     }
-    .ok-reward-referrals {
+    .ok-rp-lb-row:hover { background: rgba(211,177,124,0.03); }
+    .ok-rp-lb-row:last-child { border-bottom: none; }
+    .ok-rp-lb-rank {
+      font-family: "Manrope", sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.25);
+      min-width: 36px;
+    }
+    .ok-rp-lb-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .ok-rp-lb-name {
+      font-family: "Manrope", sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      color: #fff;
+    }
+    .ok-rp-lb-name.ok-rp-lb-empty {
+      color: rgba(255,255,255,0.2);
+      font-style: italic;
+    }
+    .ok-rp-lb-joined {
+      font-family: "Manrope", sans-serif;
+      font-size: 11px;
+      color: rgba(255,255,255,0.25);
+      letter-spacing: 0.02em;
+    }
+    .ok-rp-lb-refs {
+      font-family: "Manrope", sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: #4CAF50;
+      min-width: 40px;
+      text-align: right;
+    }
+    .ok-rp-lb-you {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 24px;
+      background: rgba(211,177,124,0.06);
+      border-top: 1px solid rgba(211,177,124,0.15);
+    }
+    .ok-rp-lb-you span:first-child {
       font-family: "Manrope", sans-serif;
       font-size: 13px;
       font-weight: 600;
       color: #D3B17C;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin: 0 0 12px;
+      letter-spacing: 0.02em;
     }
-    .ok-reward-value {
+    .ok-rp-lb-you-rank {
       font-family: "Manrope", sans-serif;
-      font-size: 28px;
-      font-weight: 700;
-      color: #fff;
-      letter-spacing: -0.02em;
-      margin: 0 0 8px;
-    }
-    .ok-reward-desc {
-      font-family: "Manrope", sans-serif;
-      font-size: 14px;
-      color: rgba(255,255,255,0.4);
-      margin: 0;
-    }
-    .ok-reward-card.vip .ok-reward-value {
+      font-size: 22px;
+      font-weight: 800;
       color: #D3B17C;
     }
-    .ok-vip-badge {
-      display: inline-block;
-      background: rgba(211,177,124,0.15);
-      color: #D3B17C;
-      font-family: "Manrope", sans-serif;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 4px 10px;
-      border-radius: 6px;
-      margin-top: 10px;
-    }
-    #ok-referral-cta {
-      display: flex;
-      justify-content: center;
-    }
-    #ok-referral-cta a {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 16px 36px;
-      background: #D3B17C;
-      color: #000;
-      font-family: "Manrope", sans-serif;
-      font-size: 16px;
-      font-weight: 700;
-      border-radius: 23px;
-      text-decoration: none;
-      box-shadow: 0 8px 20px rgba(211,177,124,0.32);
-      transition: background 0.2s, transform 0.2s;
-    }
-    #ok-referral-cta a:hover {
-      background: #c9a46e;
-      transform: translateY(-2px);
+    /* Hide Framer How It Works section */
+    section.framer-88c1hq,
+    section.framer-88c1hq + .ssr-variant {
+      display: none !important;
     }
     @media (max-width: 809px) {
       #ok-referral-section { padding: 60px 20px; }
-      #ok-referral-section h2 { font-size: 30px; }
-      #ok-referral-copy { font-size: 16px; }
-      .ok-rewards-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-      .ok-reward-card { padding: 22px 16px; }
-      .ok-reward-value { font-size: 22px; }
+      .ok-rp-layout { flex-direction: column; gap: 40px; }
+      .ok-rp-right { width: 100%; }
+      .ok-rp-heading { font-size: 36px; }
+      .ok-rp-desc { font-size: 15px; }
+      .ok-rp-step-num { font-size: 26px; min-width: 40px; }
     }
     #ok-compliance-section {
       width: 100%;

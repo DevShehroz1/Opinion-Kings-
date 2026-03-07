@@ -526,10 +526,29 @@
           '<div class="ok-hye-inner">' +
             '<div class="ok-hye-label">HOW IT WORKS</div>' +
             '<h2 class="ok-hye-heading">Three Ways to Win <span>Before We Launch</span></h2>' +
+            '<p class="ok-hye-subtitle">Join the waitlist, invite friends, and start predicting. Every action earns you real rewards before we even launch.</p>' +
             '<div class="ok-hye-grid">' +
-              '<div class="ok-hye-card"><div class="ok-hye-num">01</div><div class="ok-hye-icon">&#9650;</div><h3>Climb the Waitlist</h3><p>Join early, refer friends, rise in rank. Higher rank = earlier access + bigger launch bonus.</p></div>' +
-              '<div class="ok-hye-card"><div class="ok-hye-num">02</div><div class="ok-hye-icon">&#36;</div><h3>Earn Referral Credits</h3><p>Every friend who joins earns you trading credits. Top referrers unlock cash bonuses and VIP status.</p></div>' +
-              '<div class="ok-hye-card"><div class="ok-hye-num">03</div><div class="ok-hye-icon">&#127919;</div><h3>Predict & Earn</h3><p>Place predictions on real-world events. If you\'re right, you earn real money. Starting at $5 per correct prediction.</p></div>' +
+              '<div class="ok-hye-card">' +
+                '<div class="ok-hye-num">01</div>' +
+                '<div class="ok-hye-icon-wrap"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#D3B17C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 11 12 6 7 11"/><polyline points="17 18 12 13 7 18"/></svg></div>' +
+                '<h3>Climb the Waitlist</h3>' +
+                '<p>Join early, refer friends, rise in rank. Higher rank = earlier access + bigger launch bonus.</p>' +
+                '<div class="ok-hye-bar"></div>' +
+              '</div>' +
+              '<div class="ok-hye-card">' +
+                '<div class="ok-hye-num">02</div>' +
+                '<div class="ok-hye-icon-wrap"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#D3B17C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>' +
+                '<h3>Earn Referral Credits</h3>' +
+                '<p>Every friend who joins earns you trading credits. Top referrers unlock cash bonuses and VIP status.</p>' +
+                '<div class="ok-hye-bar"></div>' +
+              '</div>' +
+              '<div class="ok-hye-card">' +
+                '<div class="ok-hye-num">03</div>' +
+                '<div class="ok-hye-icon-wrap"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#D3B17C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>' +
+                '<h3>Predict & Earn</h3>' +
+                '<p>Place predictions on real-world events. If you\'re right, you earn real money. Starting at $5 per correct prediction.</p>' +
+                '<div class="ok-hye-bar"></div>' +
+              '</div>' +
             '</div>' +
           '</div>';
         after.parentNode.insertBefore(sec, after.nextSibling);
@@ -1764,56 +1783,97 @@
       margin: 0 0 56px;
     }
     .ok-hye-heading span { color: #D3B17C; }
+    .ok-hye-subtitle {
+      font-family: "Manrope", sans-serif;
+      font-size: 17px;
+      color: rgba(255,255,255,0.4);
+      text-align: center;
+      line-height: 1.6;
+      max-width: 600px;
+      margin: 0 auto 56px;
+    }
     .ok-hye-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
+      gap: 20px;
     }
     .ok-hye-card {
       background: rgba(13, 13, 13, 0.9);
       border: 1px solid rgba(211, 177, 124, 0.1);
-      border-radius: 16px;
-      padding: 36px 28px;
+      border-radius: 20px;
+      padding: 40px 30px 32px;
       position: relative;
-      transition: border-color 0.3s;
+      transition: border-color 0.4s, transform 0.3s, box-shadow 0.4s;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
     }
-    .ok-hye-card:hover { border-color: rgba(211, 177, 124, 0.25); }
+    .ok-hye-card:hover {
+      border-color: rgba(211, 177, 124, 0.3);
+      transform: translateY(-6px);
+      box-shadow: 0 12px 40px rgba(211, 177, 124, 0.08);
+    }
     .ok-hye-num {
       font-family: "Manrope", sans-serif;
-      font-size: 64px;
-      font-weight: 800;
-      color: rgba(255,255,255,0.03);
+      font-size: 80px;
+      font-weight: 900;
+      color: rgba(255,255,255,0.025);
       line-height: 1;
       position: absolute;
-      top: 14px;
-      right: 18px;
+      top: 10px;
+      right: 16px;
       pointer-events: none;
+      transition: color 0.4s;
     }
-    .ok-hye-card:hover .ok-hye-num { color: rgba(211,177,124,0.06); }
-    .ok-hye-icon {
-      font-size: 28px;
-      display: block;
-      margin-bottom: 18px;
+    .ok-hye-card:hover .ok-hye-num { color: rgba(211,177,124,0.08); }
+    .ok-hye-icon-wrap {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: rgba(211, 177, 124, 0.08);
+      border: 1px solid rgba(211, 177, 124, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+      transition: background 0.3s, border-color 0.3s;
+    }
+    .ok-hye-card:hover .ok-hye-icon-wrap {
+      background: rgba(211, 177, 124, 0.12);
+      border-color: rgba(211, 177, 124, 0.3);
     }
     .ok-hye-card h3 {
       font-family: "Manrope", sans-serif;
-      font-size: 20px;
+      font-size: 22px;
       font-weight: 700;
       color: #fff;
-      letter-spacing: -0.01em;
-      margin: 0 0 10px;
+      letter-spacing: -0.02em;
+      margin: 0 0 12px;
     }
     .ok-hye-card p {
       font-family: "Manrope", sans-serif;
-      font-size: 14px;
-      color: rgba(255,255,255,0.4);
+      font-size: 15px;
+      color: rgba(255,255,255,0.42);
       line-height: 1.7;
       margin: 0;
+      flex: 1;
     }
+    .ok-hye-bar {
+      height: 3px;
+      width: 100%;
+      border-radius: 3px;
+      background: linear-gradient(90deg, #D3B17C 50%, transparent 100%);
+      margin-top: 28px;
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    .ok-hye-card:hover .ok-hye-bar { opacity: 1; }
     @media (max-width: 809px) {
       #ok-how-you-earn { padding: 60px 20px; }
-      .ok-hye-heading { font-size: 32px; margin-bottom: 36px; }
+      .ok-hye-heading { font-size: 32px; margin-bottom: 16px; }
+      .ok-hye-subtitle { font-size: 15px; margin-bottom: 36px; }
       .ok-hye-grid { grid-template-columns: 1fr; }
+      .ok-hye-card { padding: 32px 24px 28px; }
     }
 
     /* ─── REFERRAL TIERS ─── */

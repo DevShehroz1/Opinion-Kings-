@@ -380,7 +380,7 @@
         hint.className = 'ok-mc-hint';
         hint.innerHTML = '← Swipe to explore all ' + marketsData.length + ' markets · Join waitlist first to lock in your predictions →';
         sec.appendChild(hint);
-        comparison.parentNode.insertBefore(sec, comparison.nextSibling);
+        comparison.parentNode.insertBefore(sec, comparison);
         // Scroll sync dots
         track.addEventListener('scroll', function() {
           var cardW = slider.firstChild.offsetWidth + 16;
@@ -1105,10 +1105,10 @@
       margin-bottom: 16px;
     }
     .ok-ms-title {
-      font-family: "Georgia", "Times New Roman", serif;
-      font-size: 72px;
-      font-weight: 700;
-      font-style: italic;
+      font-family: "Manrope", sans-serif;
+      font-size: 64px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
       color: #fff;
       line-height: 1.1;
       margin: 0 0 24px;

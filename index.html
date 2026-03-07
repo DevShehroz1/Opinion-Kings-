@@ -486,45 +486,6 @@
           })
           .catch(function() {});
       }
-      var complianceItems = [
-        { icon: '<svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>', title: 'U.S. Regulatory Framework', desc: 'Actively pursuing licensing within the U.S. regulatory framework.' },
-        { icon: '<svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>', title: 'AML & KYC Protocols', desc: 'Identity verification and anti-money laundering compliance built in from day one.' },
-        { icon: '<svg viewBox="0 0 24 24"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M12 6v6l4 2"/></svg>', title: 'Regulated Partners', desc: 'Structured with licensed custodians and regulated financial partners.' },
-        { icon: '<svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>', title: 'Secure Custody', desc: 'Institutional-grade custody architecture protecting all user assets.' }
-      ];
-      function injectCompliance() {
-        if (!document.body) return;
-        if (document.getElementById('ok-compliance-section')) return;
-        var after = document.getElementById('ok-referral-section');
-        if (!after) return;
-        var sec = document.createElement('section');
-        sec.id = 'ok-compliance-section';
-        var h2 = document.createElement('h2');
-        h2.textContent = 'Built Compliance-First';
-        sec.appendChild(h2);
-        var grid = document.createElement('div');
-        grid.className = 'ok-compliance-grid';
-        complianceItems.forEach(function(item) {
-          var card = document.createElement('div');
-          card.className = 'ok-compliance-card';
-          var iconWrap = document.createElement('div');
-          iconWrap.className = 'ok-compliance-icon';
-          iconWrap.innerHTML = item.icon;
-          card.appendChild(iconWrap);
-          var text = document.createElement('div');
-          text.className = 'ok-compliance-text';
-          var h4 = document.createElement('h4');
-          h4.textContent = item.title;
-          text.appendChild(h4);
-          var p = document.createElement('p');
-          p.textContent = item.desc;
-          text.appendChild(p);
-          card.appendChild(text);
-          grid.appendChild(card);
-        });
-        sec.appendChild(grid);
-        after.parentNode.insertBefore(sec, after.nextSibling);
-      }
       function injectHiwTagline() {
         // Removed — How It Works section replaced by Referral Program
       }
@@ -640,7 +601,7 @@
       function injectFaq() {
         if (!document.body) return;
         if (document.getElementById('ok-faq-section')) return;
-        var after = document.getElementById('ok-compliance-section');
+        var after = document.getElementById('ok-referral-section');
         if (!after) return;
         // Hide Framer FAQ section
         var framerFaq = document.querySelectorAll('section.framer-1rdywpe');
@@ -699,7 +660,7 @@
               '<div class="ok-sf-brand"><div class="ok-sf-logo">OK</div><span>Opinion Kings</span></div>' +
               '<div class="ok-sf-cols">' +
                 '<div class="ok-sf-col"><h5>Product</h5><a href="javascript:void(0)" onclick="goToWaitlist()">Waitlist</a><a href="#ok-markets-section">Markets</a><a href="#ok-referral-section">Referral Program</a></div>' +
-                '<div class="ok-sf-col"><h5>Legal</h5><a href="terms.html">Terms</a><a href="privacy.html">Privacy</a><a href="#ok-compliance-section">Compliance</a></div>' +
+                '<div class="ok-sf-col"><h5>Legal</h5><a href="terms.html">Terms</a><a href="privacy.html">Privacy</a></div>' +
                 '<div class="ok-sf-col"><h5>Connect</h5><a href="https://x.com/OpinionKings" target="_blank" rel="noopener">Twitter / X</a><a href="https://discord.gg/opinionkings" target="_blank" rel="noopener">Discord</a><a href="mailto:hello@opinionkings.com">Email</a></div>' +
               '</div>' +
             '</div>' +
@@ -840,7 +801,6 @@
         injectPerks();
         injectReferralTiers();
         injectReferral();
-        injectCompliance();
         injectFaq();
         injectCtaFooter();
         injectSiteFooter();
@@ -1549,75 +1509,6 @@
       .ok-rp-heading { font-size: 36px; }
       .ok-rp-desc { font-size: 15px; }
       .ok-rp-step-num { font-size: 26px; min-width: 40px; }
-    }
-    #ok-compliance-section {
-      width: 100%;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 100px 40px;
-    }
-    #ok-compliance-section h2 {
-      font-family: "Manrope", sans-serif;
-      font-size: 48px;
-      font-weight: 500;
-      letter-spacing: -0.04em;
-      color: #fff;
-      text-align: center;
-      margin: 0 0 56px;
-    }
-    .ok-compliance-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 16px;
-    }
-    .ok-compliance-card {
-      background: rgb(13,13,13);
-      border-radius: 20px;
-      padding: 32px 28px;
-      display: flex;
-      align-items: flex-start;
-      gap: 18px;
-      box-shadow: inset 0 1px 0 0 rgba(255,255,255,0.04), 0 1px 3px rgba(0,0,0,0.4);
-    }
-    .ok-compliance-icon {
-      flex-shrink: 0;
-      width: 40px;
-      height: 40px;
-      border-radius: 12px;
-      background: rgba(211,177,124,0.1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .ok-compliance-icon svg {
-      width: 20px;
-      height: 20px;
-      stroke: #D3B17C;
-      fill: none;
-      stroke-width: 2;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-    .ok-compliance-text h4 {
-      font-family: "Manrope", sans-serif;
-      font-size: 17px;
-      font-weight: 600;
-      color: #fff;
-      letter-spacing: -0.01em;
-      margin: 0 0 6px;
-    }
-    .ok-compliance-text p {
-      font-family: "Manrope", sans-serif;
-      font-size: 14px;
-      color: rgba(255,255,255,0.4);
-      line-height: 1.6;
-      margin: 0;
-    }
-    @media (max-width: 809px) {
-      #ok-compliance-section { padding: 60px 20px; }
-      #ok-compliance-section h2 { font-size: 30px; margin-bottom: 36px; }
-      .ok-compliance-grid { grid-template-columns: 1fr; }
-      .ok-compliance-card { padding: 24px 20px; }
     }
 
     /* ─── TICKER ─── */

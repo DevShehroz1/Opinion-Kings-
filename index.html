@@ -510,11 +510,21 @@
         btn.textContent = 'Join the Waitlist';
         fakeForm.appendChild(fakeInput);
         fakeForm.appendChild(btn);
-        var micro = document.createElement('p');
-        micro.id = 'ok-microcopy';
-        micro.textContent = 'Early access. Trading credits. Founder status.';
+        var pills = document.createElement('div');
+        pills.id = 'ok-hero-pills';
+        var pillData = [
+          { icon: '🏆', text: 'Climb Waitlist' },
+          { icon: '$', text: 'Referral Credits' },
+          { icon: '🎯', text: 'Predict & Earn $5' }
+        ];
+        for (var p = 0; p < pillData.length; p++) {
+          var pill = document.createElement('div');
+          pill.className = 'ok-hero-pill';
+          pill.innerHTML = '<span class="ok-hero-pill-icon">' + pillData[p].icon + '</span><span>' + pillData[p].text + '</span>';
+          pills.appendChild(pill);
+        }
         wrapper.appendChild(fakeForm);
-        wrapper.appendChild(micro);
+        wrapper.appendChild(pills);
         ctaDiv.parentNode.insertBefore(wrapper, ctaDiv);
       }
       function fixFaq() {
@@ -738,12 +748,36 @@
     #ok-waitlist-form button:hover {
       background: #c9a46e;
     }
-    #ok-microcopy {
+    #ok-hero-pills {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .ok-hero-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      background: rgba(211, 177, 124, 0.08);
+      border: 1px solid rgba(211, 177, 124, 0.25);
+      border-radius: 100px;
       font-family: "Manrope", sans-serif;
       font-size: 13px;
-      color: rgba(255,255,255,0.4);
+      font-weight: 600;
+      color: #D3B17C;
       letter-spacing: -0.01em;
-      text-align: center;
+      white-space: nowrap;
+      box-shadow: 0 0 12px rgba(211, 177, 124, 0.15), inset 0 0 8px rgba(211, 177, 124, 0.05);
+      transition: box-shadow 0.3s, border-color 0.3s;
+    }
+    .ok-hero-pill:hover {
+      box-shadow: 0 0 20px rgba(211, 177, 124, 0.3), inset 0 0 12px rgba(211, 177, 124, 0.08);
+      border-color: rgba(211, 177, 124, 0.45);
+    }
+    .ok-hero-pill-icon {
+      font-size: 15px;
+      line-height: 1;
     }
     .framer-1dj58g9[data-framer-name="CTA"] {
       display: none !important;

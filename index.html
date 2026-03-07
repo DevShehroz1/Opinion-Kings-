@@ -468,7 +468,7 @@
               rows.appendChild(row);
             }
             var youRank = document.getElementById('ok-rp-lb-you-rank');
-            if (youRank) youRank.textContent = '#' + (data.total_users + 1);
+            if (youRank) youRank.textContent = '#' + Math.max(1, 5000 - data.total_users);
           })
           .catch(function() {});
       }

@@ -645,8 +645,10 @@
       function injectCtaFooter() {
         if (!document.body) return;
         if (document.getElementById('ok-cta-footer')) return;
-        var after = document.getElementById('ok-faq-section');
-        if (!after) return;
+        // Hide Framer CTA section and replace it
+        var framerCta = document.querySelector('section.framer-18w1jh2');
+        if (!framerCta) return;
+        framerCta.style.display = 'none';
         var sec = document.createElement('section');
         sec.id = 'ok-cta-footer';
         sec.innerHTML =
@@ -654,7 +656,7 @@
           '<h2 class="ok-cta-bigtext">The Future Is<br><span>Social.</span><br>Be Early.</h2>' +
           '<p class="ok-cta-sub">500 Founding Trader spots. Once they\'re gone, they\'re gone. Secure yours before the public launch.</p>' +
           '<div class="ok-cta-btn-wrap"><a href="javascript:void(0)" class="ok-cta-btn" id="ok-cta-btn">Claim Your Spot →</a></div>';
-        after.parentNode.insertBefore(sec, after.nextSibling);
+        framerCta.parentNode.insertBefore(sec, framerCta);
         var ctaBtn = document.getElementById('ok-cta-btn');
         if (ctaBtn) ctaBtn.onclick = function(e) { e.preventDefault(); goToWaitlist(); };
       }

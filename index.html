@@ -521,6 +521,68 @@
       function injectHiwTagline() {
         // Removed — How It Works section replaced by Referral Program
       }
+      function injectTicker() {
+        if (!document.body) return;
+        if (document.getElementById('ok-ticker')) return;
+        var wrap = document.createElement('div');
+        wrap.id = 'ok-ticker';
+        var items = [
+          'BTC/USD <span class="ok-tk-up">$94,220 ↑2.1%</span>',
+          'ETH/USD <span class="ok-tk-up">$3,480 ↑1.4%</span>',
+          'SOL/USD <span class="ok-tk-up">$192 ↑3.2%</span>',
+          'GOLD/OZ <span class="ok-tk-up">$3,120 ↑0.8%</span>',
+          'FED RATE PAUSE? <span class="ok-tk-up">YES 74¢ ↑2.3%</span>',
+          'BTC ATH 2025? <span class="ok-tk-up">YES 61¢ ↑1.8%</span>',
+          'US RECESSION? <span class="ok-tk-dn">NO 58¢ ↓0.9%</span>',
+          'AI REGULATION? <span class="ok-tk-dn">NO 44¢ ↓1.3%</span>'
+        ];
+        var html = '';
+        for (var t = 0; t < 2; t++) {
+          for (var i = 0; i < items.length; i++) {
+            html += '<span class="ok-tk-item">' + items[i] + ' <span class="ok-tk-sep">|</span></span>';
+          }
+        }
+        wrap.innerHTML = '<div class="ok-tk-track">' + html + '</div>';
+        var nav = document.querySelector('nav') || document.querySelector('.framer-1o4tt4r');
+        if (nav) nav.parentNode.insertBefore(wrap, nav);
+        else document.body.insertBefore(wrap, document.body.firstChild);
+      }
+      function injectPerks() {
+        if (!document.body) return;
+        if (document.getElementById('ok-perks-section')) return;
+        var after = document.getElementById('ok-markets-section');
+        if (!after) return;
+        var sec = document.createElement('section');
+        sec.id = 'ok-perks-section';
+        sec.innerHTML =
+          '<div class="ok-perks-label">WHY JOIN EARLY</div>' +
+          '<h2 class="ok-perks-heading">Founding Traders <span>Get More.</span></h2>' +
+          '<div class="ok-perks-grid">' +
+            '<div class="ok-perk"><span class="ok-perk-num">01</span><span class="ok-perk-icon">⚡</span><div class="ok-perk-title">Priority Beta Access</div><div class="ok-perk-desc">Be the first inside the platform before public launch. Shape the product, test live markets, and earn while others wait.</div></div>' +
+            '<div class="ok-perk"><span class="ok-perk-num">02</span><span class="ok-perk-icon">🏆</span><div class="ok-perk-title">Founding Trader Badge</div><div class="ok-perk-desc">A permanent, non-transferable status marking you as a Day-One believer. Visible on your profile forever.</div></div>' +
+            '<div class="ok-perk"><span class="ok-perk-num">03</span><span class="ok-perk-icon">💰</span><div class="ok-perk-title">Exclusive Launch Bonus</div><div class="ok-perk-desc">Waitlist members unlock a trading credit bonus at launch — unavailable to any user who signs up after go-live.</div></div>' +
+            '<div class="ok-perk"><span class="ok-perk-num">04</span><span class="ok-perk-icon">📡</span><div class="ok-perk-title">Early Market Intel</div><div class="ok-perk-desc">Get notified of new markets before they go public. First movers get the best odds and the widest spreads.</div></div>' +
+            '<div class="ok-perk"><span class="ok-perk-num">05</span><span class="ok-perk-icon">🔗</span><div class="ok-perk-title">Referral Rewards</div><div class="ok-perk-desc">Move up the queue by inviting friends. Top referrers earn cash bonuses and VIP status at launch.</div></div>' +
+            '<div class="ok-perk"><span class="ok-perk-num">06</span><span class="ok-perk-icon">🛡️</span><div class="ok-perk-title">Locked Pricing Forever</div><div class="ok-perk-desc">Founding traders lock in their pricing — guaranteed for the lifetime of your account. Never pay retail.</div></div>' +
+          '</div>';
+        after.parentNode.insertBefore(sec, after.nextSibling);
+      }
+      function injectCtaFooter() {
+        if (!document.body) return;
+        if (document.getElementById('ok-cta-footer')) return;
+        var after = document.getElementById('ok-compliance-section');
+        if (!after) return;
+        var sec = document.createElement('section');
+        sec.id = 'ok-cta-footer';
+        sec.innerHTML =
+          '<div class="ok-cta-glow"></div>' +
+          '<h2 class="ok-cta-bigtext">The Future Is<br><span>Social.</span><br>Be Early.</h2>' +
+          '<p class="ok-cta-sub">500 Founding Trader spots. Once they\'re gone, they\'re gone. Secure yours before the public launch.</p>' +
+          '<div class="ok-cta-btn-wrap"><a href="javascript:void(0)" class="ok-cta-btn" id="ok-cta-btn">Claim Your Spot →</a></div>';
+        after.parentNode.insertBefore(sec, after.nextSibling);
+        var ctaBtn = document.getElementById('ok-cta-btn');
+        if (ctaBtn) ctaBtn.onclick = function(e) { e.preventDefault(); goToWaitlist(); };
+      }
       function goToWaitlist() {
         var ref = '';
         try { ref = new URLSearchParams(window.location.search).get('ref') || ''; } catch(e) {}
@@ -572,9 +634,50 @@
           pill.innerHTML = '<span class="ok-hero-pill-icon">' + pillData[p].icon + '</span><span>' + pillData[p].text + '</span>';
           pills.appendChild(pill);
         }
+        // Hero stats counter row
+        var statsRow = document.createElement('div');
+        statsRow.id = 'ok-hero-stats';
+        var statsData = [
+          { id: 'ok-stat-joined', target: 0, label: 'Waitlist Spots Taken' },
+          { id: 'ok-stat-markets', target: 14, label: 'Markets Live in Beta' },
+          { id: 'ok-stat-left', target: 500, label: 'Founding Spots Left' }
+        ];
+        for (var s = 0; s < statsData.length; s++) {
+          var stat = document.createElement('div');
+          stat.className = 'ok-hero-stat';
+          stat.innerHTML = '<div class="ok-hero-stat-num" id="' + statsData[s].id + '">0</div><div class="ok-hero-stat-lbl">' + statsData[s].label + '</div>';
+          statsRow.appendChild(stat);
+        }
         wrapper.appendChild(fakeForm);
         wrapper.appendChild(pills);
+        wrapper.appendChild(statsRow);
         ctaDiv.parentNode.insertBefore(wrapper, ctaDiv);
+        // Fetch live count for stats
+        fetch('/api/waitlist/leaderboard?limit=1')
+          .then(function(r) { return r.json(); })
+          .then(function(data) {
+            var total = data.total_users || 0;
+            animateCounter('ok-stat-joined', total);
+            animateCounter('ok-stat-markets', 14);
+            animateCounter('ok-stat-left', Math.max(0, 500 - total));
+          })
+          .catch(function() {
+            animateCounter('ok-stat-joined', 0);
+            animateCounter('ok-stat-markets', 14);
+            animateCounter('ok-stat-left', 500);
+          });
+      }
+      function animateCounter(id, target) {
+        var el = document.getElementById(id);
+        if (!el || el.getAttribute('data-done')) return;
+        el.setAttribute('data-done', '1');
+        var start = 0;
+        var step = Math.max(1, target / 60);
+        var timer = setInterval(function() {
+          start = Math.min(start + step, target);
+          el.textContent = Math.floor(start).toLocaleString();
+          if (start >= target) clearInterval(timer);
+        }, 25);
       }
       function fixFaq() {
         var sixthItems = document.querySelectorAll('.framer-1js9qsl-container');
@@ -591,9 +694,12 @@
         fixFaq();
         injectWaitlistForm();
         injectHiwTagline();
+        injectTicker();
         injectMarkets();
+        injectPerks();
         injectReferral();
         injectCompliance();
+        injectCtaFooter();
         if (document.body) {
           sweepTextNodes(document.body);
           sweepAttributes(document.body);
@@ -1332,6 +1438,223 @@
       #ok-compliance-section h2 { font-size: 30px; margin-bottom: 36px; }
       .ok-compliance-grid { grid-template-columns: 1fr; }
       .ok-compliance-card { padding: 24px 20px; }
+    }
+
+    /* ─── TICKER ─── */
+    #ok-ticker {
+      width: 100%;
+      background: #D3B17C;
+      overflow: hidden;
+      padding: 8px 0;
+      position: relative;
+      z-index: 50;
+    }
+    .ok-tk-track {
+      display: flex;
+      gap: 0;
+      animation: ok-ticker-scroll 32s linear infinite;
+      white-space: nowrap;
+    }
+    .ok-tk-item {
+      font-family: "Manrope", sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      color: #000;
+      padding: 0 28px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .ok-tk-up { color: #1a5c28; }
+    .ok-tk-dn { color: #8b0000; }
+    .ok-tk-sep { color: rgba(0,0,0,0.25); }
+    @keyframes ok-ticker-scroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* ─── HERO STATS ─── */
+    #ok-hero-stats {
+      display: flex;
+      gap: 40px;
+      justify-content: center;
+      margin-top: 36px;
+      padding-top: 28px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      width: 100%;
+      flex-wrap: wrap;
+    }
+    .ok-hero-stat {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+    .ok-hero-stat-num {
+      font-family: "Manrope", sans-serif;
+      font-size: 38px;
+      font-weight: 800;
+      color: #D3B17C;
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+    .ok-hero-stat-lbl {
+      font-family: "Manrope", sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.3);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    /* ─── PERKS ─── */
+    #ok-perks-section {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 100px 40px;
+      background: rgba(15,15,15,0.5);
+      border-top: 1px solid rgba(255,255,255,0.04);
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .ok-perks-label {
+      font-family: "Manrope", sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      color: #D3B17C;
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 14px;
+    }
+    .ok-perks-heading {
+      font-family: "Manrope", sans-serif;
+      font-size: 52px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: #fff;
+      text-align: center;
+      margin: 0 0 56px;
+    }
+    .ok-perks-heading span { color: #D3B17C; }
+    .ok-perks-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      background: rgba(255,255,255,0.04);
+    }
+    .ok-perk {
+      background: rgba(18,18,18,0.95);
+      padding: 36px 32px;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.2s;
+    }
+    .ok-perk:hover { background: rgba(22,20,16,0.95); }
+    .ok-perk-num {
+      font-family: "Manrope", sans-serif;
+      font-size: 72px;
+      font-weight: 800;
+      color: rgba(255,255,255,0.03);
+      line-height: 1;
+      position: absolute;
+      top: 12px;
+      right: 16px;
+      pointer-events: none;
+      transition: color 0.2s;
+    }
+    .ok-perk:hover .ok-perk-num { color: rgba(211,177,124,0.06); }
+    .ok-perk-icon {
+      font-size: 28px;
+      display: block;
+      margin-bottom: 18px;
+    }
+    .ok-perk-title {
+      font-family: "Manrope", sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.01em;
+      margin-bottom: 10px;
+    }
+    .ok-perk-desc {
+      font-family: "Manrope", sans-serif;
+      font-size: 14px;
+      color: rgba(255,255,255,0.35);
+      line-height: 1.65;
+      font-weight: 300;
+    }
+
+    /* ─── CTA FOOTER ─── */
+    #ok-cta-footer {
+      padding: 120px 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .ok-cta-glow {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(211,177,124,0.07), transparent);
+      pointer-events: none;
+    }
+    .ok-cta-bigtext {
+      font-family: "Manrope", sans-serif;
+      font-size: clamp(48px, 8vw, 90px);
+      font-weight: 800;
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+      color: #fff;
+      margin-bottom: 28px;
+      position: relative;
+    }
+    .ok-cta-bigtext span { color: #D3B17C; }
+    .ok-cta-sub {
+      font-family: "Manrope", sans-serif;
+      font-size: 16px;
+      color: rgba(255,255,255,0.4);
+      max-width: 440px;
+      margin: 0 auto 44px;
+      line-height: 1.65;
+      font-weight: 300;
+      position: relative;
+    }
+    .ok-cta-btn-wrap {
+      position: relative;
+      display: flex;
+      justify-content: center;
+    }
+    .ok-cta-btn {
+      display: inline-block;
+      background: #D3B17C;
+      color: #000;
+      border: none;
+      border-radius: 100px;
+      padding: 18px 52px;
+      font-family: "Manrope", sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      box-shadow: 0 8px 24px rgba(211,177,124,0.3);
+    }
+    .ok-cta-btn:hover {
+      background: #c9a46e;
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 809px) {
+      #ok-hero-stats { gap: 24px; }
+      .ok-hero-stat-num { font-size: 28px; }
+      #ok-perks-section { padding: 60px 20px; }
+      .ok-perks-heading { font-size: 34px; }
+      .ok-perks-grid { grid-template-columns: 1fr; }
+      .ok-perk { padding: 28px 24px; }
+      #ok-cta-footer { padding: 80px 20px; }
     }
 
   </style>

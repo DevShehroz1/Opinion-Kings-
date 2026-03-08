@@ -597,7 +597,8 @@
       document.getElementById('loading').style.display = 'none';
       document.querySelectorAll('.tab-content').forEach(function(el) { el.style.visibility = 'visible'; });
       var now = new Date();
-      document.getElementById('last-updated').textContent = 'Last updated: ' + now.toLocaleString();
+      var serverTs = d._ts ? ' (server: ' + new Date(d._ts).toLocaleTimeString() + ')' : '';
+      document.getElementById('last-updated').textContent = 'Last updated: ' + now.toLocaleString() + serverTs;
       renderAll();
     })
     .catch(function(e) {

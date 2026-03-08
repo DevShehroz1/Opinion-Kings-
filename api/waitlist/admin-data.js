@@ -31,31 +31,31 @@ module.exports = async function handler(req, res) {
     let rewardEvents = [];
     try {
       rewardEvents = await db.get('reward_events?select=*&order=created_at.desc');
-    } catch (_) {}
+    } catch (e) { console.error('reward_events error:', e.message); }
 
     // Share clicks detail
     let shareClicksDetail = [];
     try {
       shareClicksDetail = await db.get('share_clicks?select=*&order=created_at.desc');
-    } catch (_) {}
+    } catch (e) { console.error('share_clicks error:', e.message); }
 
     // Credits ledger
     let creditsLedger = [];
     try {
       creditsLedger = await db.get('credits_ledger?select=*&order=total_credits.desc');
-    } catch (_) {}
+    } catch (e) { console.error('credits_ledger error:', e.message); }
 
     // International signups
     let internationalSignups = [];
     try {
       internationalSignups = await db.get('international_waitlist?select=*&order=created_at.desc');
-    } catch (_) {}
+    } catch (e) { console.error('international_waitlist error:', e.message); }
 
     // Page views
     let pageViews = [];
     try {
       pageViews = await db.get('page_views?select=id,page_path,referrer,screen_w,session_id,created_at&order=created_at.desc&limit=10000');
-    } catch (_) {}
+    } catch (e) { console.error('page_views error:', e.message); }
 
     // Compute derived data
     const flaggedUsers = allUsers.filter(u => u.flagged_reason);
@@ -207,7 +207,10 @@ module.exports = async function handler(req, res) {
       screen_buckets: pvScreenBuckets,
     };
 
+    console.log('ADMIN DATA: users=' + totalUsers + ' intl=' + internationalSignups.length + ' pv=' + pageViews.length);
+
     return res.json({
+      _ts: new Date().toISOString(),
       overview: {
         total_users: totalUsers,
         spots_remaining: 5000 - totalUsers,

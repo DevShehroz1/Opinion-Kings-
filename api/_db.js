@@ -12,7 +12,7 @@ function headers(prefer) {
 }
 
 async function get(path) {
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, { headers: headers(), cache: 'no-store' });
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, { headers: headers() });
   if (!res.ok) throw new Error(`GET ${path}: ${res.status} ${await res.text()}`);
   return res.json();
 }

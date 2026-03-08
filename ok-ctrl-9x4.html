@@ -324,6 +324,7 @@
     <button data-tab="credits">Credits</button>
     <button data-tab="flagged">Flagged</button>
     <button data-tab="timeline">Timeline</button>
+    <button data-tab="international">International</button>
     <button data-tab="visitors">Visitors</button>
   </div>
 
@@ -457,7 +458,17 @@
     </div>
   </div>
 
-  <!-- 8. Visitors -->
+  <!-- 8. International -->
+  <div class="tab-content" data-tab="international" id="tab-international">
+    <div class="tab-header">
+      <h2>International Signups</h2>
+      <p>People from outside the USA who signed up to be notified when you launch in their country.</p>
+    </div>
+    <div class="summary-row" id="intl-summary"></div>
+    <div class="table-wrap" id="intl-table-wrap"></div>
+  </div>
+
+  <!-- 9. Visitors -->
   <div class="tab-content" data-tab="visitors" id="tab-visitors">
     <div class="tab-header">
       <h2>Website Visitors</h2>
@@ -615,6 +626,7 @@
     renderFlagged();
     renderTimeline();
     renderVisitors();
+    renderInternational();
   }
 
   // ─── 1. Overview ───
@@ -1004,6 +1016,47 @@
       });
       dh += '</div>';
       document.getElementById('visitors-device-chart').innerHTML = dh;
+    }
+  }
+
+  // ─── 9. International ───
+  function renderInternational() {
+    var intl = DATA.international_signups || [];
+    var summaryEl = document.getElementById('intl-summary');
+
+    // Summary cards
+    var countryMap = {};
+    intl.forEach(function(s) {
+      var cc = s.country_code || 'Unknown';
+      countryMap[cc] = (countryMap[cc] || 0) + 1;
+    });
+    var topCountries = Object.entries(countryMap).sort(function(a, b) { return b[1] - a[1]; }).slice(0, 3);
+    var sh = '';
+    sh += '<div class="summary-item"><div class="si-label">Total International Signups</div><div class="si-value">' + intl.length + '</div><div class="si-sub">People waiting for your international launch</div></div>';
+    if (topCountries.length > 0) {
+      sh += '<div class="summary-item"><div class="si-label">Top Country</div><div class="si-value">' + esc(topCountries[0][0]) + '</div><div class="si-sub">' + topCountries[0][1] + ' signups</div></div>';
+    }
+    if (topCountries.length > 1) {
+      sh += '<div class="summary-item"><div class="si-label">Countries Represented</div><div class="si-value">' + Object.keys(countryMap).length + '</div><div class="si-sub">Different countries interested</div></div>';
+    }
+    summaryEl.innerHTML = sh;
+
+    // Table
+    if (intl.length === 0) {
+      document.getElementById('intl-table-wrap').innerHTML = '<p class="empty">No international signups yet. When people from outside the USA sign up, they\'ll appear here.</p>';
+    } else {
+      var h = '<table><tr><th>#</th><th>Email</th><th>Country</th><th>IP Address</th><th>Signed Up</th></tr>';
+      intl.forEach(function(s, i) {
+        h += '<tr>';
+        h += '<td style="color:#555;">' + (i + 1) + '</td>';
+        h += '<td style="color:#fff;font-weight:600;">' + esc(s.email) + '</td>';
+        h += '<td style="font-weight:600;">' + esc(s.country_code || 'Unknown') + '</td>';
+        h += '<td style="font-family:monospace;font-size:11px;color:#666;">' + esc(s.ip_address || '-') + '</td>';
+        h += '<td style="color:#666;">' + shortDate(s.created_at) + '</td>';
+        h += '</tr>';
+      });
+      h += '</table>';
+      document.getElementById('intl-table-wrap').innerHTML = h;
     }
   }
 

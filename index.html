@@ -199,22 +199,38 @@
         }
       }
       function fixFooterCredit() {
-        // Hide Framer footer elements directly (CSS handles most, this catches runtime-rendered ones)
-        var footerEls = document.querySelectorAll('.framer-c03ypj, .framer-cl8wm7, .framer-1oxflbe');
-        for (var i = 0; i < footerEls.length; i++) {
-          footerEls[i].style.display = 'none';
-        }
-        // Replace text in any visible Kadir references
-        var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
-        while (walker.nextNode()) {
-          var node = walker.currentNode;
-          if (node.nodeValue && node.nodeValue.indexOf('Kadir Calik') !== -1) {
-            node.nodeValue = node.nodeValue.replace('Kadir Calik', 'Opinion Kings');
+        function nukeFramerFooter() {
+          // Hide Framer footer elements
+          var els = document.querySelectorAll('.framer-c03ypj, .framer-cl8wm7, .framer-1oxflbe');
+          for (var i = 0; i < els.length; i++) {
+            els[i].style.cssText = 'display:none!important';
           }
-          if (node.nodeValue && node.nodeValue.indexOf('kadirov') !== -1) {
-            node.nodeValue = node.nodeValue.replace(/hello@kadirov\.design/g, 'support@opinionkings.com');
+          // Find any element containing "Quick Menu" or "Designed by" and hide its ancestor
+          var all = document.querySelectorAll('p, span, div, a');
+          for (var j = 0; j < all.length; j++) {
+            var t = all[j].textContent || '';
+            if ((t.indexOf('Quick Menu') !== -1 || t.indexOf('Information') !== -1 || t.indexOf('Designed by') !== -1) && all[j].closest && !all[j].closest('#ok-site-footer')) {
+              // Walk up to find the large footer wrapper
+              var el = all[j];
+              while (el && el.parentElement && el.parentElement.tagName !== 'BODY') {
+                el = el.parentElement;
+                var elText = el.textContent || '';
+                if (elText.indexOf('Quick Menu') !== -1 && elText.indexOf('Designed by') !== -1) {
+                  el.style.cssText = 'display:none!important';
+                  break;
+                }
+              }
+            }
+            // Replace Kadir text
+            if (t.indexOf('Kadir') !== -1) {
+              all[j].innerHTML = all[j].innerHTML.replace(/Kadir Calik/g, 'Opinion Kings').replace(/Kadir/g, 'Opinion Kings');
+            }
           }
         }
+        nukeFramerFooter();
+        var fObs = new MutationObserver(nukeFramerFooter);
+        fObs.observe(document.body, { childList: true, subtree: true });
+        setTimeout(function() { fObs.disconnect(); }, 10000);
         // Inject custom footer
         if (document.getElementById('ok-site-footer')) return;
         var footer = document.createElement('footer');

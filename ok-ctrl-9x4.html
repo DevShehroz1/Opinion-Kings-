@@ -12,27 +12,23 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Manrope', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: #060608; color: #e0e0e0; line-height: 1.5; min-height: 100vh;
+      background: #060608; color: #e0e0e0; line-height: 1.6; min-height: 100vh;
     }
 
-    /* ─── Login Screen ─── */
+    /* ─── Login ─── */
     #login-screen {
       display: flex; align-items: center; justify-content: center; min-height: 100vh;
-      padding: 20px;
-      background: radial-gradient(ellipse at 50% 0%, rgba(212,169,90,0.08) 0%, transparent 60%);
+      padding: 20px; background: radial-gradient(ellipse at 50% 0%, rgba(212,169,90,0.08) 0%, transparent 60%);
     }
     .login-card {
       background: linear-gradient(145deg, #111113, #0d0d0f);
       border: 1px solid #1f1f24; border-radius: 20px;
       padding: 48px 40px; width: 100%; max-width: 420px; text-align: center;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 80px rgba(212,169,90,0.04);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
     }
-    .login-logo {
-      width: 72px; height: 72px; margin: 0 auto 20px;
-      display: flex; align-items: center; justify-content: center;
-    }
+    .login-logo { width: 160px; height: 160px; margin: 0 auto 20px; }
     .login-logo img { width: 100%; height: 100%; object-fit: contain; }
-    .login-card h1 { font-size: 26px; color: #fff; margin-bottom: 4px; font-weight: 800; letter-spacing: -0.02em; }
+    .login-card h1 { font-size: 26px; color: #fff; margin-bottom: 4px; font-weight: 800; }
     .login-brand { color: #d4a95a; font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
     .login-card p { color: #555; font-size: 14px; margin-bottom: 32px; }
     .login-card input {
@@ -48,107 +44,117 @@
       font-size: 14px; font-family: inherit; width: 100%; transition: all .25s;
       box-shadow: 0 4px 16px rgba(212,169,90,0.25);
     }
-    .btn-gold:hover { background: linear-gradient(135deg, #e0b566, #d4a95a); transform: translateY(-1px); box-shadow: 0 6px 24px rgba(212,169,90,0.35); }
-    .btn-gold:active { transform: translateY(0); }
-    .btn-gold:disabled { opacity: .5; cursor: not-allowed; transform: none; box-shadow: none; }
+    .btn-gold:hover { background: linear-gradient(135deg, #e0b566, #d4a95a); transform: translateY(-1px); }
+    .btn-gold:disabled { opacity: .5; cursor: not-allowed; transform: none; }
     #login-error { color: #ff5555; margin-top: 16px; font-size: 13px; min-height: 20px; }
 
-    /* ─── Dashboard Layout ─── */
+    /* ─── Dashboard ─── */
     #dashboard { display: none; }
 
     .top-nav {
       position: sticky; top: 0; z-index: 100;
-      background: rgba(6,6,8,0.92); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      background: rgba(6,6,8,0.95); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid #16161a;
-      padding: 12px 28px; display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 28px; display: flex; align-items: center; justify-content: space-between;
       gap: 16px; flex-wrap: wrap;
     }
-    .top-nav-brand {
-      display: flex; align-items: center; gap: 12px;
-    }
-    .top-nav-icon {
-      width: 120px; height: 36px; display: flex; align-items: center;
-      justify-content: center; flex-shrink: 0;
-    }
+    .top-nav-brand { display: flex; align-items: center; gap: 14px; }
+    .top-nav-icon { width: 130px; height: 38px; flex-shrink: 0; }
     .top-nav-icon img { width: 100%; height: 100%; object-fit: contain; }
-    .top-nav-brand h1 { font-size: 16px; color: #fff; font-weight: 800; white-space: nowrap; letter-spacing: -0.01em; }
-    .top-nav-brand h1 span { color: #d4a95a; }
     .top-nav-right { display: flex; align-items: center; gap: 10px; }
     .top-nav-right .admin-email { color: #555; font-size: 12px; }
     .global-search {
-      padding: 7px 14px 7px 32px; background: #111114; border: 1px solid #222228;
-      border-radius: 10px; color: #e0e0e0; font-size: 12px; font-family: inherit;
-      outline: none; width: 220px; transition: all .25s;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='%23555' viewBox='0 0 24 24'%3E%3Cpath d='M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z' stroke='%23555' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-      background-repeat: no-repeat; background-position: 10px center;
+      padding: 8px 14px 8px 34px; background: #111114; border: 1px solid #222228;
+      border-radius: 10px; color: #e0e0e0; font-size: 13px; font-family: inherit;
+      outline: none; width: 240px; transition: all .25s;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24'%3E%3Cpath d='M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z' stroke='%23555' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: 12px center;
     }
-    .global-search:focus { border-color: #d4a95a; background-color: #0d0d0f; box-shadow: 0 0 0 3px rgba(212,169,90,0.08); }
+    .global-search:focus { border-color: #d4a95a; box-shadow: 0 0 0 3px rgba(212,169,90,0.08); }
     .global-search::placeholder { color: #444; }
     .btn-sm {
-      padding: 7px 16px; border-radius: 9px; font-size: 12px; font-weight: 600;
+      padding: 8px 18px; border-radius: 9px; font-size: 12px; font-weight: 600;
       cursor: pointer; border: 1px solid #222228; background: #111114; color: #999;
       font-family: inherit; transition: all .2s;
     }
-    .btn-sm:hover { border-color: #d4a95a; color: #d4a95a; background: rgba(212,169,90,0.06); }
+    .btn-sm:hover { border-color: #d4a95a; color: #d4a95a; }
     .btn-logout { border-color: #3a1a1a; color: #cc4444; }
     .btn-logout:hover { background: rgba(204,68,68,0.08); border-color: #cc4444; color: #ff5555; }
 
     .tab-nav {
       display: flex; gap: 0; border-bottom: 1px solid #16161a;
       padding: 0 28px; overflow-x: auto; -webkit-overflow-scrolling: touch;
-      background: rgba(6,6,8,0.6);
+      background: rgba(8,8,10,0.8);
     }
     .tab-nav button {
       padding: 14px 22px; background: none; border: none; border-bottom: 2px solid transparent;
       color: #555; font-size: 13px; font-weight: 600; cursor: pointer;
       font-family: inherit; white-space: nowrap; transition: all .2s;
-      position: relative;
     }
     .tab-nav button:hover { color: #bbb; }
     .tab-nav button.active { color: #d4a95a; border-bottom-color: #d4a95a; }
 
-    .tab-content { display: none; padding: 28px; max-width: 1400px; margin: 0 auto; }
+    .tab-content { display: none; padding: 32px 28px; max-width: 1400px; margin: 0 auto; }
     .tab-content.active { display: block; }
 
-    /* ─── Overview Cards ─── */
+    /* ─── Welcome / Tab Headers ─── */
+    .tab-header { margin-bottom: 28px; }
+    .tab-header h2 { font-size: 22px; font-weight: 800; color: #fff; margin-bottom: 4px; }
+    .tab-header p { font-size: 14px; color: #666; }
+    .last-updated { font-size: 11px; color: #444; margin-top: 4px; }
+
+    /* ─── Stat Cards ─── */
     .stats-grid {
-      display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px;
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-bottom: 32px;
     }
     .stat-card {
       background: linear-gradient(145deg, #111114, #0d0d10);
-      border: 1px solid #1a1a1f; border-radius: 14px;
-      padding: 22px 20px; text-align: center;
-      transition: all .25s; position: relative; overflow: hidden;
+      border: 1px solid #1a1a1f; border-radius: 16px;
+      padding: 24px; position: relative; overflow: hidden; transition: all .25s;
     }
     .stat-card::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-      background: linear-gradient(90deg, transparent, #d4a95a, transparent); opacity: 0;
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, transparent, var(--card-accent, #d4a95a), transparent); opacity: 0;
       transition: opacity .3s;
     }
     .stat-card:hover { border-color: #2a2a30; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
     .stat-card:hover::before { opacity: 1; }
-    .stat-card .val { font-size: 34px; font-weight: 800; color: #d4a95a; letter-spacing: -0.02em; }
-    .stat-card .lbl { font-size: 11px; color: #555; margin-top: 6px; text-transform: uppercase; letter-spacing: .06em; font-weight: 600; }
+    .stat-icon { font-size: 22px; margin-bottom: 10px; }
+    .stat-card .val { font-size: 36px; font-weight: 800; color: #d4a95a; letter-spacing: -0.02em; line-height: 1.1; }
+    .stat-card .lbl { font-size: 13px; color: #888; margin-top: 6px; font-weight: 600; }
+    .stat-card .desc { font-size: 11px; color: #444; margin-top: 4px; line-height: 1.4; }
+
+    /* ─── Section Titles ─── */
+    .section-block { margin-bottom: 28px; }
+    .section-title {
+      font-size: 15px; color: #999; font-weight: 700; margin-bottom: 6px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .section-title::after {
+      content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, #1a1a1f, transparent);
+    }
+    .section-desc { font-size: 12px; color: #444; margin-bottom: 14px; }
 
     /* ─── Tables ─── */
     .table-wrap {
       overflow-x: auto; border-radius: 14px; border: 1px solid #1a1a1f;
-      margin-bottom: 24px; background: #0a0a0d;
+      background: #0a0a0d;
     }
     table { width: 100%; border-collapse: collapse; font-size: 13px; }
     th {
-      background: #111114; color: #d4a95a; text-align: left; padding: 12px 16px;
-      font-weight: 700; font-size: 10px; text-transform: uppercase; letter-spacing: .06em;
+      background: #111114; color: #999; text-align: left; padding: 14px 16px;
+      font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: .05em;
       white-space: nowrap; position: sticky; top: 0; border-bottom: 1px solid #1a1a1f;
     }
-    td { padding: 10px 16px; border-top: 1px solid #111116; white-space: nowrap; color: #bbb; }
+    td { padding: 12px 16px; border-top: 1px solid #0f0f12; white-space: nowrap; color: #bbb; }
     tr { transition: background .15s; }
-    tr:hover td { background: rgba(212,169,90,0.02); }
+    tr:nth-child(even) td { background: rgba(255,255,255,0.01); }
+    tr:hover td { background: rgba(212,169,90,0.03); }
     .flag-row td { background: rgba(255, 85, 85, 0.04); }
     .flag-text { color: #ff5555; font-weight: 600; }
 
     .badge {
-      display: inline-block; padding: 3px 10px; border-radius: 6px;
+      display: inline-block; padding: 4px 12px; border-radius: 20px;
       font-size: 10px; font-weight: 700; letter-spacing: .03em;
     }
     .badge-vip { background: linear-gradient(135deg, #d4a95a, #b8893a); color: #000; }
@@ -162,76 +168,69 @@
       display: flex; gap: 12px; margin-bottom: 18px; flex-wrap: wrap; align-items: center;
     }
     .controls input, .controls select {
-      padding: 9px 14px; background: #0d0d10; border: 1px solid #222228;
+      padding: 10px 14px; background: #0d0d10; border: 1px solid #222228;
       border-radius: 10px; color: #e0e0e0; font-size: 13px; font-family: inherit; outline: none;
       transition: all .2s;
     }
     .controls input:focus, .controls select:focus { border-color: #d4a95a; box-shadow: 0 0 0 3px rgba(212,169,90,0.08); }
     .controls input { flex: 1; min-width: 200px; }
-    .controls select { min-width: 140px; cursor: pointer; }
+    .controls select { min-width: 150px; cursor: pointer; }
 
     .pagination {
       display: flex; gap: 8px; justify-content: center; align-items: center; margin-top: 18px;
     }
     .pagination button {
-      padding: 7px 14px; background: #111114; border: 1px solid #222228;
+      padding: 8px 16px; background: #111114; border: 1px solid #222228;
       border-radius: 8px; color: #999; font-size: 12px; cursor: pointer; font-family: inherit;
       transition: all .2s;
     }
     .pagination button:hover { border-color: #d4a95a; color: #d4a95a; }
     .pagination button:disabled { opacity: .25; cursor: not-allowed; }
-    .pagination span { color: #555; font-size: 12px; }
+    .pagination span { color: #555; font-size: 13px; }
 
     /* ─── Charts ─── */
     .chart-container {
       background: linear-gradient(145deg, #0d0d10, #0a0a0d);
-      border: 1px solid #1a1a1f; border-radius: 14px; padding: 20px;
-      margin-bottom: 24px; overflow-x: auto;
+      border: 1px solid #1a1a1f; border-radius: 14px; padding: 24px;
+      overflow-x: auto;
     }
     .bar-chart {
-      display: flex; align-items: flex-end; gap: 4px; height: 220px;
+      display: flex; align-items: flex-end; gap: 5px; height: 240px;
       padding: 10px 0; overflow-x: auto; min-width: 100%;
     }
-    .bar-col { display: flex; flex-direction: column; align-items: center; min-width: 36px; }
+    .bar-col { display: flex; flex-direction: column; align-items: center; min-width: 38px; }
     .bar {
-      width: 28px; background: linear-gradient(180deg, #d4a95a, #b8893a);
-      border-radius: 4px 4px 0 0; transition: all .3s; min-height: 2px;
-      box-shadow: 0 0 8px rgba(212,169,90,0.15);
+      width: 30px; background: linear-gradient(180deg, #d4a95a, #b8893a);
+      border-radius: 6px 6px 0 0; transition: all .3s; min-height: 2px;
+      cursor: default;
     }
-    .bar:hover { background: linear-gradient(180deg, #e0b566, #d4a95a); box-shadow: 0 0 16px rgba(212,169,90,0.3); }
-    .bar-label { font-size: 9px; color: #555; margin-top: 4px; writing-mode: vertical-rl; text-orientation: mixed; max-height: 60px; overflow: hidden; }
-    .bar-count { font-size: 10px; color: #d4a95a; margin-bottom: 4px; font-weight: 600; }
+    .bar:hover { background: linear-gradient(180deg, #e8c06e, #d4a95a); box-shadow: 0 0 12px rgba(212,169,90,0.3); }
+    .bar-label { font-size: 10px; color: #555; margin-top: 6px; writing-mode: vertical-rl; text-orientation: mixed; max-height: 55px; overflow: hidden; }
+    .bar-count { font-size: 11px; color: #d4a95a; margin-bottom: 4px; font-weight: 700; }
 
     .h-bar-chart { margin: 16px 0; }
-    .h-bar-row { display: flex; align-items: center; margin-bottom: 10px; gap: 12px; }
-    .h-bar-label { width: 120px; font-size: 12px; color: #888; text-align: right; flex-shrink: 0; font-weight: 500; }
-    .h-bar-track { flex: 1; height: 28px; background: #111114; border-radius: 8px; overflow: hidden; border: 1px solid #1a1a1f; }
-    .h-bar-fill { height: 100%; background: linear-gradient(90deg, #d4a95a, #b8893a); border-radius: 8px; display: flex; align-items: center; padding: 0 10px; transition: width .5s ease; }
-    .h-bar-val { font-size: 11px; color: #000; font-weight: 700; }
+    .h-bar-row { display: flex; align-items: center; margin-bottom: 12px; gap: 14px; }
+    .h-bar-label { width: 130px; font-size: 13px; color: #888; text-align: right; flex-shrink: 0; font-weight: 500; }
+    .h-bar-track { flex: 1; height: 32px; background: #111114; border-radius: 8px; overflow: hidden; border: 1px solid #1a1a1f; position: relative; }
+    .h-bar-fill { height: 100%; background: linear-gradient(90deg, #d4a95a, #b8893a); border-radius: 8px; display: flex; align-items: center; padding: 0 12px; transition: width .6s ease; }
+    .h-bar-val { font-size: 12px; color: #000; font-weight: 700; }
+    .h-bar-pct { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 11px; color: #555; }
 
-    .channel-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+    .channel-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-bottom: 24px; }
     .channel-card {
       background: linear-gradient(145deg, #111114, #0d0d10);
-      border: 1px solid #1a1a1f; border-radius: 14px; padding: 24px; text-align: center;
+      border: 1px solid #1a1a1f; border-radius: 16px; padding: 28px; text-align: center;
       transition: all .25s;
     }
     .channel-card:hover { border-color: #2a2a30; transform: translateY(-2px); }
-    .channel-card .ch-name { font-size: 13px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: .05em; }
-    .channel-card .ch-count { font-size: 30px; font-weight: 800; color: #d4a95a; margin-top: 6px; }
+    .channel-card .ch-icon { font-size: 24px; margin-bottom: 8px; }
+    .channel-card .ch-name { font-size: 14px; font-weight: 700; color: #999; text-transform: capitalize; }
+    .channel-card .ch-count { font-size: 32px; font-weight: 800; color: #d4a95a; margin-top: 4px; }
 
-    .section-title {
-      font-size: 14px; color: #888; font-weight: 700; margin-bottom: 14px;
-      text-transform: uppercase; letter-spacing: .06em;
-      display: flex; align-items: center; gap: 10px;
-    }
-    .section-title::after {
-      content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, #1a1a1f, transparent);
-    }
-
-    .empty { color: #333; font-style: italic; padding: 28px; text-align: center; font-size: 13px; }
+    .empty { color: #444; padding: 40px 20px; text-align: center; font-size: 14px; line-height: 1.6; }
 
     .btn-action {
-      padding: 5px 12px; border-radius: 7px; font-size: 11px; font-weight: 600;
+      padding: 6px 14px; border-radius: 8px; font-size: 11px; font-weight: 600;
       cursor: pointer; border: 1px solid rgba(42,122,58,0.4); background: rgba(42,122,58,0.08);
       color: #4ade80; font-family: inherit; transition: all .2s;
     }
@@ -240,18 +239,31 @@
     .btn-cancel { border-color: rgba(122,42,42,0.4); color: #f87171; background: rgba(122,42,42,0.08); }
     .btn-cancel:hover { background: rgba(122,42,42,0.2); border-color: #f87171; }
 
-    .loading { text-align: center; padding: 80px 20px; color: #555; }
+    .loading { text-align: center; padding: 100px 20px; color: #555; }
     .spinner {
-      display: inline-block; width: 36px; height: 36px;
+      display: inline-block; width: 40px; height: 40px;
       border: 3px solid #1a1a1f; border-top-color: #d4a95a;
       border-radius: 50%; animation: spin .7s linear infinite;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
+    /* ─── Summary Row ─── */
+    .summary-row {
+      display: flex; gap: 18px; margin-bottom: 28px; flex-wrap: wrap;
+    }
+    .summary-item {
+      background: linear-gradient(145deg, #111114, #0d0d10);
+      border: 1px solid #1a1a1f; border-radius: 12px; padding: 16px 20px;
+      flex: 1; min-width: 200px;
+    }
+    .summary-item .si-label { font-size: 12px; color: #666; font-weight: 600; margin-bottom: 4px; }
+    .summary-item .si-value { font-size: 20px; color: #d4a95a; font-weight: 800; }
+    .summary-item .si-sub { font-size: 11px; color: #444; margin-top: 2px; }
+
     /* ─── Footer ─── */
     .dash-footer {
-      text-align: center; padding: 32px 20px; color: #2a2a30; font-size: 11px;
-      border-top: 1px solid #111116; margin-top: 40px;
+      text-align: center; padding: 36px 20px; color: #2a2a30; font-size: 12px;
+      border-top: 1px solid #111116; margin-top: 48px;
     }
     .dash-footer span { color: #d4a95a; font-weight: 700; }
 
@@ -265,22 +277,22 @@
       .channel-cards { grid-template-columns: 1fr; }
       .top-nav { padding: 10px 16px; }
       .tab-nav { padding: 0 16px; }
-      .tab-content { padding: 16px; }
-      .top-nav-brand h1 { font-size: 14px; }
+      .tab-content { padding: 20px 16px; }
       .global-search { width: 160px; }
       table { font-size: 11px; }
       th, td { padding: 8px 10px; }
-      .stat-card .val { font-size: 26px; }
+      .stat-card .val { font-size: 28px; }
+      .tab-header h2 { font-size: 18px; }
+      .summary-row { flex-direction: column; }
     }
   </style>
 </head>
 <body>
 
-<!-- LOGIN SCREEN -->
+<!-- LOGIN -->
 <div id="login-screen">
   <div class="login-card">
     <div class="login-logo"><img src="https://cdn.shopify.com/s/files/1/0920/7591/7591/files/7_5244414e-055a-4786-a3ad-34dbdd940e0e.png?v=1772224680" alt="Opinion Kings"></div>
-    <div class="login-brand">Opinion Kings</div>
     <h1>Admin Dashboard</h1>
     <p>Sign in to access your command center</p>
     <input type="email" id="login-email" placeholder="Email address" autocomplete="email">
@@ -295,10 +307,9 @@
   <nav class="top-nav">
     <div class="top-nav-brand">
       <div class="top-nav-icon"><img src="https://cdn.shopify.com/s/files/1/0920/7591/7591/files/7_5244414e-055a-4786-a3ad-34dbdd940e0e.png?v=1772224680" alt="Opinion Kings"></div>
-      <h1>Dashboard</h1>
     </div>
     <div class="top-nav-right">
-      <input type="text" id="global-search" class="global-search" placeholder="Search users...">
+      <input type="text" id="global-search" class="global-search" placeholder="Search users, emails, codes...">
       <span class="admin-email" id="admin-email-display"></span>
       <button class="btn-sm" onclick="refreshData()">Refresh</button>
       <button class="btn-sm btn-logout" onclick="doLogout()">Logout</button>
@@ -318,78 +329,129 @@
 
   <div id="loading" class="loading">
     <div class="spinner"></div>
-    <p style="margin-top:14px;">Loading dashboard data...</p>
+    <p style="margin-top:16px;font-size:14px;">Loading your dashboard...</p>
   </div>
 
   <!-- 1. Overview -->
   <div class="tab-content active" data-tab="overview" id="tab-overview">
+    <div class="tab-header">
+      <h2>Welcome Back</h2>
+      <p>Here's a snapshot of your waitlist performance right now.</p>
+      <div class="last-updated" id="last-updated"></div>
+    </div>
     <div class="stats-grid" id="overview-stats"></div>
   </div>
 
   <!-- 2. All Users -->
   <div class="tab-content" data-tab="users" id="tab-users">
+    <div class="tab-header">
+      <h2>All Users</h2>
+      <p>Browse, search, and filter every person who signed up for the waitlist.</p>
+    </div>
     <div class="controls">
-      <input type="text" id="user-search" placeholder="Search name, email, or referral code...">
+      <input type="text" id="user-search" placeholder="Search by name, email, or referral code...">
       <select id="user-filter">
         <option value="all">All Users</option>
-        <option value="flagged">Flagged</option>
-        <option value="vip">VIP</option>
+        <option value="flagged">Flagged Only</option>
+        <option value="vip">VIP Members</option>
         <option value="has_referrals">Has Referrals</option>
-        <option value="out_of_usa">Out of USA</option>
+        <option value="out_of_usa">Outside USA</option>
       </select>
       <select id="user-sort">
-        <option value="newest">Newest</option>
-        <option value="oldest">Oldest</option>
+        <option value="newest">Newest First</option>
+        <option value="oldest">Oldest First</option>
         <option value="most_referrals">Most Referrals</option>
-        <option value="most_boost">Most Boost</option>
+        <option value="most_boost">Highest Boost</option>
       </select>
     </div>
     <div class="table-wrap" id="users-table-wrap"></div>
     <div class="pagination" id="users-pagination"></div>
   </div>
 
-  <!-- 3. Referral Analytics -->
+  <!-- 3. Referrals -->
   <div class="tab-content" data-tab="referrals" id="tab-referrals">
-    <div class="section-title">Top Referrers (Top 50)</div>
-    <div class="table-wrap" id="top-referrers-table"></div>
-    <div class="section-title" style="margin-top:28px;">Referral Chains</div>
-    <div class="controls">
-      <input type="text" id="referral-search" placeholder="Search referral chains...">
+    <div class="tab-header">
+      <h2>Referral Analytics</h2>
+      <p>See who's bringing in new users, how referral chains look, and milestone progress.</p>
     </div>
-    <div class="table-wrap" id="referral-chains-table"></div>
-    <div class="section-title" style="margin-top:28px;">Milestone Distribution</div>
-    <div id="milestone-chart"></div>
+    <div class="section-block">
+      <div class="section-title">Top Referrers</div>
+      <div class="section-desc">Users who have invited the most people to the waitlist.</div>
+      <div class="table-wrap" id="top-referrers-table"></div>
+    </div>
+    <div class="section-block">
+      <div class="section-title">Referral Chains</div>
+      <div class="section-desc">Shows who referred whom — the full invite trail.</div>
+      <div class="controls">
+        <input type="text" id="referral-search" placeholder="Search by name or email...">
+      </div>
+      <div class="table-wrap" id="referral-chains-table"></div>
+    </div>
+    <div class="section-block">
+      <div class="section-title">Milestone Progress</div>
+      <div class="section-desc">How many users have reached each referral milestone.</div>
+      <div id="milestone-chart"></div>
+    </div>
   </div>
 
-  <!-- 4. Share Analytics -->
+  <!-- 4. Shares -->
   <div class="tab-content" data-tab="shares" id="tab-shares">
-    <div class="section-title">Clicks by Channel</div>
-    <div class="channel-cards" id="channel-cards"></div>
-    <div class="section-title">Clicks Over Time</div>
-    <div class="chart-container">
-      <div class="bar-chart" id="share-time-chart"></div>
+    <div class="tab-header">
+      <h2>Share Analytics</h2>
+      <p>Track how users are sharing their referral links across different platforms.</p>
     </div>
-    <div class="section-title" style="margin-top:28px;">Top Sharers</div>
-    <div class="table-wrap" id="top-sharers-table"></div>
+    <div class="section-block">
+      <div class="section-title">Clicks by Platform</div>
+      <div class="section-desc">Total share link clicks broken down by channel.</div>
+      <div class="channel-cards" id="channel-cards"></div>
+    </div>
+    <div class="section-block">
+      <div class="section-title">Share Clicks Over Time</div>
+      <div class="section-desc">Daily share click activity — see which days had the most engagement.</div>
+      <div class="chart-container">
+        <div class="bar-chart" id="share-time-chart"></div>
+      </div>
+    </div>
+    <div class="section-block">
+      <div class="section-title">Most Active Sharers</div>
+      <div class="section-desc">Users who clicked their share buttons the most.</div>
+      <div class="table-wrap" id="top-sharers-table"></div>
+    </div>
   </div>
 
-  <!-- 5. Credits Ledger -->
+  <!-- 5. Credits -->
   <div class="tab-content" data-tab="credits" id="tab-credits">
-    <div class="section-title">Credits Ledger</div>
+    <div class="tab-header">
+      <h2>Credits Ledger</h2>
+      <p>Manage referral reward credits — distribute, cancel, or reopen entries.</p>
+    </div>
     <div class="table-wrap" id="credits-table-wrap"></div>
   </div>
 
-  <!-- 6. Flagged Users & Fraud -->
+  <!-- 6. Flagged -->
   <div class="tab-content" data-tab="flagged" id="tab-flagged">
-    <div class="section-title">Flagged Users</div>
-    <div class="table-wrap" id="flagged-table-wrap"></div>
-    <div class="section-title" style="margin-top:28px;">IP Clusters (3+ Signups)</div>
-    <div class="table-wrap" id="ip-clusters-table"></div>
+    <div class="tab-header">
+      <h2>Flagged Users & Fraud Detection</h2>
+      <p>Users flagged for suspicious activity and IP addresses with too many signups.</p>
+    </div>
+    <div class="section-block">
+      <div class="section-title">Flagged Users</div>
+      <div class="section-desc">These users were automatically flagged — review the reason for each.</div>
+      <div class="table-wrap" id="flagged-table-wrap"></div>
+    </div>
+    <div class="section-block">
+      <div class="section-title">Suspicious IP Clusters</div>
+      <div class="section-desc">IP addresses with 3 or more signups — could indicate fake accounts.</div>
+      <div class="table-wrap" id="ip-clusters-table"></div>
+    </div>
   </div>
 
-  <!-- 7. Signup Timeline -->
+  <!-- 7. Timeline -->
   <div class="tab-content" data-tab="timeline" id="tab-timeline">
-    <div class="section-title">Signups Per Day</div>
+    <div class="tab-header">
+      <h2>Signup Timeline</h2>
+      <p>How many new users signed up each day — see your growth trend over time.</p>
+    </div>
     <div class="chart-container">
       <div class="bar-chart" id="timeline-chart"></div>
     </div>
@@ -397,17 +459,33 @@
 
   <!-- 8. Visitors -->
   <div class="tab-content" data-tab="visitors" id="tab-visitors">
-    <div class="stats-grid" id="visitors-stats"></div>
-    <div class="section-title">Page Views Per Day</div>
-    <div class="chart-container">
-      <div class="bar-chart" id="visitors-day-chart"></div>
+    <div class="tab-header">
+      <h2>Website Visitors</h2>
+      <p>Track how many people visit your website, which pages they view, and where they come from.</p>
     </div>
-    <div class="section-title" style="margin-top:28px;">Most Visited Pages</div>
-    <div class="table-wrap" id="visitors-pages-table"></div>
-    <div class="section-title" style="margin-top:28px;">Traffic Sources</div>
-    <div class="table-wrap" id="visitors-referrers-table"></div>
-    <div class="section-title" style="margin-top:28px;">Device / Screen Breakdown</div>
-    <div id="visitors-device-chart"></div>
+    <div class="stats-grid" id="visitors-stats"></div>
+    <div class="section-block">
+      <div class="section-title">Daily Page Views</div>
+      <div class="section-desc">Number of page views your website received each day.</div>
+      <div class="chart-container">
+        <div class="bar-chart" id="visitors-day-chart"></div>
+      </div>
+    </div>
+    <div class="section-block">
+      <div class="section-title">Most Visited Pages</div>
+      <div class="section-desc">Which pages on your site get the most traffic.</div>
+      <div class="table-wrap" id="visitors-pages-table"></div>
+    </div>
+    <div class="section-block">
+      <div class="section-title">Where Visitors Come From</div>
+      <div class="section-desc">The websites and sources that send people to your site. "(direct)" means they typed your URL or used a bookmark.</div>
+      <div class="table-wrap" id="visitors-referrers-table"></div>
+    </div>
+    <div class="section-block">
+      <div class="section-title">Device Breakdown</div>
+      <div class="section-desc">What kind of devices your visitors use — phone, tablet, or computer.</div>
+      <div id="visitors-device-chart"></div>
+    </div>
   </div>
 
   <div class="dash-footer">
@@ -427,10 +505,8 @@
   var USERS_PER_PAGE = 50;
   var searchDebounce = null;
 
-  // Auto-login if token exists
   if (token) tryAutoLogin();
 
-  // ─── Login ───
   window.doLogin = function() {
     var email = document.getElementById('login-email').value.trim();
     var password = document.getElementById('login-password').value;
@@ -508,14 +584,15 @@
       DATA = d;
       document.getElementById('loading').style.display = 'none';
       document.querySelectorAll('.tab-content').forEach(function(el) { el.style.visibility = 'visible'; });
+      var now = new Date();
+      document.getElementById('last-updated').textContent = 'Last updated: ' + now.toLocaleString();
       renderAll();
     })
     .catch(function(e) {
-      document.getElementById('loading').innerHTML = '<p style="color:#ff5555;">Failed to load data: ' + esc(e.message) + '</p>';
+      document.getElementById('loading').innerHTML = '<p style="color:#ff5555;font-size:14px;">Failed to load data: ' + esc(e.message) + '</p>';
     });
   }
 
-  // ─── Tab Navigation ───
   document.getElementById('tab-nav').addEventListener('click', function(e) {
     if (e.target.tagName !== 'BUTTON') return;
     var tab = e.target.getAttribute('data-tab');
@@ -525,14 +602,9 @@
     document.querySelector('.tab-content[data-tab="' + tab + '"]').classList.add('active');
   });
 
-  document.getElementById('login-password').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') window.doLogin();
-  });
-  document.getElementById('login-email').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') document.getElementById('login-password').focus();
-  });
+  document.getElementById('login-password').addEventListener('keydown', function(e) { if (e.key === 'Enter') window.doLogin(); });
+  document.getElementById('login-email').addEventListener('keydown', function(e) { if (e.key === 'Enter') document.getElementById('login-password').focus(); });
 
-  // ─── Render All ───
   function renderAll() {
     if (!DATA) return;
     renderOverview();
@@ -549,15 +621,19 @@
   function renderOverview() {
     var o = DATA.overview;
     var html = '';
-    html += statCard(o.total_users, 'Total Users');
-    html += statCard(o.spots_remaining, 'Spots Remaining');
-    html += statCard(o.total_referrals, 'Total Referrals');
-    html += statCard('$' + (o.total_credits_pending / 100).toFixed(0), 'Pending Credits');
-    html += statCard(o.flagged_count, 'Flagged');
-    html += statCard(o.vip_count, 'VIP Members');
-    html += statCard(o.share_clicks, 'Share Clicks');
-    html += statCard(o.international_count, 'International');
+    html += iconStatCard('&#128101;', o.total_users, 'Total Users', 'People who joined the waitlist');
+    html += iconStatCard('&#9201;', o.spots_remaining, 'Spots Left', 'Remaining out of 5,000 spots');
+    html += iconStatCard('&#128279;', o.total_referrals, 'Referrals', 'Successful invites by users');
+    html += iconStatCard('&#128176;', '$' + (o.total_credits_pending / 100).toFixed(0), 'Pending Credits', 'Rewards waiting to be paid');
+    html += iconStatCard('&#9888;', o.flagged_count, 'Flagged', 'Accounts under review');
+    html += iconStatCard('&#11088;', o.vip_count, 'VIP Members', 'Users with VIP status');
+    html += iconStatCard('&#128228;', o.share_clicks, 'Share Clicks', 'Times a share button was clicked');
+    html += iconStatCard('&#127758;', o.international_count, 'International', 'Signups from outside the US');
     document.getElementById('overview-stats').innerHTML = html;
+  }
+
+  function iconStatCard(icon, val, lbl, desc) {
+    return '<div class="stat-card"><div class="stat-icon">' + icon + '</div><div class="val">' + val + '</div><div class="lbl">' + lbl + '</div><div class="desc">' + desc + '</div></div>';
   }
 
   function statCard(val, lbl) {
@@ -573,39 +649,38 @@
     var start = (usersPage - 1) * USERS_PER_PAGE;
     var page = users.slice(start, start + USERS_PER_PAGE);
 
-    var h = '<table><tr><th>ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Code</th><th>Rank</th><th>Referrals</th><th>Boost</th><th>Credits</th><th>VIP</th><th>IP</th><th>Flagged</th><th>Country</th><th>Joined</th></tr>';
+    var h = '<table><tr><th>#</th><th>Name</th><th>Email</th><th>Phone</th><th>Referral Code</th><th>Rank</th><th>Referrals</th><th>Boost</th><th>Credits</th><th>VIP</th><th>Country</th><th>Flagged</th><th>Joined</th></tr>';
     if (page.length === 0) {
-      h += '<tr><td colspan="14" class="empty">No users match your criteria.</td></tr>';
+      h += '<tr><td colspan="13" class="empty">No users found. Try adjusting your search or filters.</td></tr>';
     }
-    page.forEach(function(u) {
+    page.forEach(function(u, i) {
       var flagClass = u.flagged_reason ? ' class="flag-row"' : '';
       h += '<tr' + flagClass + '>';
-      h += '<td>' + u.id + '</td>';
+      h += '<td style="color:#555;">' + (start + i + 1) + '</td>';
       h += '<td style="color:#fff;font-weight:600;">' + esc(u.full_name) + '</td>';
       h += '<td>' + esc(u.email) + '</td>';
-      h += '<td>' + esc(u.phone || '') + '</td>';
-      h += '<td style="color:#d4a95a;font-weight:600;">' + esc(u.referral_code) + '</td>';
-      h += '<td>' + (u._rank || '-') + '</td>';
-      h += '<td>' + (u.referral_count || 0) + '</td>';
+      h += '<td style="color:#666;">' + esc(u.phone || '-') + '</td>';
+      h += '<td style="color:#d4a95a;font-weight:600;font-family:monospace;">' + esc(u.referral_code) + '</td>';
+      h += '<td style="color:#888;">#' + (u._rank || '-') + '</td>';
+      h += '<td style="font-weight:700;">' + (u.referral_count || 0) + '</td>';
       h += '<td>' + (u.boost_points || 0) + '</td>';
-      h += '<td>$' + ((u.credits_earned || 0) / 100).toFixed(0) + '</td>';
-      h += '<td>' + (u.vip_badge ? '<span class="badge badge-vip">VIP</span>' : '') + '</td>';
-      h += '<td style="font-size:11px;color:#555;">' + esc(u.ip_address || '') + '</td>';
-      h += '<td>' + (u.flagged_reason ? '<span class="flag-text">' + esc(u.flagged_reason) + '</span>' : '') + '</td>';
-      h += '<td>' + esc(u.country_code || '') + '</td>';
+      h += '<td style="color:#4ade80;font-weight:600;">$' + ((u.credits_earned || 0) / 100).toFixed(0) + '</td>';
+      h += '<td>' + (u.vip_badge ? '<span class="badge badge-vip">VIP</span>' : '<span style="color:#333;">-</span>') + '</td>';
+      h += '<td>' + esc(u.country_code || '-') + '</td>';
+      h += '<td>' + (u.flagged_reason ? '<span class="flag-text">' + esc(u.flagged_reason) + '</span>' : '<span style="color:#333;">-</span>') + '</td>';
       h += '<td style="color:#666;">' + shortDate(u.created_at) + '</td>';
       h += '</tr>';
       if (u.referrer_email) {
-        h += '<tr style="background:#08080a;"><td></td><td colspan="13" style="font-size:11px;color:#555;">Referred by: <span style="color:#d4a95a;">' + esc(u.referrer_email) + '</span></td></tr>';
+        h += '<tr style="background:#08080a;"><td></td><td colspan="12" style="font-size:11px;color:#555;padding:6px 16px;">Referred by: <span style="color:#d4a95a;">' + esc(u.referrer_email) + '</span></td></tr>';
       }
     });
     h += '</table>';
     document.getElementById('users-table-wrap').innerHTML = h;
 
     var ph = '';
-    ph += '<button onclick="usersPageNav(-1)"' + (usersPage <= 1 ? ' disabled' : '') + '>&laquo; Prev</button>';
-    ph += '<span>Page ' + usersPage + ' of ' + totalPages + ' (' + total + ' users)</span>';
-    ph += '<button onclick="usersPageNav(1)"' + (usersPage >= totalPages ? ' disabled' : '') + '>Next &raquo;</button>';
+    ph += '<button onclick="usersPageNav(-1)"' + (usersPage <= 1 ? ' disabled' : '') + '>Previous</button>';
+    ph += '<span>Page ' + usersPage + ' of ' + totalPages + ' &middot; ' + total + ' users total</span>';
+    ph += '<button onclick="usersPageNav(1)"' + (usersPage >= totalPages ? ' disabled' : '') + '>Next</button>';
     document.getElementById('users-pagination').innerHTML = ph;
   }
 
@@ -646,15 +721,15 @@
   document.getElementById('user-filter').addEventListener('change', function() { usersPage = 1; renderUsers(); });
   document.getElementById('user-sort').addEventListener('change', function() { usersPage = 1; renderUsers(); });
 
-  // ─── 3. Referral Analytics ───
+  // ─── 3. Referrals ───
   function renderReferrals() {
     var refs = DATA.top_referrers || [];
     if (refs.length === 0) {
-      document.getElementById('top-referrers-table').innerHTML = '<p class="empty">No referrers yet.</p>';
+      document.getElementById('top-referrers-table').innerHTML = '<p class="empty">No one has made referrals yet. Once users start inviting others, the top referrers will show here.</p>';
     } else {
-      var h = '<table><tr><th>ID</th><th>Name</th><th>Email</th><th>Code</th><th>Referrals</th><th>Credits</th><th>VIP</th><th>IP</th></tr>';
-      refs.forEach(function(u) {
-        h += '<tr><td>' + u.id + '</td><td style="color:#fff;font-weight:600;">' + esc(u.full_name) + '</td><td>' + esc(u.email) + '</td><td style="color:#d4a95a;">' + esc(u.referral_code) + '</td><td>' + (u.referral_count || 0) + '</td><td>$' + ((u.credits_earned || 0) / 100).toFixed(0) + '</td><td>' + (u.vip_badge ? '<span class="badge badge-vip">VIP</span>' : '') + '</td><td style="font-size:11px;color:#555;">' + esc(u.ip_address || '') + '</td></tr>';
+      var h = '<table><tr><th>#</th><th>Name</th><th>Email</th><th>Referral Code</th><th>Referrals</th><th>Credits Earned</th><th>VIP</th></tr>';
+      refs.forEach(function(u, i) {
+        h += '<tr><td style="color:#555;">' + (i + 1) + '</td><td style="color:#fff;font-weight:600;">' + esc(u.full_name) + '</td><td>' + esc(u.email) + '</td><td style="color:#d4a95a;font-family:monospace;">' + esc(u.referral_code) + '</td><td style="font-weight:700;">' + (u.referral_count || 0) + '</td><td style="color:#4ade80;">$' + ((u.credits_earned || 0) / 100).toFixed(0) + '</td><td>' + (u.vip_badge ? '<span class="badge badge-vip">VIP</span>' : '-') + '</td></tr>';
       });
       h += '</table>';
       document.getElementById('top-referrers-table').innerHTML = h;
@@ -664,13 +739,13 @@
 
     var milestones = DATA.milestone_distribution || [];
     if (milestones.length === 0) {
-      document.getElementById('milestone-chart').innerHTML = '<p class="empty">No data.</p>';
+      document.getElementById('milestone-chart').innerHTML = '<p class="empty">No milestone data yet.</p>';
     } else {
       var maxCount = Math.max.apply(null, milestones.map(function(m) { return m.count; })) || 1;
       var mh = '<div class="h-bar-chart">';
       milestones.forEach(function(m) {
         var pct = Math.max(1, (m.count / maxCount) * 100);
-        mh += '<div class="h-bar-row"><div class="h-bar-label">' + esc(m.tier) + '</div><div class="h-bar-track"><div class="h-bar-fill" style="width:' + pct + '%"><span class="h-bar-val">' + m.count + '</span></div></div></div>';
+        mh += '<div class="h-bar-row"><div class="h-bar-label">' + esc(m.tier) + '</div><div class="h-bar-track"><div class="h-bar-fill" style="width:' + pct + '%"><span class="h-bar-val">' + m.count + ' users</span></div></div></div>';
       });
       mh += '</div>';
       document.getElementById('milestone-chart').innerHTML = mh;
@@ -689,11 +764,11 @@
       });
     }
     if (chains.length === 0) {
-      document.getElementById('referral-chains-table').innerHTML = '<p class="empty">No referral chains' + (search ? ' matching search' : '') + '.</p>';
+      document.getElementById('referral-chains-table').innerHTML = '<p class="empty">No referral chains found' + (search ? ' matching your search' : '') + '.</p>';
     } else {
-      var h = '<table><tr><th>Referrer</th><th>Referrer Email</th><th>Referred</th><th>Referred Email</th><th>Status</th><th>Date</th></tr>';
+      var h = '<table><tr><th>Invited By</th><th>Their Email</th><th>New User</th><th>Their Email</th><th>Status</th><th>Date</th></tr>';
       chains.slice(0, 200).forEach(function(r) {
-        h += '<tr><td style="color:#fff;font-weight:600;">' + esc(r.referrer_name || '') + '</td><td>' + esc(r.referrer_email || '') + '</td><td style="color:#fff;font-weight:600;">' + esc(r.referred_name || '') + '</td><td>' + esc(r.referred_email || '') + '</td><td>' + esc(r.status || '') + '</td><td style="color:#666;">' + shortDate(r.created_at) + '</td></tr>';
+        h += '<tr><td style="color:#fff;font-weight:600;">' + esc(r.referrer_name || '-') + '</td><td>' + esc(r.referrer_email || '') + '</td><td style="color:#fff;font-weight:600;">' + esc(r.referred_name || '-') + '</td><td>' + esc(r.referred_email || '') + '</td><td>' + esc(r.status || '') + '</td><td style="color:#666;">' + shortDate(r.created_at) + '</td></tr>';
       });
       h += '</table>';
       document.getElementById('referral-chains-table').innerHTML = h;
@@ -705,15 +780,16 @@
     searchDebounce = setTimeout(renderReferralChains, 250);
   });
 
-  // ─── 4. Share Analytics ───
+  // ─── 4. Shares ───
   function renderShares() {
     var stats = DATA.share_stats || [];
+    var icons = { twitter: '&#120143;', whatsapp: '&#128172;', copy: '&#128203;' };
     var channels = ['twitter', 'whatsapp', 'copy'];
     var ch = '';
     channels.forEach(function(c) {
       var found = stats.find(function(s) { return s.channel === c; });
       var count = found ? found.clicks : 0;
-      ch += '<div class="channel-card"><div class="ch-name">' + esc(c) + '</div><div class="ch-count">' + count + '</div></div>';
+      ch += '<div class="channel-card"><div class="ch-icon">' + (icons[c] || '') + '</div><div class="ch-name">' + esc(c) + '</div><div class="ch-count">' + count + '</div></div>';
     });
     document.getElementById('channel-cards').innerHTML = ch;
 
@@ -725,12 +801,12 @@
     });
     var days = Object.entries(clicksByDay).sort(function(a, b) { return a[0].localeCompare(b[0]); });
     if (days.length === 0) {
-      document.getElementById('share-time-chart').innerHTML = '<p class="empty">No share click data.</p>';
+      document.getElementById('share-time-chart').innerHTML = '<p class="empty">No share activity yet. When users start sharing, daily click data will appear here.</p>';
     } else {
       var maxC = Math.max.apply(null, days.map(function(d) { return d[1]; })) || 1;
       var bh = '';
       days.forEach(function(d) {
-        var h = Math.max(2, (d[1] / maxC) * 180);
+        var h = Math.max(2, (d[1] / maxC) * 200);
         bh += '<div class="bar-col"><div class="bar-count">' + d[1] + '</div><div class="bar" style="height:' + h + 'px"></div><div class="bar-label">' + d[0].slice(5) + '</div></div>';
       });
       document.getElementById('share-time-chart').innerHTML = bh;
@@ -744,35 +820,34 @@
     });
     var sharers = Object.values(sharerMap).sort(function(a, b) { return b.total - a.total; }).slice(0, 20);
     if (sharers.length === 0) {
-      document.getElementById('top-sharers-table').innerHTML = '<p class="empty">No sharers yet.</p>';
+      document.getElementById('top-sharers-table').innerHTML = '<p class="empty">No sharing activity recorded yet.</p>';
     } else {
-      var h = '<table><tr><th>Name</th><th>Email</th><th>Total</th><th>Twitter</th><th>WhatsApp</th><th>Copy</th></tr>';
-      sharers.forEach(function(s) {
-        h += '<tr><td style="color:#fff;font-weight:600;">' + esc(s.full_name || '') + '</td><td>' + esc(s.email || '') + '</td><td style="color:#d4a95a;font-weight:700;">' + s.total + '</td><td>' + s.twitter + '</td><td>' + s.whatsapp + '</td><td>' + s.copy + '</td></tr>';
+      var h = '<table><tr><th>#</th><th>Name</th><th>Email</th><th>Total Clicks</th><th>Twitter</th><th>WhatsApp</th><th>Copy Link</th></tr>';
+      sharers.forEach(function(s, i) {
+        h += '<tr><td style="color:#555;">' + (i + 1) + '</td><td style="color:#fff;font-weight:600;">' + esc(s.full_name || '-') + '</td><td>' + esc(s.email || '') + '</td><td style="color:#d4a95a;font-weight:700;">' + s.total + '</td><td>' + s.twitter + '</td><td>' + s.whatsapp + '</td><td>' + s.copy + '</td></tr>';
       });
       h += '</table>';
       document.getElementById('top-sharers-table').innerHTML = h;
     }
   }
 
-  // ─── 5. Credits Ledger ───
+  // ─── 5. Credits ───
   function renderCredits() {
     var ledger = DATA.credits_ledger || [];
     if (ledger.length === 0) {
-      document.getElementById('credits-table-wrap').innerHTML = '<p class="empty">No credits ledger entries.</p>';
+      document.getElementById('credits-table-wrap').innerHTML = '<p class="empty">No credit entries yet. Credits appear here when users earn referral rewards.</p>';
       return;
     }
-    var h = '<table><tr><th>ID</th><th>Email</th><th>Name</th><th>Code</th><th>Referrals</th><th>Credits</th><th>VIP</th><th>Status</th><th>Updated</th><th>Actions</th></tr>';
+    var h = '<table><tr><th>Name</th><th>Email</th><th>Referral Code</th><th>Referrals</th><th>Credits</th><th>VIP</th><th>Status</th><th>Last Updated</th><th>Actions</th></tr>';
     ledger.forEach(function(l) {
       var badgeClass = l.status === 'distributed' ? 'badge-distributed' : l.status === 'cancelled' ? 'badge-cancelled' : 'badge-pending';
       h += '<tr>';
-      h += '<td>' + l.id + '</td>';
+      h += '<td style="color:#fff;font-weight:600;">' + esc(l.full_name || '-') + '</td>';
       h += '<td>' + esc(l.email) + '</td>';
-      h += '<td style="color:#fff;font-weight:600;">' + esc(l.full_name || '') + '</td>';
-      h += '<td style="color:#d4a95a;">' + esc(l.referral_code) + '</td>';
-      h += '<td>' + (l.referral_count || 0) + '</td>';
-      h += '<td style="font-weight:700;">$' + ((l.total_credits || 0) / 100).toFixed(0) + '</td>';
-      h += '<td>' + (l.vip_badge ? '<span class="badge badge-vip">VIP</span>' : '') + '</td>';
+      h += '<td style="color:#d4a95a;font-family:monospace;">' + esc(l.referral_code) + '</td>';
+      h += '<td style="font-weight:600;">' + (l.referral_count || 0) + '</td>';
+      h += '<td style="color:#4ade80;font-weight:700;font-size:14px;">$' + ((l.total_credits || 0) / 100).toFixed(0) + '</td>';
+      h += '<td>' + (l.vip_badge ? '<span class="badge badge-vip">VIP</span>' : '-') + '</td>';
       h += '<td><span class="badge ' + badgeClass + '">' + esc(l.status) + '</span></td>';
       h += '<td style="color:#666;">' + shortDate(l.last_updated) + '</td>';
       h += '<td>';
@@ -806,22 +881,20 @@
         var entry = DATA.credits_ledger.find(function(l) { return l.id === id; });
         if (entry) entry.status = newStatus;
         renderCredits();
-      } else {
-        btn.disabled = false; btn.textContent = 'Error';
-      }
+      } else { btn.disabled = false; btn.textContent = 'Error'; }
     })
     .catch(function() { btn.disabled = false; btn.textContent = 'Error'; });
   };
 
-  // ─── 6. Flagged Users & Fraud ───
+  // ─── 6. Flagged ───
   function renderFlagged() {
     var flagged = DATA.flagged_users || [];
     if (flagged.length === 0) {
-      document.getElementById('flagged-table-wrap').innerHTML = '<p class="empty">No flagged users.</p>';
+      document.getElementById('flagged-table-wrap').innerHTML = '<p class="empty">No flagged users. Everything looks clean!</p>';
     } else {
-      var h = '<table><tr><th>ID</th><th>Name</th><th>Email</th><th>Code</th><th>Referrals</th><th>IP</th><th>Reason</th><th>Joined</th></tr>';
-      flagged.forEach(function(u) {
-        h += '<tr class="flag-row"><td>' + u.id + '</td><td style="color:#fff;font-weight:600;">' + esc(u.full_name) + '</td><td>' + esc(u.email) + '</td><td style="color:#d4a95a;">' + esc(u.referral_code) + '</td><td>' + (u.referral_count || 0) + '</td><td style="font-size:11px;color:#555;">' + esc(u.ip_address || '') + '</td><td><span class="flag-text">' + esc(u.flagged_reason) + '</span></td><td style="color:#666;">' + shortDate(u.created_at) + '</td></tr>';
+      var h = '<table><tr><th>#</th><th>Name</th><th>Email</th><th>Referral Code</th><th>Referrals</th><th>IP Address</th><th>Why Flagged</th><th>Joined</th></tr>';
+      flagged.forEach(function(u, i) {
+        h += '<tr class="flag-row"><td style="color:#555;">' + (i + 1) + '</td><td style="color:#fff;font-weight:600;">' + esc(u.full_name) + '</td><td>' + esc(u.email) + '</td><td style="color:#d4a95a;font-family:monospace;">' + esc(u.referral_code) + '</td><td>' + (u.referral_count || 0) + '</td><td style="font-family:monospace;font-size:11px;color:#666;">' + esc(u.ip_address || '-') + '</td><td><span class="flag-text">' + esc(u.flagged_reason) + '</span></td><td style="color:#666;">' + shortDate(u.created_at) + '</td></tr>';
       });
       h += '</table>';
       document.getElementById('flagged-table-wrap').innerHTML = h;
@@ -829,30 +902,30 @@
 
     var clusters = DATA.ip_clusters || [];
     if (clusters.length === 0) {
-      document.getElementById('ip-clusters-table').innerHTML = '<p class="empty">No suspicious IP clusters.</p>';
+      document.getElementById('ip-clusters-table').innerHTML = '<p class="empty">No suspicious IP clusters detected. All signups look legitimate!</p>';
     } else {
-      var h = '<table><tr><th>IP Address</th><th>Count</th><th>Severity</th><th>Associated Emails</th></tr>';
+      var h = '<table><tr><th>IP Address</th><th>Signups</th><th>Risk Level</th><th>Associated Emails</th></tr>';
       clusters.forEach(function(c) {
         var sev = c.cnt >= 10 ? 'badge-cancelled' : c.cnt >= 5 ? 'badge-flagged' : 'badge-pending';
         var sevLabel = c.cnt >= 10 ? 'Critical' : c.cnt >= 5 ? 'High' : 'Medium';
-        h += '<tr><td style="font-family:monospace;font-size:12px;">' + esc(c.ip_address) + '</td><td style="font-weight:700;">' + c.cnt + '</td><td><span class="badge ' + sev + '">' + sevLabel + '</span></td><td style="white-space:normal;max-width:400px;color:#888;">' + esc(c.emails) + '</td></tr>';
+        h += '<tr><td style="font-family:monospace;font-size:12px;">' + esc(c.ip_address) + '</td><td style="font-weight:700;font-size:15px;">' + c.cnt + '</td><td><span class="badge ' + sev + '">' + sevLabel + '</span></td><td style="white-space:normal;max-width:400px;color:#888;font-size:12px;line-height:1.5;">' + esc(c.emails) + '</td></tr>';
       });
       h += '</table>';
       document.getElementById('ip-clusters-table').innerHTML = h;
     }
   }
 
-  // ─── 7. Signup Timeline ───
+  // ─── 7. Timeline ───
   function renderTimeline() {
     var days = DATA.signups_by_day || [];
     if (days.length === 0) {
-      document.getElementById('timeline-chart').innerHTML = '<p class="empty">No signup data.</p>';
+      document.getElementById('timeline-chart').innerHTML = '<p class="empty">No signup data yet. Once users start joining, the daily signup chart will appear here.</p>';
       return;
     }
     var maxCount = Math.max.apply(null, days.map(function(d) { return d.count; })) || 1;
     var bh = '';
     days.forEach(function(d) {
-      var h = Math.max(2, (d.count / maxCount) * 180);
+      var h = Math.max(2, (d.count / maxCount) * 200);
       bh += '<div class="bar-col"><div class="bar-count">' + d.count + '</div><div class="bar" style="height:' + h + 'px"></div><div class="bar-label">' + d.date.slice(5) + '</div></div>';
     });
     document.getElementById('timeline-chart').innerHTML = bh;
@@ -862,74 +935,72 @@
   function renderVisitors() {
     var v = DATA.visitors;
     if (!v) {
-      document.getElementById('visitors-stats').innerHTML = '<p class="empty">No visitor data available.</p>';
+      document.getElementById('visitors-stats').innerHTML = '<p class="empty">Visitor tracking not active yet. Once the page_views table is created in Supabase and visitors browse your site, data will appear here.</p>';
       return;
     }
 
-    // Overview cards
     var sh = '';
-    sh += statCard(v.total_views, 'Total Page Views');
-    sh += statCard(v.unique_visitors, 'Unique Visitors');
-    sh += statCard(v.views_today, 'Views Today');
-    sh += statCard(v.pages_per_visitor, 'Pages / Visitor');
+    sh += iconStatCard('&#128065;', v.total_views, 'Total Page Views', 'Every time someone loads a page on your site');
+    sh += iconStatCard('&#128100;', v.unique_visitors, 'Unique Visitors', 'Individual people (not repeat visits)');
+    sh += iconStatCard('&#128200;', v.views_today, 'Views Today', 'Page views in the last 24 hours');
+    sh += iconStatCard('&#128196;', v.pages_per_visitor, 'Pages per Visit', 'Average pages each visitor views');
     document.getElementById('visitors-stats').innerHTML = sh;
 
-    // Page views per day bar chart
     var days = v.views_by_day || [];
     if (days.length === 0) {
-      document.getElementById('visitors-day-chart').innerHTML = '<p class="empty">No page view data yet.</p>';
+      document.getElementById('visitors-day-chart').innerHTML = '<p class="empty">No page view data yet. Visit your site to start generating data.</p>';
     } else {
       var maxC = Math.max.apply(null, days.map(function(d) { return d.count; })) || 1;
       var bh = '';
       days.forEach(function(d) {
-        var h = Math.max(2, (d.count / maxC) * 180);
+        var h = Math.max(2, (d.count / maxC) * 200);
         bh += '<div class="bar-col"><div class="bar-count">' + d.count + '</div><div class="bar" style="height:' + h + 'px"></div><div class="bar-label">' + d.date.slice(5) + '</div></div>';
       });
       document.getElementById('visitors-day-chart').innerHTML = bh;
     }
 
-    // Most visited pages table
     var pages = v.top_pages || [];
     if (pages.length === 0) {
       document.getElementById('visitors-pages-table').innerHTML = '<p class="empty">No page data yet.</p>';
     } else {
-      var ph = '<table><tr><th>Page Path</th><th>Views</th><th>Unique Visitors</th></tr>';
-      pages.forEach(function(p) {
-        ph += '<tr><td style="color:#d4a95a;font-weight:600;">' + esc(p.page) + '</td><td style="font-weight:700;">' + p.views + '</td><td>' + p.unique + '</td></tr>';
+      var totalViews = pages.reduce(function(s, p) { return s + p.views; }, 0);
+      var ph = '<table><tr><th>#</th><th>Page</th><th>Views</th><th>Unique Visitors</th><th>% of Traffic</th></tr>';
+      pages.forEach(function(p, i) {
+        var pct = totalViews > 0 ? ((p.views / totalViews) * 100).toFixed(1) : '0';
+        ph += '<tr><td style="color:#555;">' + (i + 1) + '</td><td style="color:#d4a95a;font-weight:600;">' + esc(p.page) + '</td><td style="font-weight:700;">' + p.views + '</td><td>' + p.unique + '</td><td style="color:#888;">' + pct + '%</td></tr>';
       });
       ph += '</table>';
       document.getElementById('visitors-pages-table').innerHTML = ph;
     }
 
-    // Traffic sources table
     var refs = v.top_referrers || [];
     if (refs.length === 0) {
       document.getElementById('visitors-referrers-table').innerHTML = '<p class="empty">No referrer data yet.</p>';
     } else {
-      var rh = '<table><tr><th>Source</th><th>Views</th><th>%</th></tr>';
-      refs.forEach(function(r) {
-        rh += '<tr><td style="color:#fff;font-weight:600;">' + esc(r.source) + '</td><td style="font-weight:700;">' + r.count + '</td><td style="color:#d4a95a;">' + r.pct + '%</td></tr>';
+      var rh = '<table><tr><th>#</th><th>Source</th><th>Visitors Sent</th><th>Share of Traffic</th></tr>';
+      refs.forEach(function(r, i) {
+        rh += '<tr><td style="color:#555;">' + (i + 1) + '</td><td style="color:#fff;font-weight:600;">' + esc(r.source) + '</td><td style="font-weight:700;">' + r.count + '</td><td style="color:#d4a95a;">' + r.pct + '%</td></tr>';
       });
       rh += '</table>';
       document.getElementById('visitors-referrers-table').innerHTML = rh;
     }
 
-    // Device breakdown horizontal bar chart
     var sb = v.screen_buckets || {};
     var total = (sb.mobile || 0) + (sb.tablet || 0) + (sb.desktop || 0);
     if (total === 0) {
       document.getElementById('visitors-device-chart').innerHTML = '<p class="empty">No device data yet.</p>';
     } else {
       var buckets = [
-        { label: 'Mobile (<768px)', count: sb.mobile || 0 },
-        { label: 'Tablet (768-1024)', count: sb.tablet || 0 },
-        { label: 'Desktop (>1024)', count: sb.desktop || 0 }
+        { label: 'Phone', count: sb.mobile || 0, icon: '&#128241;' },
+        { label: 'Tablet', count: sb.tablet || 0, icon: '&#128187;' },
+        { label: 'Computer', count: sb.desktop || 0, icon: '&#128421;' }
       ];
       var maxB = Math.max.apply(null, buckets.map(function(b) { return b.count; })) || 1;
       var dh = '<div class="h-bar-chart">';
       buckets.forEach(function(b) {
         var pct = Math.max(1, (b.count / maxB) * 100);
-        dh += '<div class="h-bar-row"><div class="h-bar-label">' + esc(b.label) + '</div><div class="h-bar-track"><div class="h-bar-fill" style="width:' + pct + '%"><span class="h-bar-val">' + b.count + '</span></div></div></div>';
+        var pctOfTotal = total > 0 ? ((b.count / total) * 100).toFixed(0) : '0';
+        dh += '<div class="h-bar-row"><div class="h-bar-label">' + b.icon + ' ' + esc(b.label) + '</div><div class="h-bar-track"><div class="h-bar-fill" style="width:' + pct + '%"><span class="h-bar-val">' + b.count + '</span></div><span class="h-bar-pct">' + pctOfTotal + '%</span></div></div>';
       });
       dh += '</div>';
       document.getElementById('visitors-device-chart').innerHTML = dh;
@@ -958,10 +1029,10 @@
   }
 
   function shortDate(s) {
-    if (!s) return '';
+    if (!s) return '-';
     try {
       var d = new Date(s);
-      return d.toLocaleDateString() + ' ' + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) + ', ' + d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
     } catch(e) { return s; }
   }
 })();

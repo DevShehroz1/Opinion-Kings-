@@ -609,10 +609,13 @@
       font-weight: 700;
       text-decoration: none;
       transition: opacity 0.2s;
+      cursor: pointer;
+      border: none;
     }
     .ok-share-btn:hover { opacity: 0.85; }
     .ok-share-btn.tw { background: #1d9bf0; color: #fff; }
     .ok-share-btn.wa { background: #25d366; color: #fff; }
+    .ok-share-btn.cp { background: rgba(255,255,255,0.10); color: #fff; }
     .ok-dash-lb {
       width: 100%;
       margin-top: 8px;
@@ -1278,15 +1281,41 @@
 
         var sr = document.createElement('div');
         sr.className = 'ok-dash-share';
-        var shareText = encodeURIComponent('I just joined the Opinion Kings waitlist — the 1st social prediction market. Join me and skip the line! ' + data.referral_link);
+        var shareText = encodeURIComponent('I just joined the Opinion Kings waitlist \u2014 the 1st social prediction market. Join me and skip the line! ' + data.referral_link);
+
+        function trackShare(channel) {
+          try {
+            fetch(OK_API + '/share-click', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ user_id: data.user_id, channel: channel })
+            });
+          } catch(_) {}
+        }
+
         var tw = document.createElement('a');
         tw.href = 'https://twitter.com/intent/tweet?text=' + shareText;
         tw.target = '_blank'; tw.className = 'ok-share-btn tw'; tw.textContent = 'Share on X';
+        tw.onclick = function() { trackShare('twitter'); };
         sr.appendChild(tw);
+
         var wa = document.createElement('a');
         wa.href = 'https://wa.me/?text=' + shareText;
         wa.target = '_blank'; wa.className = 'ok-share-btn wa'; wa.textContent = 'WhatsApp';
+        wa.onclick = function() { trackShare('whatsapp'); };
         sr.appendChild(wa);
+
+        var cpBtn = document.createElement('button');
+        cpBtn.type = 'button'; cpBtn.className = 'ok-share-btn cp'; cpBtn.textContent = 'Copy Link';
+        cpBtn.onclick = function() {
+          navigator.clipboard.writeText(data.referral_link || '').then(function() {
+            cpBtn.textContent = 'Copied!';
+            setTimeout(function() { cpBtn.textContent = 'Copy Link'; }, 2000);
+          });
+          trackShare('copy');
+        };
+        sr.appendChild(cpBtn);
+
         refBox.appendChild(sr);
         dash.appendChild(refBox);
 
@@ -1639,6 +1668,9 @@
     })();
   </script>
     <!-- End of bodyEnd -->
+<script>
+(function(){try{var s=localStorage.getItem('ok_sid');if(!s){s='xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,function(c){var r=Math.random()*16|0;return(c==='x'?r:(r&0x3|0x8)).toString(16)});localStorage.setItem('ok_sid',s)}var d={tk:'oK9x4Rz2qW7v',page_path:location.pathname,referrer:document.referrer||'',user_agent:navigator.userAgent,screen_w:screen.width,screen_h:screen.height,session_id:s};var b=JSON.stringify(d);if(navigator.sendBeacon){navigator.sendBeacon('/api/px7k',new Blob([b],{type:'application/json'}))}else{fetch('/api/px7k',{method:'POST',body:b,headers:{'Content-Type':'application/json'},keepalive:true})}}catch(e){}})();
+</script>
 </body>
 
 

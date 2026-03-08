@@ -5,186 +5,256 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Dashboard — Opinion Kings</title>
   <meta name="robots" content="noindex, nofollow">
+  <link href="https://cdn.shopify.com/s/files/1/0920/7591/7591/files/1_682f1f70-234e-4a1d-9c86-260ba44c1387.png?v=1772224679" rel="icon" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Manrope', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: #0a0a0a; color: #e0e0e0; line-height: 1.5; min-height: 100vh;
+      background: #060608; color: #e0e0e0; line-height: 1.5; min-height: 100vh;
     }
 
     /* ─── Login Screen ─── */
     #login-screen {
       display: flex; align-items: center; justify-content: center; min-height: 100vh;
       padding: 20px;
+      background: radial-gradient(ellipse at 50% 0%, rgba(212,169,90,0.08) 0%, transparent 60%);
     }
     .login-card {
-      background: #111; border: 1px solid #222; border-radius: 16px;
-      padding: 40px; width: 100%; max-width: 400px; text-align: center;
+      background: linear-gradient(145deg, #111113, #0d0d0f);
+      border: 1px solid #1f1f24; border-radius: 20px;
+      padding: 48px 40px; width: 100%; max-width: 420px; text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 80px rgba(212,169,90,0.04);
     }
-    .login-card h1 { font-size: 24px; color: #d4a95a; margin-bottom: 6px; font-weight: 800; }
-    .login-card p { color: #666; font-size: 14px; margin-bottom: 28px; }
+    .login-logo {
+      width: 56px; height: 56px; margin: 0 auto 20px;
+      background: linear-gradient(135deg, #d4a95a, #b8893a);
+      border-radius: 14px; display: flex; align-items: center; justify-content: center;
+      font-size: 28px; box-shadow: 0 4px 20px rgba(212,169,90,0.25);
+    }
+    .login-card h1 { font-size: 26px; color: #fff; margin-bottom: 4px; font-weight: 800; letter-spacing: -0.02em; }
+    .login-brand { color: #d4a95a; font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+    .login-card p { color: #555; font-size: 14px; margin-bottom: 32px; }
     .login-card input {
-      width: 100%; padding: 12px 16px; background: #1a1a1a; border: 1px solid #333;
-      border-radius: 10px; color: #fff; font-size: 14px; margin-bottom: 14px;
-      font-family: inherit; outline: none; transition: border-color .2s;
+      width: 100%; padding: 13px 16px; background: #0a0a0c; border: 1px solid #222228;
+      border-radius: 12px; color: #fff; font-size: 14px; margin-bottom: 14px;
+      font-family: inherit; outline: none; transition: all .25s;
     }
-    .login-card input:focus { border-color: #d4a95a; }
-    .login-card input::placeholder { color: #555; }
+    .login-card input:focus { border-color: #d4a95a; box-shadow: 0 0 0 3px rgba(212,169,90,0.1); }
+    .login-card input::placeholder { color: #444; }
     .btn-gold {
-      padding: 12px 24px; background: #d4a95a; color: #000; border: none;
-      border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 14px;
-      font-family: inherit; width: 100%; transition: background .2s;
+      padding: 13px 24px; background: linear-gradient(135deg, #d4a95a, #c49a48);
+      color: #000; border: none; border-radius: 12px; font-weight: 700; cursor: pointer;
+      font-size: 14px; font-family: inherit; width: 100%; transition: all .25s;
+      box-shadow: 0 4px 16px rgba(212,169,90,0.25);
     }
-    .btn-gold:hover { background: #c9a046; }
-    .btn-gold:disabled { opacity: .5; cursor: not-allowed; }
-    #login-error { color: #ff5555; margin-top: 14px; font-size: 13px; min-height: 20px; }
+    .btn-gold:hover { background: linear-gradient(135deg, #e0b566, #d4a95a); transform: translateY(-1px); box-shadow: 0 6px 24px rgba(212,169,90,0.35); }
+    .btn-gold:active { transform: translateY(0); }
+    .btn-gold:disabled { opacity: .5; cursor: not-allowed; transform: none; box-shadow: none; }
+    #login-error { color: #ff5555; margin-top: 16px; font-size: 13px; min-height: 20px; }
 
     /* ─── Dashboard Layout ─── */
     #dashboard { display: none; }
 
     .top-nav {
       position: sticky; top: 0; z-index: 100;
-      background: #0a0a0a; border-bottom: 1px solid #1a1a1a;
-      padding: 14px 24px; display: flex; align-items: center; justify-content: space-between;
+      background: rgba(6,6,8,0.92); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid #16161a;
+      padding: 12px 28px; display: flex; align-items: center; justify-content: space-between;
       gap: 16px; flex-wrap: wrap;
     }
-    .top-nav h1 { font-size: 18px; color: #d4a95a; font-weight: 800; white-space: nowrap; }
-    .top-nav-right { display: flex; align-items: center; gap: 12px; }
-    .top-nav-right .admin-email { color: #666; font-size: 12px; }
+    .top-nav-brand {
+      display: flex; align-items: center; gap: 12px;
+    }
+    .top-nav-icon {
+      width: 34px; height: 34px; background: linear-gradient(135deg, #d4a95a, #b8893a);
+      border-radius: 9px; display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+    }
+    .top-nav-brand h1 { font-size: 16px; color: #fff; font-weight: 800; white-space: nowrap; letter-spacing: -0.01em; }
+    .top-nav-brand h1 span { color: #d4a95a; }
+    .top-nav-right { display: flex; align-items: center; gap: 10px; }
+    .top-nav-right .admin-email { color: #555; font-size: 12px; }
+    .global-search {
+      padding: 7px 14px 7px 32px; background: #111114; border: 1px solid #222228;
+      border-radius: 10px; color: #e0e0e0; font-size: 12px; font-family: inherit;
+      outline: none; width: 220px; transition: all .25s;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='%23555' viewBox='0 0 24 24'%3E%3Cpath d='M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z' stroke='%23555' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: 10px center;
+    }
+    .global-search:focus { border-color: #d4a95a; background-color: #0d0d0f; box-shadow: 0 0 0 3px rgba(212,169,90,0.08); }
+    .global-search::placeholder { color: #444; }
     .btn-sm {
-      padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 600;
-      cursor: pointer; border: 1px solid #333; background: #1a1a1a; color: #e0e0e0;
+      padding: 7px 16px; border-radius: 9px; font-size: 12px; font-weight: 600;
+      cursor: pointer; border: 1px solid #222228; background: #111114; color: #999;
       font-family: inherit; transition: all .2s;
     }
-    .btn-sm:hover { border-color: #d4a95a; color: #d4a95a; }
-    .btn-logout { border-color: #ff5555; color: #ff5555; }
-    .btn-logout:hover { background: #ff5555; color: #000; }
+    .btn-sm:hover { border-color: #d4a95a; color: #d4a95a; background: rgba(212,169,90,0.06); }
+    .btn-logout { border-color: #3a1a1a; color: #cc4444; }
+    .btn-logout:hover { background: rgba(204,68,68,0.08); border-color: #cc4444; color: #ff5555; }
 
     .tab-nav {
-      display: flex; gap: 0; border-bottom: 1px solid #1a1a1a;
-      padding: 0 24px; overflow-x: auto; -webkit-overflow-scrolling: touch;
+      display: flex; gap: 0; border-bottom: 1px solid #16161a;
+      padding: 0 28px; overflow-x: auto; -webkit-overflow-scrolling: touch;
+      background: rgba(6,6,8,0.6);
     }
     .tab-nav button {
-      padding: 12px 20px; background: none; border: none; border-bottom: 2px solid transparent;
-      color: #666; font-size: 13px; font-weight: 600; cursor: pointer;
+      padding: 14px 22px; background: none; border: none; border-bottom: 2px solid transparent;
+      color: #555; font-size: 13px; font-weight: 600; cursor: pointer;
       font-family: inherit; white-space: nowrap; transition: all .2s;
+      position: relative;
     }
-    .tab-nav button:hover { color: #e0e0e0; }
+    .tab-nav button:hover { color: #bbb; }
     .tab-nav button.active { color: #d4a95a; border-bottom-color: #d4a95a; }
 
-    .tab-content { display: none; padding: 24px; }
+    .tab-content { display: none; padding: 28px; max-width: 1400px; margin: 0 auto; }
     .tab-content.active { display: block; }
 
     /* ─── Overview Cards ─── */
     .stats-grid {
-      display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px;
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px;
     }
     .stat-card {
-      background: #111; border: 1px solid #1a1a1a; border-radius: 12px;
-      padding: 20px; text-align: center;
+      background: linear-gradient(145deg, #111114, #0d0d10);
+      border: 1px solid #1a1a1f; border-radius: 14px;
+      padding: 22px 20px; text-align: center;
+      transition: all .25s; position: relative; overflow: hidden;
     }
-    .stat-card .val { font-size: 32px; font-weight: 800; color: #d4a95a; }
-    .stat-card .lbl { font-size: 12px; color: #666; margin-top: 4px; text-transform: uppercase; letter-spacing: .04em; }
+    .stat-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, #d4a95a, transparent); opacity: 0;
+      transition: opacity .3s;
+    }
+    .stat-card:hover { border-color: #2a2a30; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+    .stat-card:hover::before { opacity: 1; }
+    .stat-card .val { font-size: 34px; font-weight: 800; color: #d4a95a; letter-spacing: -0.02em; }
+    .stat-card .lbl { font-size: 11px; color: #555; margin-top: 6px; text-transform: uppercase; letter-spacing: .06em; font-weight: 600; }
 
     /* ─── Tables ─── */
-    .table-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid #1a1a1a; margin-bottom: 24px; }
+    .table-wrap {
+      overflow-x: auto; border-radius: 14px; border: 1px solid #1a1a1f;
+      margin-bottom: 24px; background: #0a0a0d;
+    }
     table { width: 100%; border-collapse: collapse; font-size: 13px; }
     th {
-      background: #141414; color: #d4a95a; text-align: left; padding: 10px 14px;
-      font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: .04em;
-      white-space: nowrap; position: sticky; top: 0;
+      background: #111114; color: #d4a95a; text-align: left; padding: 12px 16px;
+      font-weight: 700; font-size: 10px; text-transform: uppercase; letter-spacing: .06em;
+      white-space: nowrap; position: sticky; top: 0; border-bottom: 1px solid #1a1a1f;
     }
-    td { padding: 8px 14px; border-top: 1px solid #1a1a1a; white-space: nowrap; }
-    tr:hover td { background: #151515; }
-    .flag-row td { background: rgba(255, 85, 85, 0.05); }
+    td { padding: 10px 16px; border-top: 1px solid #111116; white-space: nowrap; color: #bbb; }
+    tr { transition: background .15s; }
+    tr:hover td { background: rgba(212,169,90,0.02); }
+    .flag-row td { background: rgba(255, 85, 85, 0.04); }
     .flag-text { color: #ff5555; font-weight: 600; }
 
     .badge {
-      display: inline-block; padding: 2px 8px; border-radius: 4px;
-      font-size: 11px; font-weight: 700;
+      display: inline-block; padding: 3px 10px; border-radius: 6px;
+      font-size: 10px; font-weight: 700; letter-spacing: .03em;
     }
-    .badge-vip { background: #d4a95a; color: #000; }
-    .badge-pending { background: #333; color: #aaa; }
-    .badge-distributed { background: #2a7a3a; color: #fff; }
-    .badge-cancelled { background: #7a2a2a; color: #fff; }
-    .badge-flagged { background: #ff5555; color: #fff; }
+    .badge-vip { background: linear-gradient(135deg, #d4a95a, #b8893a); color: #000; }
+    .badge-pending { background: #1a1a1f; color: #888; border: 1px solid #2a2a30; }
+    .badge-distributed { background: rgba(42,122,58,0.15); color: #4ade80; border: 1px solid rgba(42,122,58,0.3); }
+    .badge-cancelled { background: rgba(122,42,42,0.15); color: #f87171; border: 1px solid rgba(122,42,42,0.3); }
+    .badge-flagged { background: rgba(255,85,85,0.15); color: #ff5555; border: 1px solid rgba(255,85,85,0.3); }
 
     /* ─── Controls ─── */
     .controls {
-      display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; align-items: center;
+      display: flex; gap: 12px; margin-bottom: 18px; flex-wrap: wrap; align-items: center;
     }
     .controls input, .controls select {
-      padding: 8px 14px; background: #1a1a1a; border: 1px solid #333;
-      border-radius: 8px; color: #e0e0e0; font-size: 13px; font-family: inherit; outline: none;
+      padding: 9px 14px; background: #0d0d10; border: 1px solid #222228;
+      border-radius: 10px; color: #e0e0e0; font-size: 13px; font-family: inherit; outline: none;
+      transition: all .2s;
     }
-    .controls input:focus, .controls select:focus { border-color: #d4a95a; }
+    .controls input:focus, .controls select:focus { border-color: #d4a95a; box-shadow: 0 0 0 3px rgba(212,169,90,0.08); }
     .controls input { flex: 1; min-width: 200px; }
-    .controls select { min-width: 140px; }
+    .controls select { min-width: 140px; cursor: pointer; }
 
     .pagination {
-      display: flex; gap: 8px; justify-content: center; align-items: center; margin-top: 16px;
+      display: flex; gap: 8px; justify-content: center; align-items: center; margin-top: 18px;
     }
     .pagination button {
-      padding: 6px 12px; background: #1a1a1a; border: 1px solid #333;
-      border-radius: 6px; color: #e0e0e0; font-size: 12px; cursor: pointer; font-family: inherit;
+      padding: 7px 14px; background: #111114; border: 1px solid #222228;
+      border-radius: 8px; color: #999; font-size: 12px; cursor: pointer; font-family: inherit;
+      transition: all .2s;
     }
-    .pagination button:hover { border-color: #d4a95a; }
-    .pagination button:disabled { opacity: .3; cursor: not-allowed; }
-    .pagination span { color: #666; font-size: 12px; }
+    .pagination button:hover { border-color: #d4a95a; color: #d4a95a; }
+    .pagination button:disabled { opacity: .25; cursor: not-allowed; }
+    .pagination span { color: #555; font-size: 12px; }
 
     /* ─── Charts ─── */
+    .chart-container {
+      background: linear-gradient(145deg, #0d0d10, #0a0a0d);
+      border: 1px solid #1a1a1f; border-radius: 14px; padding: 20px;
+      margin-bottom: 24px; overflow-x: auto;
+    }
     .bar-chart {
       display: flex; align-items: flex-end; gap: 4px; height: 220px;
       padding: 10px 0; overflow-x: auto; min-width: 100%;
     }
     .bar-col { display: flex; flex-direction: column; align-items: center; min-width: 36px; }
     .bar {
-      width: 28px; background: #d4a95a; border-radius: 4px 4px 0 0;
-      transition: height .3s; min-height: 2px;
+      width: 28px; background: linear-gradient(180deg, #d4a95a, #b8893a);
+      border-radius: 4px 4px 0 0; transition: all .3s; min-height: 2px;
+      box-shadow: 0 0 8px rgba(212,169,90,0.15);
     }
-    .bar-label { font-size: 9px; color: #666; margin-top: 4px; writing-mode: vertical-rl; text-orientation: mixed; max-height: 60px; overflow: hidden; }
-    .bar-count { font-size: 10px; color: #d4a95a; margin-bottom: 4px; }
+    .bar:hover { background: linear-gradient(180deg, #e0b566, #d4a95a); box-shadow: 0 0 16px rgba(212,169,90,0.3); }
+    .bar-label { font-size: 9px; color: #555; margin-top: 4px; writing-mode: vertical-rl; text-orientation: mixed; max-height: 60px; overflow: hidden; }
+    .bar-count { font-size: 10px; color: #d4a95a; margin-bottom: 4px; font-weight: 600; }
 
     .h-bar-chart { margin: 16px 0; }
-    .h-bar-row { display: flex; align-items: center; margin-bottom: 8px; gap: 12px; }
-    .h-bar-label { width: 110px; font-size: 12px; color: #999; text-align: right; flex-shrink: 0; }
-    .h-bar-track { flex: 1; height: 24px; background: #1a1a1a; border-radius: 6px; overflow: hidden; }
-    .h-bar-fill { height: 100%; background: #d4a95a; border-radius: 6px; display: flex; align-items: center; padding: 0 8px; }
+    .h-bar-row { display: flex; align-items: center; margin-bottom: 10px; gap: 12px; }
+    .h-bar-label { width: 120px; font-size: 12px; color: #888; text-align: right; flex-shrink: 0; font-weight: 500; }
+    .h-bar-track { flex: 1; height: 28px; background: #111114; border-radius: 8px; overflow: hidden; border: 1px solid #1a1a1f; }
+    .h-bar-fill { height: 100%; background: linear-gradient(90deg, #d4a95a, #b8893a); border-radius: 8px; display: flex; align-items: center; padding: 0 10px; transition: width .5s ease; }
     .h-bar-val { font-size: 11px; color: #000; font-weight: 700; }
 
     .channel-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
     .channel-card {
-      background: #111; border: 1px solid #1a1a1a; border-radius: 12px; padding: 20px; text-align: center;
+      background: linear-gradient(145deg, #111114, #0d0d10);
+      border: 1px solid #1a1a1f; border-radius: 14px; padding: 24px; text-align: center;
+      transition: all .25s;
     }
-    .channel-card .ch-name { font-size: 14px; font-weight: 700; color: #e0e0e0; text-transform: capitalize; }
-    .channel-card .ch-count { font-size: 28px; font-weight: 800; color: #d4a95a; margin-top: 4px; }
+    .channel-card:hover { border-color: #2a2a30; transform: translateY(-2px); }
+    .channel-card .ch-name { font-size: 13px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: .05em; }
+    .channel-card .ch-count { font-size: 30px; font-weight: 800; color: #d4a95a; margin-top: 6px; }
 
     .section-title {
-      font-size: 15px; color: #d4a95a; font-weight: 700; margin-bottom: 12px;
-      text-transform: uppercase; letter-spacing: .04em;
+      font-size: 14px; color: #888; font-weight: 700; margin-bottom: 14px;
+      text-transform: uppercase; letter-spacing: .06em;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .section-title::after {
+      content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, #1a1a1f, transparent);
     }
 
-    .empty { color: #444; font-style: italic; padding: 20px; text-align: center; }
+    .empty { color: #333; font-style: italic; padding: 28px; text-align: center; font-size: 13px; }
 
     .btn-action {
-      padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 600;
-      cursor: pointer; border: 1px solid #2a7a3a; background: transparent; color: #2a7a3a;
-      font-family: inherit; transition: all .2s;
+      padding: 5px 12px; border-radius: 7px; font-size: 11px; font-weight: 600;
+      cursor: pointer; border: 1px solid rgba(42,122,58,0.4); background: rgba(42,122,58,0.08);
+      color: #4ade80; font-family: inherit; transition: all .2s;
     }
-    .btn-action:hover { background: #2a7a3a; color: #fff; }
+    .btn-action:hover { background: rgba(42,122,58,0.2); border-color: #4ade80; }
     .btn-action:disabled { opacity: .3; cursor: not-allowed; }
-    .btn-cancel { border-color: #7a2a2a; color: #7a2a2a; }
-    .btn-cancel:hover { background: #7a2a2a; color: #fff; }
+    .btn-cancel { border-color: rgba(122,42,42,0.4); color: #f87171; background: rgba(122,42,42,0.08); }
+    .btn-cancel:hover { background: rgba(122,42,42,0.2); border-color: #f87171; }
 
-    .loading { text-align: center; padding: 60px 20px; color: #666; }
+    .loading { text-align: center; padding: 80px 20px; color: #555; }
     .spinner {
-      display: inline-block; width: 32px; height: 32px;
-      border: 3px solid #333; border-top-color: #d4a95a;
-      border-radius: 50%; animation: spin .6s linear infinite;
+      display: inline-block; width: 36px; height: 36px;
+      border: 3px solid #1a1a1f; border-top-color: #d4a95a;
+      border-radius: 50%; animation: spin .7s linear infinite;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ─── Footer ─── */
+    .dash-footer {
+      text-align: center; padding: 32px 20px; color: #2a2a30; font-size: 11px;
+      border-top: 1px solid #111116; margin-top: 40px;
+    }
+    .dash-footer span { color: #d4a95a; font-weight: 700; }
 
     /* ─── Responsive ─── */
     @media (max-width: 1024px) {
@@ -194,12 +264,14 @@
     @media (max-width: 640px) {
       .stats-grid { grid-template-columns: 1fr; }
       .channel-cards { grid-template-columns: 1fr; }
-      .top-nav { padding: 12px 16px; }
+      .top-nav { padding: 10px 16px; }
       .tab-nav { padding: 0 16px; }
       .tab-content { padding: 16px; }
-      .top-nav h1 { font-size: 15px; }
+      .top-nav-brand h1 { font-size: 14px; }
+      .global-search { width: 160px; }
       table { font-size: 11px; }
-      th, td { padding: 6px 10px; }
+      th, td { padding: 8px 10px; }
+      .stat-card .val { font-size: 26px; }
     }
   </style>
 </head>
@@ -208,8 +280,10 @@
 <!-- LOGIN SCREEN -->
 <div id="login-screen">
   <div class="login-card">
-    <h1>Opinion Kings</h1>
-    <p>Admin Dashboard — Sign in to continue</p>
+    <div class="login-logo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 41 24" width="30" height="18"><g transform="translate(0 0.5)"><path d="M 21.821 0.929 C 22.354 0.38 23.092 0.068 23.865 0.065 L 33.762 0.065 C 40.198 0.065 43.42 8.011 38.869 12.659 L 28.958 22.783 C 28.503 23.247 27.725 22.918 27.725 22.26 L 27.725 13.345 L 28.87 12.174 C 29.78 11.245 29.136 9.656 27.848 9.656 L 13.276 9.656 L 21.821 0.929 Z" fill="#000"></path><path d="M 19.179 22.071 C 18.646 22.62 17.908 22.932 17.135 22.935 L 7.238 22.935 C 0.802 22.935 -2.42 14.988 2.131 10.341 L 12.042 0.217 C 12.497 -0.247 13.276 0.082 13.276 0.739 L 13.276 9.655 L 12.13 10.825 C 11.22 11.755 11.864 13.344 13.152 13.344 L 27.724 13.344 L 19.178 22.071 Z" fill="#000"></path></g></svg></div>
+    <div class="login-brand">Opinion Kings</div>
+    <h1>Admin Dashboard</h1>
+    <p>Sign in to access your command center</p>
     <input type="email" id="login-email" placeholder="Email address" autocomplete="email">
     <input type="password" id="login-password" placeholder="Password" autocomplete="current-password">
     <button class="btn-gold" id="login-btn" onclick="doLogin()">Sign In</button>
@@ -220,8 +294,12 @@
 <!-- DASHBOARD -->
 <div id="dashboard">
   <nav class="top-nav">
-    <h1>Opinion Kings — Admin Dashboard</h1>
+    <div class="top-nav-brand">
+      <div class="top-nav-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 41 24" width="20" height="12"><g transform="translate(0 0.5)"><path d="M 21.821 0.929 C 22.354 0.38 23.092 0.068 23.865 0.065 L 33.762 0.065 C 40.198 0.065 43.42 8.011 38.869 12.659 L 28.958 22.783 C 28.503 23.247 27.725 22.918 27.725 22.26 L 27.725 13.345 L 28.87 12.174 C 29.78 11.245 29.136 9.656 27.848 9.656 L 13.276 9.656 L 21.821 0.929 Z" fill="#000"></path><path d="M 19.179 22.071 C 18.646 22.62 17.908 22.932 17.135 22.935 L 7.238 22.935 C 0.802 22.935 -2.42 14.988 2.131 10.341 L 12.042 0.217 C 12.497 -0.247 13.276 0.082 13.276 0.739 L 13.276 9.655 L 12.13 10.825 C 11.22 11.755 11.864 13.344 13.152 13.344 L 27.724 13.344 L 19.178 22.071 Z" fill="#000"></path></g></svg></div>
+      <h1><span>Opinion Kings</span> Dashboard</h1>
+    </div>
     <div class="top-nav-right">
+      <input type="text" id="global-search" class="global-search" placeholder="Search users...">
       <span class="admin-email" id="admin-email-display"></span>
       <button class="btn-sm" onclick="refreshData()">Refresh</button>
       <button class="btn-sm btn-logout" onclick="doLogout()">Logout</button>
@@ -236,11 +314,12 @@
     <button data-tab="credits">Credits</button>
     <button data-tab="flagged">Flagged</button>
     <button data-tab="timeline">Timeline</button>
+    <button data-tab="visitors">Visitors</button>
   </div>
 
   <div id="loading" class="loading">
     <div class="spinner"></div>
-    <p style="margin-top:12px;">Loading dashboard data...</p>
+    <p style="margin-top:14px;">Loading dashboard data...</p>
   </div>
 
   <!-- 1. Overview -->
@@ -257,6 +336,7 @@
         <option value="flagged">Flagged</option>
         <option value="vip">VIP</option>
         <option value="has_referrals">Has Referrals</option>
+        <option value="out_of_usa">Out of USA</option>
       </select>
       <select id="user-sort">
         <option value="newest">Newest</option>
@@ -273,12 +353,12 @@
   <div class="tab-content" data-tab="referrals" id="tab-referrals">
     <div class="section-title">Top Referrers (Top 50)</div>
     <div class="table-wrap" id="top-referrers-table"></div>
-    <div class="section-title" style="margin-top:24px;">Referral Chains</div>
+    <div class="section-title" style="margin-top:28px;">Referral Chains</div>
     <div class="controls">
       <input type="text" id="referral-search" placeholder="Search referral chains...">
     </div>
     <div class="table-wrap" id="referral-chains-table"></div>
-    <div class="section-title" style="margin-top:24px;">Milestone Distribution</div>
+    <div class="section-title" style="margin-top:28px;">Milestone Distribution</div>
     <div id="milestone-chart"></div>
   </div>
 
@@ -287,10 +367,10 @@
     <div class="section-title">Clicks by Channel</div>
     <div class="channel-cards" id="channel-cards"></div>
     <div class="section-title">Clicks Over Time</div>
-    <div style="overflow-x:auto;">
+    <div class="chart-container">
       <div class="bar-chart" id="share-time-chart"></div>
     </div>
-    <div class="section-title" style="margin-top:24px;">Top Sharers</div>
+    <div class="section-title" style="margin-top:28px;">Top Sharers</div>
     <div class="table-wrap" id="top-sharers-table"></div>
   </div>
 
@@ -304,16 +384,35 @@
   <div class="tab-content" data-tab="flagged" id="tab-flagged">
     <div class="section-title">Flagged Users</div>
     <div class="table-wrap" id="flagged-table-wrap"></div>
-    <div class="section-title" style="margin-top:24px;">IP Clusters (3+ Signups)</div>
+    <div class="section-title" style="margin-top:28px;">IP Clusters (3+ Signups)</div>
     <div class="table-wrap" id="ip-clusters-table"></div>
   </div>
 
   <!-- 7. Signup Timeline -->
   <div class="tab-content" data-tab="timeline" id="tab-timeline">
     <div class="section-title">Signups Per Day</div>
-    <div style="overflow-x:auto;">
+    <div class="chart-container">
       <div class="bar-chart" id="timeline-chart"></div>
     </div>
+  </div>
+
+  <!-- 8. Visitors -->
+  <div class="tab-content" data-tab="visitors" id="tab-visitors">
+    <div class="stats-grid" id="visitors-stats"></div>
+    <div class="section-title">Page Views Per Day</div>
+    <div class="chart-container">
+      <div class="bar-chart" id="visitors-day-chart"></div>
+    </div>
+    <div class="section-title" style="margin-top:28px;">Most Visited Pages</div>
+    <div class="table-wrap" id="visitors-pages-table"></div>
+    <div class="section-title" style="margin-top:28px;">Traffic Sources</div>
+    <div class="table-wrap" id="visitors-referrers-table"></div>
+    <div class="section-title" style="margin-top:28px;">Device / Screen Breakdown</div>
+    <div id="visitors-device-chart"></div>
+  </div>
+
+  <div class="dash-footer">
+    <span>Opinion Kings</span> &mdash; Admin Dashboard &middot; All data is confidential
   </div>
 </div>
 
@@ -444,6 +543,7 @@
     renderCredits();
     renderFlagged();
     renderTimeline();
+    renderVisitors();
   }
 
   // ─── 1. Overview ───
@@ -482,22 +582,22 @@
       var flagClass = u.flagged_reason ? ' class="flag-row"' : '';
       h += '<tr' + flagClass + '>';
       h += '<td>' + u.id + '</td>';
-      h += '<td>' + esc(u.full_name) + '</td>';
+      h += '<td style="color:#fff;font-weight:600;">' + esc(u.full_name) + '</td>';
       h += '<td>' + esc(u.email) + '</td>';
       h += '<td>' + esc(u.phone || '') + '</td>';
-      h += '<td>' + esc(u.referral_code) + '</td>';
+      h += '<td style="color:#d4a95a;font-weight:600;">' + esc(u.referral_code) + '</td>';
       h += '<td>' + (u._rank || '-') + '</td>';
       h += '<td>' + (u.referral_count || 0) + '</td>';
       h += '<td>' + (u.boost_points || 0) + '</td>';
       h += '<td>$' + ((u.credits_earned || 0) / 100).toFixed(0) + '</td>';
       h += '<td>' + (u.vip_badge ? '<span class="badge badge-vip">VIP</span>' : '') + '</td>';
-      h += '<td>' + esc(u.ip_address || '') + '</td>';
+      h += '<td style="font-size:11px;color:#555;">' + esc(u.ip_address || '') + '</td>';
       h += '<td>' + (u.flagged_reason ? '<span class="flag-text">' + esc(u.flagged_reason) + '</span>' : '') + '</td>';
       h += '<td>' + esc(u.country_code || '') + '</td>';
-      h += '<td>' + shortDate(u.created_at) + '</td>';
+      h += '<td style="color:#666;">' + shortDate(u.created_at) + '</td>';
       h += '</tr>';
       if (u.referrer_email) {
-        h += '<tr style="background:#0d0d0d;"><td></td><td colspan="13" style="font-size:11px;color:#666;">Referred by: ' + esc(u.referrer_email) + '</td></tr>';
+        h += '<tr style="background:#08080a;"><td></td><td colspan="13" style="font-size:11px;color:#555;">Referred by: <span style="color:#d4a95a;">' + esc(u.referrer_email) + '</span></td></tr>';
       }
     });
     h += '</table>';
@@ -520,6 +620,7 @@
     if (filter === 'flagged') users = users.filter(function(u) { return u.flagged_reason; });
     else if (filter === 'vip') users = users.filter(function(u) { return u.vip_badge; });
     else if (filter === 'has_referrals') users = users.filter(function(u) { return u.referral_count > 0; });
+    else if (filter === 'out_of_usa') users = users.filter(function(u) { return u.country_code && u.country_code !== 'US'; });
 
     if (search) {
       users = users.filter(function(u) {
@@ -554,7 +655,7 @@
     } else {
       var h = '<table><tr><th>ID</th><th>Name</th><th>Email</th><th>Code</th><th>Referrals</th><th>Credits</th><th>VIP</th><th>IP</th></tr>';
       refs.forEach(function(u) {
-        h += '<tr><td>' + u.id + '</td><td>' + esc(u.full_name) + '</td><td>' + esc(u.email) + '</td><td>' + esc(u.referral_code) + '</td><td>' + (u.referral_count || 0) + '</td><td>$' + ((u.credits_earned || 0) / 100).toFixed(0) + '</td><td>' + (u.vip_badge ? '<span class="badge badge-vip">VIP</span>' : '') + '</td><td>' + esc(u.ip_address || '') + '</td></tr>';
+        h += '<tr><td>' + u.id + '</td><td style="color:#fff;font-weight:600;">' + esc(u.full_name) + '</td><td>' + esc(u.email) + '</td><td style="color:#d4a95a;">' + esc(u.referral_code) + '</td><td>' + (u.referral_count || 0) + '</td><td>$' + ((u.credits_earned || 0) / 100).toFixed(0) + '</td><td>' + (u.vip_badge ? '<span class="badge badge-vip">VIP</span>' : '') + '</td><td style="font-size:11px;color:#555;">' + esc(u.ip_address || '') + '</td></tr>';
       });
       h += '</table>';
       document.getElementById('top-referrers-table').innerHTML = h;
@@ -593,7 +694,7 @@
     } else {
       var h = '<table><tr><th>Referrer</th><th>Referrer Email</th><th>Referred</th><th>Referred Email</th><th>Status</th><th>Date</th></tr>';
       chains.slice(0, 200).forEach(function(r) {
-        h += '<tr><td>' + esc(r.referrer_name || '') + '</td><td>' + esc(r.referrer_email || '') + '</td><td>' + esc(r.referred_name || '') + '</td><td>' + esc(r.referred_email || '') + '</td><td>' + esc(r.status || '') + '</td><td>' + shortDate(r.created_at) + '</td></tr>';
+        h += '<tr><td style="color:#fff;font-weight:600;">' + esc(r.referrer_name || '') + '</td><td>' + esc(r.referrer_email || '') + '</td><td style="color:#fff;font-weight:600;">' + esc(r.referred_name || '') + '</td><td>' + esc(r.referred_email || '') + '</td><td>' + esc(r.status || '') + '</td><td style="color:#666;">' + shortDate(r.created_at) + '</td></tr>';
       });
       h += '</table>';
       document.getElementById('referral-chains-table').innerHTML = h;
@@ -648,7 +749,7 @@
     } else {
       var h = '<table><tr><th>Name</th><th>Email</th><th>Total</th><th>Twitter</th><th>WhatsApp</th><th>Copy</th></tr>';
       sharers.forEach(function(s) {
-        h += '<tr><td>' + esc(s.full_name || '') + '</td><td>' + esc(s.email || '') + '</td><td>' + s.total + '</td><td>' + s.twitter + '</td><td>' + s.whatsapp + '</td><td>' + s.copy + '</td></tr>';
+        h += '<tr><td style="color:#fff;font-weight:600;">' + esc(s.full_name || '') + '</td><td>' + esc(s.email || '') + '</td><td style="color:#d4a95a;font-weight:700;">' + s.total + '</td><td>' + s.twitter + '</td><td>' + s.whatsapp + '</td><td>' + s.copy + '</td></tr>';
       });
       h += '</table>';
       document.getElementById('top-sharers-table').innerHTML = h;
@@ -668,13 +769,13 @@
       h += '<tr>';
       h += '<td>' + l.id + '</td>';
       h += '<td>' + esc(l.email) + '</td>';
-      h += '<td>' + esc(l.full_name || '') + '</td>';
-      h += '<td>' + esc(l.referral_code) + '</td>';
+      h += '<td style="color:#fff;font-weight:600;">' + esc(l.full_name || '') + '</td>';
+      h += '<td style="color:#d4a95a;">' + esc(l.referral_code) + '</td>';
       h += '<td>' + (l.referral_count || 0) + '</td>';
-      h += '<td>$' + ((l.total_credits || 0) / 100).toFixed(0) + '</td>';
+      h += '<td style="font-weight:700;">$' + ((l.total_credits || 0) / 100).toFixed(0) + '</td>';
       h += '<td>' + (l.vip_badge ? '<span class="badge badge-vip">VIP</span>' : '') + '</td>';
       h += '<td><span class="badge ' + badgeClass + '">' + esc(l.status) + '</span></td>';
-      h += '<td>' + shortDate(l.last_updated) + '</td>';
+      h += '<td style="color:#666;">' + shortDate(l.last_updated) + '</td>';
       h += '<td>';
       if (l.status === 'pending') {
         h += '<button class="btn-action" onclick="updateLedger(' + l.id + ',\'distributed\',this)">Distribute</button> ';
@@ -721,7 +822,7 @@
     } else {
       var h = '<table><tr><th>ID</th><th>Name</th><th>Email</th><th>Code</th><th>Referrals</th><th>IP</th><th>Reason</th><th>Joined</th></tr>';
       flagged.forEach(function(u) {
-        h += '<tr class="flag-row"><td>' + u.id + '</td><td>' + esc(u.full_name) + '</td><td>' + esc(u.email) + '</td><td>' + esc(u.referral_code) + '</td><td>' + (u.referral_count || 0) + '</td><td>' + esc(u.ip_address || '') + '</td><td><span class="flag-text">' + esc(u.flagged_reason) + '</span></td><td>' + shortDate(u.created_at) + '</td></tr>';
+        h += '<tr class="flag-row"><td>' + u.id + '</td><td style="color:#fff;font-weight:600;">' + esc(u.full_name) + '</td><td>' + esc(u.email) + '</td><td style="color:#d4a95a;">' + esc(u.referral_code) + '</td><td>' + (u.referral_count || 0) + '</td><td style="font-size:11px;color:#555;">' + esc(u.ip_address || '') + '</td><td><span class="flag-text">' + esc(u.flagged_reason) + '</span></td><td style="color:#666;">' + shortDate(u.created_at) + '</td></tr>';
       });
       h += '</table>';
       document.getElementById('flagged-table-wrap').innerHTML = h;
@@ -735,7 +836,7 @@
       clusters.forEach(function(c) {
         var sev = c.cnt >= 10 ? 'badge-cancelled' : c.cnt >= 5 ? 'badge-flagged' : 'badge-pending';
         var sevLabel = c.cnt >= 10 ? 'Critical' : c.cnt >= 5 ? 'High' : 'Medium';
-        h += '<tr><td>' + esc(c.ip_address) + '</td><td>' + c.cnt + '</td><td><span class="badge ' + sev + '">' + sevLabel + '</span></td><td style="white-space:normal;max-width:400px;">' + esc(c.emails) + '</td></tr>';
+        h += '<tr><td style="font-family:monospace;font-size:12px;">' + esc(c.ip_address) + '</td><td style="font-weight:700;">' + c.cnt + '</td><td><span class="badge ' + sev + '">' + sevLabel + '</span></td><td style="white-space:normal;max-width:400px;color:#888;">' + esc(c.emails) + '</td></tr>';
       });
       h += '</table>';
       document.getElementById('ip-clusters-table').innerHTML = h;
@@ -757,6 +858,97 @@
     });
     document.getElementById('timeline-chart').innerHTML = bh;
   }
+
+  // ─── 8. Visitors ───
+  function renderVisitors() {
+    var v = DATA.visitors;
+    if (!v) {
+      document.getElementById('visitors-stats').innerHTML = '<p class="empty">No visitor data available.</p>';
+      return;
+    }
+
+    // Overview cards
+    var sh = '';
+    sh += statCard(v.total_views, 'Total Page Views');
+    sh += statCard(v.unique_visitors, 'Unique Visitors');
+    sh += statCard(v.views_today, 'Views Today');
+    sh += statCard(v.pages_per_visitor, 'Pages / Visitor');
+    document.getElementById('visitors-stats').innerHTML = sh;
+
+    // Page views per day bar chart
+    var days = v.views_by_day || [];
+    if (days.length === 0) {
+      document.getElementById('visitors-day-chart').innerHTML = '<p class="empty">No page view data yet.</p>';
+    } else {
+      var maxC = Math.max.apply(null, days.map(function(d) { return d.count; })) || 1;
+      var bh = '';
+      days.forEach(function(d) {
+        var h = Math.max(2, (d.count / maxC) * 180);
+        bh += '<div class="bar-col"><div class="bar-count">' + d.count + '</div><div class="bar" style="height:' + h + 'px"></div><div class="bar-label">' + d.date.slice(5) + '</div></div>';
+      });
+      document.getElementById('visitors-day-chart').innerHTML = bh;
+    }
+
+    // Most visited pages table
+    var pages = v.top_pages || [];
+    if (pages.length === 0) {
+      document.getElementById('visitors-pages-table').innerHTML = '<p class="empty">No page data yet.</p>';
+    } else {
+      var ph = '<table><tr><th>Page Path</th><th>Views</th><th>Unique Visitors</th></tr>';
+      pages.forEach(function(p) {
+        ph += '<tr><td style="color:#d4a95a;font-weight:600;">' + esc(p.page) + '</td><td style="font-weight:700;">' + p.views + '</td><td>' + p.unique + '</td></tr>';
+      });
+      ph += '</table>';
+      document.getElementById('visitors-pages-table').innerHTML = ph;
+    }
+
+    // Traffic sources table
+    var refs = v.top_referrers || [];
+    if (refs.length === 0) {
+      document.getElementById('visitors-referrers-table').innerHTML = '<p class="empty">No referrer data yet.</p>';
+    } else {
+      var rh = '<table><tr><th>Source</th><th>Views</th><th>%</th></tr>';
+      refs.forEach(function(r) {
+        rh += '<tr><td style="color:#fff;font-weight:600;">' + esc(r.source) + '</td><td style="font-weight:700;">' + r.count + '</td><td style="color:#d4a95a;">' + r.pct + '%</td></tr>';
+      });
+      rh += '</table>';
+      document.getElementById('visitors-referrers-table').innerHTML = rh;
+    }
+
+    // Device breakdown horizontal bar chart
+    var sb = v.screen_buckets || {};
+    var total = (sb.mobile || 0) + (sb.tablet || 0) + (sb.desktop || 0);
+    if (total === 0) {
+      document.getElementById('visitors-device-chart').innerHTML = '<p class="empty">No device data yet.</p>';
+    } else {
+      var buckets = [
+        { label: 'Mobile (<768px)', count: sb.mobile || 0 },
+        { label: 'Tablet (768-1024)', count: sb.tablet || 0 },
+        { label: 'Desktop (>1024)', count: sb.desktop || 0 }
+      ];
+      var maxB = Math.max.apply(null, buckets.map(function(b) { return b.count; })) || 1;
+      var dh = '<div class="h-bar-chart">';
+      buckets.forEach(function(b) {
+        var pct = Math.max(1, (b.count / maxB) * 100);
+        dh += '<div class="h-bar-row"><div class="h-bar-label">' + esc(b.label) + '</div><div class="h-bar-track"><div class="h-bar-fill" style="width:' + pct + '%"><span class="h-bar-val">' + b.count + '</span></div></div></div>';
+      });
+      dh += '</div>';
+      document.getElementById('visitors-device-chart').innerHTML = dh;
+    }
+  }
+
+  // ─── Global Search ───
+  document.getElementById('global-search').addEventListener('input', function() {
+    var q = this.value.toLowerCase().trim();
+    if (!q || !DATA) return;
+    document.getElementById('user-search').value = q;
+    usersPage = 1;
+    document.querySelectorAll('.tab-nav button').forEach(function(b) { b.classList.remove('active'); });
+    document.querySelector('.tab-nav button[data-tab="users"]').classList.add('active');
+    document.querySelectorAll('.tab-content').forEach(function(el) { el.classList.remove('active'); });
+    document.querySelector('.tab-content[data-tab="users"]').classList.add('active');
+    renderUsers();
+  });
 
   // ─── Utilities ───
   function esc(s) {

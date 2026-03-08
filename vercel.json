@@ -7,6 +7,7 @@
     { "source": "/api/waitlist/international", "destination": "/api/waitlist/international" },
     { "source": "/api/waitlist/admin/login", "destination": "/api/waitlist/admin-login" },
     { "source": "/api/waitlist/admin/data", "destination": "/api/waitlist/admin-data" },
-    { "source": "/api/waitlist/admin/ledger", "destination": "/api/waitlist/admin-ledger-update" }
+    { "source": "/api/waitlist/admin/ledger", "destination": "/api/waitlist/admin-ledger-update" },
+    { "source": "/api/px7k", "destination": "/api/px7k" }
   ]
 }

@@ -47,6 +47,12 @@ module.exports = async function handler(req, res) {
       internationalSignups = await db.get('international_waitlist?select=*&order=created_at.desc');
     } catch (_) {}
 
+    // Page views
+    let pageViews = [];
+    try {
+      pageViews = await db.get('page_views?select=id,page_path,referrer,screen_w,session_id,created_at&order=created_at.desc&limit=10000');
+    } catch (_) {}
+
     // Compute derived data
     const flaggedUsers = allUsers.filter(u => u.flagged_reason);
     const vipUsers = allUsers.filter(u => u.vip_badge);
@@ -137,6 +143,66 @@ module.exports = async function handler(req, res) {
       full_name: userMap[c.user_id] ? userMap[c.user_id].full_name : null,
     }));
 
+    // ─── Page Views Analytics ───
+    const todayStr = new Date().toISOString().slice(0, 10);
+    const pvSessions = new Set();
+    const pvByDay = {};
+    const pvByPage = {};
+    const pvByReferrer = {};
+    const pvScreenBuckets = { mobile: 0, tablet: 0, desktop: 0 };
+
+    pageViews.forEach(pv => {
+      pvSessions.add(pv.session_id);
+      const day = (pv.created_at || '').slice(0, 10);
+      if (day) pvByDay[day] = (pvByDay[day] || 0) + 1;
+
+      if (!pvByPage[pv.page_path]) pvByPage[pv.page_path] = { views: 0, sessions: new Set() };
+      pvByPage[pv.page_path].views++;
+      pvByPage[pv.page_path].sessions.add(pv.session_id);
+
+      let source = '(direct)';
+      if (pv.referrer) {
+        try { source = new URL(pv.referrer).hostname; } catch (_) { source = pv.referrer; }
+      }
+      if (!pvByReferrer[source]) pvByReferrer[source] = 0;
+      pvByReferrer[source]++;
+
+      if (pv.screen_w != null) {
+        if (pv.screen_w < 768) pvScreenBuckets.mobile++;
+        else if (pv.screen_w <= 1024) pvScreenBuckets.tablet++;
+        else pvScreenBuckets.desktop++;
+      }
+    });
+
+    const viewsToday = pvByDay[todayStr] || 0;
+    const uniqueVisitors = pvSessions.size;
+    const pagesPerVisitor = uniqueVisitors > 0 ? +(pageViews.length / uniqueVisitors).toFixed(1) : 0;
+
+    const viewsByDay = Object.entries(pvByDay)
+      .map(([date, count]) => ({ date, count }))
+      .sort((a, b) => a.date.localeCompare(b.date));
+
+    const topPages = Object.entries(pvByPage)
+      .map(([page, d]) => ({ page, views: d.views, unique: d.sessions.size }))
+      .sort((a, b) => b.views - a.views)
+      .slice(0, 30);
+
+    const topReferrers_pv = Object.entries(pvByReferrer)
+      .map(([source, count]) => ({ source, count, pct: pageViews.length > 0 ? +((count / pageViews.length) * 100).toFixed(1) : 0 }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 20);
+
+    const visitors = {
+      total_views: pageViews.length,
+      unique_visitors: uniqueVisitors,
+      views_today: viewsToday,
+      pages_per_visitor: pagesPerVisitor,
+      views_by_day: viewsByDay,
+      top_pages: topPages,
+      top_referrers: topReferrers_pv,
+      screen_buckets: pvScreenBuckets,
+    };
+
     return res.json({
       overview: {
         total_users: totalUsers,
@@ -160,6 +226,7 @@ module.exports = async function handler(req, res) {
       international_signups: internationalSignups,
       top_referrers: topReferrers,
       milestone_distribution: milestoneDistribution,
+      visitors: visitors,
     });
   } catch (err) {
     console.error('ADMIN DATA ERROR:', err.message);

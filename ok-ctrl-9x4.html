@@ -656,6 +656,48 @@
 
   // ─── 2. All Users ───
   function renderUsers() {
+    var filter = document.getElementById('user-filter').value;
+
+    // Special handling for international signups (separate table)
+    if (filter === 'out_of_usa') {
+      var intl = (DATA.international_signups || []).slice();
+      var search = (document.getElementById('user-search').value || '').toLowerCase().trim();
+      if (search) {
+        intl = intl.filter(function(s) {
+          return (s.email || '').toLowerCase().indexOf(search) !== -1 ||
+                 (s.country_code || '').toLowerCase().indexOf(search) !== -1;
+        });
+      }
+      var total = intl.length;
+      var totalPages = Math.max(1, Math.ceil(total / USERS_PER_PAGE));
+      if (usersPage > totalPages) usersPage = totalPages;
+      var start = (usersPage - 1) * USERS_PER_PAGE;
+      var page = intl.slice(start, start + USERS_PER_PAGE);
+
+      var h = '<table><tr><th>#</th><th>Email</th><th>Country</th><th>IP Address</th><th>Signed Up</th></tr>';
+      if (page.length === 0) {
+        h += '<tr><td colspan="5" class="empty">No international signups found.</td></tr>';
+      }
+      page.forEach(function(s, i) {
+        h += '<tr>';
+        h += '<td style="color:#555;">' + (start + i + 1) + '</td>';
+        h += '<td style="color:#fff;font-weight:600;">' + esc(s.email) + '</td>';
+        h += '<td style="font-weight:600;">' + esc(s.country_code || 'Unknown') + '</td>';
+        h += '<td style="font-family:monospace;font-size:11px;color:#666;">' + esc(s.ip_address || '-') + '</td>';
+        h += '<td style="color:#666;">' + shortDate(s.created_at) + '</td>';
+        h += '</tr>';
+      });
+      h += '</table>';
+      document.getElementById('users-table-wrap').innerHTML = h;
+
+      var ph = '';
+      ph += '<button onclick="usersPageNav(-1)"' + (usersPage <= 1 ? ' disabled' : '') + '>Previous</button>';
+      ph += '<span>Page ' + usersPage + ' of ' + totalPages + ' &middot; ' + total + ' international signups</span>';
+      ph += '<button onclick="usersPageNav(1)"' + (usersPage >= totalPages ? ' disabled' : '') + '>Next</button>';
+      document.getElementById('users-pagination').innerHTML = ph;
+      return;
+    }
+
     var users = getFilteredUsers();
     var total = users.length;
     var totalPages = Math.max(1, Math.ceil(total / USERS_PER_PAGE));
@@ -708,7 +750,7 @@
     if (filter === 'flagged') users = users.filter(function(u) { return u.flagged_reason; });
     else if (filter === 'vip') users = users.filter(function(u) { return u.vip_badge; });
     else if (filter === 'has_referrals') users = users.filter(function(u) { return u.referral_count > 0; });
-    else if (filter === 'out_of_usa') users = users.filter(function(u) { return u.country_code && u.country_code !== 'US'; });
+    // 'out_of_usa' is handled directly in renderUsers() using international_signups data
 
     if (search) {
       users = users.filter(function(u) {

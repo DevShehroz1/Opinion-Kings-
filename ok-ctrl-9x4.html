@@ -583,8 +583,9 @@
     document.getElementById('loading').style.display = 'block';
     document.querySelectorAll('.tab-content').forEach(function(el) { el.style.visibility = 'hidden'; });
 
-    fetch(API_BASE + '/data', {
-      headers: { 'Authorization': 'Bearer ' + token }
+    fetch(API_BASE + '/data?_t=' + Date.now(), {
+      headers: { 'Authorization': 'Bearer ' + token },
+      cache: 'no-store'
     })
     .then(function(r) {
       if (r.status === 401) { window.doLogout(); throw new Error('Session expired'); }

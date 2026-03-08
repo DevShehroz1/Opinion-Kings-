@@ -12,7 +12,7 @@ function headers(prefer) {
 }
 
 async function get(path) {
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, { headers: headers() });
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, { headers: headers(), cache: 'no-store' });
   if (!res.ok) throw new Error(`GET ${path}: ${res.status} ${await res.text()}`);
   return res.json();
 }
@@ -37,4 +37,14 @@ async function patch(table, filter, data) {
   return res.json();
 }
 
-module.exports = { get, post, patch };
+async function upsert(table, data, onConflict) {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}`, {
+    method: 'POST',
+    headers: headers('return=representation,resolution=merge-duplicates'),
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error(`UPSERT ${table}: ${res.status} ${await res.text()}`);
+  return res.json();
+}
+
+module.exports = { get, post, patch, upsert };

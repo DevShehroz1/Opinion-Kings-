@@ -325,7 +325,60 @@
       margin: 0 !important;
       padding: 0 !important;
     }
-  </style>
+  
+/* ─── CUSTOM SITE FOOTER ─── */
+#ok-site-footer {
+  background: #060608;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding: 60px 40px 0;
+  font-family: "Manrope", sans-serif;
+  color: #888;
+}
+.ok-footer-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  gap: 60px;
+  padding-bottom: 40px;
+}
+.ok-footer-left { max-width: 420px; }
+.ok-footer-logo {
+  display: flex; align-items: center; gap: 10px;
+  text-decoration: none; margin-bottom: 16px;
+}
+.ok-footer-logo img { height: 36px; width: auto; }
+.ok-footer-logo span {
+  font-size: 18px; font-weight: 800; color: #fff; letter-spacing: -0.02em;
+}
+.ok-footer-desc {
+  font-size: 14px; line-height: 1.7; color: rgba(255,255,255,0.4);
+}
+.ok-footer-links {
+  display: flex; flex-direction: column; gap: 12px;
+}
+.ok-footer-links h4 {
+  font-size: 14px; font-weight: 700; color: #fff;
+  letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 4px;
+}
+.ok-footer-links a {
+  font-size: 14px; color: rgba(255,255,255,0.4);
+  text-decoration: none; transition: color 0.2s;
+}
+.ok-footer-links a:hover { color: #d4a95a; }
+.ok-footer-bottom {
+  max-width: 1100px; margin: 0 auto;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding: 24px 0; text-align: center;
+  font-size: 13px; color: rgba(255,255,255,0.25);
+}
+.framer-c03ypj, .framer-cl8wm7, .framer-1oxflbe { display: none !important; }
+@media (max-width: 640px) {
+  #ok-site-footer { padding: 40px 20px 0; }
+  .ok-footer-inner { flex-direction: column; gap: 36px; }
+}
+
+</style>
 
 
 	<meta name="viewport" content="width=device-width">
@@ -693,6 +746,27 @@
 <script>
 (function(){try{var s=localStorage.getItem('ok_sid');if(!s){s='xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,function(c){var r=Math.random()*16|0;return(c==='x'?r:(r&0x3|0x8)).toString(16)});localStorage.setItem('ok_sid',s)}var d={tk:'oK9x4Rz2qW7v',page_path:location.pathname,referrer:document.referrer||'',user_agent:navigator.userAgent,screen_w:screen.width,screen_h:screen.height,session_id:s};var b=JSON.stringify(d);if(navigator.sendBeacon){navigator.sendBeacon('/api/px7k',new Blob([b],{type:'application/json'}))}else{fetch('/api/px7k',{method:'POST',body:b,headers:{'Content-Type':'application/json'},keepalive:true})}}catch(e){}})();
 </script>
+<footer id="ok-site-footer">
+  <div class="ok-footer-inner">
+    <div class="ok-footer-left">
+      <a href="/" class="ok-footer-logo">
+        <img src="https://cdn.shopify.com/s/files/1/0920/7591/7591/files/7_5244414e-055a-4786-a3ad-34dbdd940e0e.png?v=1772224401" alt="Opinion Kings">
+        <span>Opinion Kings</span>
+      </a>
+      <p class="ok-footer-desc">The social prediction market where your opinions earn real rewards. Trade on outcomes, climb the leaderboard, and get paid for being right.</p>
+    </div>
+    <div class="ok-footer-links">
+      <h4>Quick Links</h4>
+      <a href="/waitlist.html">Join Waitlist</a>
+      <a href="/privacy.html">Privacy Policy</a>
+      <a href="/terms.html">Terms & Conditions</a>
+      <a href="/contact.html">Contact Us</a>
+    </div>
+  </div>
+  <div class="ok-footer-bottom">
+    <span>&copy; 2026 Opinion Kings. All rights reserved.</span>
+  </div>
+</footer>
 </body>
 
 

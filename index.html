@@ -199,17 +199,12 @@
         }
       }
       function fixFooterCredit() {
-        // Hide the entire Framer footer section
+        // Hide Framer footer elements directly (CSS handles most, this catches runtime-rendered ones)
         var footerEls = document.querySelectorAll('.framer-c03ypj, .framer-cl8wm7, .framer-1oxflbe');
         for (var i = 0; i < footerEls.length; i++) {
-          // Walk up to find the footer container and hide it
-          var parent = footerEls[i];
-          while (parent && parent.parentElement && parent.parentElement.tagName !== 'BODY') {
-            parent = parent.parentElement;
-          }
-          if (parent) parent.style.display = 'none';
+          footerEls[i].style.display = 'none';
         }
-        // Also hide by walking text nodes for any visible Kadir references
+        // Replace text in any visible Kadir references
         var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
         while (walker.nextNode()) {
           var node = walker.currentNode;

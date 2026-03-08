@@ -1,4 +1,5 @@
 const express = require('express');
+const crypto = require('crypto');
 const { getDb } = require('../database');
 const {
   generateCode,
@@ -7,6 +8,7 @@ const {
   REWARD_MILESTONES,
   getNextReward,
 } = require('../utils');
+const { isDisposableEmail, rateLimit: secRateLimit, getClientIP } = require('../../api/_security');
 
 const router = express.Router();
 
@@ -23,8 +25,8 @@ function prepareStatements() {
     findById: db.prepare('SELECT * FROM waitlist_users WHERE id = ?'),
 
     insertUser: db.prepare(`
-      INSERT INTO waitlist_users (full_name, email, phone, referral_code, referrer_id)
-      VALUES (@full_name, @email, @phone, @referral_code, @referrer_id)
+      INSERT INTO waitlist_users (full_name, email, phone, referral_code, referrer_id, ip_address)
+      VALUES (@full_name, @email, @phone, @referral_code, @referrer_id, @ip_address)
     `),
 
     insertReferral: db.prepare(`
@@ -55,6 +57,28 @@ function prepareStatements() {
 
     insertReward: db.prepare(`
       INSERT INTO reward_events (user_id, type, amount) VALUES (@user_id, @type, @amount)
+    `),
+
+    upsertLedger: db.prepare(`
+      INSERT INTO credits_ledger (user_id, email, full_name, referral_code, referral_count, total_credits, vip_badge, last_updated)
+      VALUES (@user_id, @email, @full_name, @referral_code, @referral_count, @total_credits, @vip_badge, strftime('%Y-%m-%dT%H:%M:%f','now'))
+      ON CONFLICT(user_id) DO UPDATE SET
+        referral_count = @referral_count,
+        total_credits  = @total_credits,
+        vip_badge      = @vip_badge,
+        last_updated   = strftime('%Y-%m-%dT%H:%M:%f','now')
+    `),
+
+    insertShareClick: db.prepare(`
+      INSERT INTO share_clicks (user_id, channel) VALUES (@user_id, @channel)
+    `),
+
+    findByIp: db.prepare(`
+      SELECT id, referral_code FROM waitlist_users WHERE ip_address = ? ORDER BY id DESC LIMIT 10
+    `),
+
+    flagUser: db.prepare(`
+      UPDATE waitlist_users SET flagged_reason = @reason WHERE id = @id
     `),
 
     // position = how many users are ahead of you + 1 (1 = best)
@@ -161,6 +185,11 @@ router.post('/join', (req, res) => {
   if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return res.status(400).json({ error: 'Invalid email format.' });
   }
+  if (email && isDisposableEmail(email)) {
+    return res.status(400).json({ error: 'Please use a permanent email address (temporary/disposable emails are not allowed).' });
+  }
+
+  const clientIp = req.ip || req.socket?.remoteAddress || 'unknown';
 
   const existing = email ? s.findByEmail.get(email) : s.findByPhone.get(phone);
   if (existing) {
@@ -185,6 +214,15 @@ router.post('/join', (req, res) => {
     }
   }
 
+  // Detect IP-based referral loops
+  let flaggedReason = null;
+  if (referrer && clientIp && clientIp !== 'unknown') {
+    const sameIpUsers = s.findByIp.all(clientIp);
+    if (sameIpUsers.some(u => u.referral_code === referral_code)) {
+      flaggedReason = 'self_referral_ip';
+    }
+  }
+
   const newCode = generateCode();
 
   const joinTx = db.transaction(() => {
@@ -194,13 +232,30 @@ router.post('/join', (req, res) => {
       phone: phone || null,
       referral_code: newCode,
       referrer_id: referrer ? referrer.id : null,
+      ip_address: clientIp,
     });
     const newUserId = info.lastInsertRowid;
+
+    if (flaggedReason) {
+      s.flagUser.run({ reason: flaggedReason, id: newUserId });
+    }
 
     if (referrer) {
       s.insertReferral.run({ referrer_id: referrer.id, referred_user_id: newUserId });
       s.bumpReferrer.run({ boost: BOOST_PER_REFERRAL, id: referrer.id });
       processRewards(referrer);
+
+      // Upsert credits ledger for the referrer
+      const updatedReferrer = s.findById.get(referrer.id);
+      s.upsertLedger.run({
+        user_id: updatedReferrer.id,
+        email: updatedReferrer.email,
+        full_name: updatedReferrer.full_name,
+        referral_code: updatedReferrer.referral_code,
+        referral_count: updatedReferrer.referral_count,
+        total_credits: updatedReferrer.credits_earned,
+        vip_badge: updatedReferrer.vip_badge,
+      });
     }
 
     return newUserId;
@@ -296,6 +351,294 @@ router.get('/leaderboard', (req, res) => {
   }));
 
   return res.json({ total_users: totalUsers, leaderboard });
+});
+
+// ─── Admin Auth Helpers (HMAC-SHA256) ────────────────────────────────
+const ADMIN_TOKEN_EXPIRY = 24 * 60 * 60 * 1000;
+
+function adminGenerateToken(email) {
+  const secret = process.env.ADMIN_PASSWORD || '';
+  const payload = JSON.stringify({ email: email.toLowerCase(), exp: Date.now() + ADMIN_TOKEN_EXPIRY });
+  const b64 = Buffer.from(payload).toString('base64url');
+  const sig = crypto.createHmac('sha256', secret).update(b64).digest('base64url');
+  return `${b64}.${sig}`;
+}
+
+function adminVerifyToken(token) {
+  const secret = process.env.ADMIN_PASSWORD || '';
+  if (!token || !secret) return null;
+  const parts = token.split('.');
+  if (parts.length !== 2) return null;
+  const [b64, sig] = parts;
+  const expected = crypto.createHmac('sha256', secret).update(b64).digest('base64url');
+  if (!crypto.timingSafeEqual(Buffer.from(sig), Buffer.from(expected))) return null;
+  try {
+    const payload = JSON.parse(Buffer.from(b64, 'base64url').toString());
+    if (!payload.exp || Date.now() > payload.exp) return null;
+    const adminEmails = (process.env.ADMIN_EMAILS || '').split(',').map(e => e.trim().toLowerCase()).filter(Boolean);
+    if (!adminEmails.includes(payload.email)) return null;
+    return payload;
+  } catch (_) {
+    return null;
+  }
+}
+
+function adminRequireAuth(req, res) {
+  const auth = req.headers.authorization || '';
+  const token = auth.startsWith('Bearer ') ? auth.slice(7) : '';
+  const payload = adminVerifyToken(token);
+  if (!payload) {
+    res.status(401).json({ error: 'Unauthorized.' });
+    return null;
+  }
+  return payload;
+}
+
+// ─── POST /api/waitlist/admin/login ──────────────────────────────────
+router.post('/admin/login', (req, res) => {
+  const ip = getClientIP(req);
+  if (!secRateLimit(ip, 5, 60 * 60 * 1000)) {
+    return res.status(429).json({ error: 'Too many login attempts. Try again later.' });
+  }
+
+  const { email, password } = req.body || {};
+  if (!email || !password) {
+    return res.status(400).json({ error: 'Email and password are required.' });
+  }
+
+  const adminEmails = (process.env.ADMIN_EMAILS || '').split(',').map(e => e.trim().toLowerCase()).filter(Boolean);
+  if (!adminEmails.includes(email.toLowerCase()) || password !== (process.env.ADMIN_PASSWORD || '')) {
+    return res.status(401).json({ error: 'Invalid credentials.' });
+  }
+
+  const token = adminGenerateToken(email);
+  const expires_at = new Date(Date.now() + ADMIN_TOKEN_EXPIRY).toISOString();
+  return res.json({ token, email: email.toLowerCase(), expires_at });
+});
+
+// ─── GET /api/waitlist/admin/data ────────────────────────────────────
+router.get('/admin/data', (req, res) => {
+  const admin = adminRequireAuth(req, res);
+  if (!admin) return;
+
+  const db = getDb();
+
+  const allUsers = db.prepare('SELECT * FROM waitlist_users ORDER BY boost_points DESC, created_at ASC').all();
+  const totalUsers = allUsers.length;
+
+  const referralChains = db.prepare('SELECT * FROM referrals ORDER BY created_at DESC').all();
+
+  const rewardEvents = db.prepare('SELECT * FROM reward_events ORDER BY created_at DESC').all();
+
+  const shareClicksDetail = db.prepare('SELECT * FROM share_clicks ORDER BY created_at DESC').all();
+
+  const creditsLedger = db.prepare('SELECT * FROM credits_ledger ORDER BY total_credits DESC').all();
+
+  let internationalSignups = [];
+  try {
+    internationalSignups = db.prepare('SELECT * FROM international_waitlist ORDER BY created_at DESC').all();
+  } catch (_) {}
+
+  // Derived data
+  const flaggedUsers = allUsers.filter(u => u.flagged_reason);
+  const vipUsers = allUsers.filter(u => u.vip_badge);
+  const totalReferrals = allUsers.reduce((sum, u) => sum + (u.referral_count || 0), 0);
+  const totalCreditsPending = creditsLedger
+    .filter(l => l.status === 'pending')
+    .reduce((sum, l) => sum + (l.total_credits || 0), 0);
+
+  // Share stats by channel
+  const shareStatsMap = {};
+  shareClicksDetail.forEach(c => {
+    shareStatsMap[c.channel] = (shareStatsMap[c.channel] || 0) + 1;
+  });
+  const shareStats = Object.entries(shareStatsMap).map(([channel, clicks]) => ({ channel, clicks }));
+
+  // IP clusters
+  const ipMap = {};
+  allUsers.forEach(u => {
+    if (u.ip_address) {
+      if (!ipMap[u.ip_address]) ipMap[u.ip_address] = [];
+      ipMap[u.ip_address].push(u.email || u.phone || `id:${u.id}`);
+    }
+  });
+  const ipClusters = Object.entries(ipMap)
+    .filter(([, emails]) => emails.length >= 3)
+    .map(([ip_address, emails]) => ({ ip_address, cnt: emails.length, emails: emails.join(', ') }))
+    .sort((a, b) => b.cnt - a.cnt)
+    .slice(0, 50);
+
+  // Signups by day
+  const dayMap = {};
+  allUsers.forEach(u => {
+    const day = (u.created_at || '').slice(0, 10);
+    if (day) dayMap[day] = (dayMap[day] || 0) + 1;
+  });
+  const signupsByDay = Object.entries(dayMap)
+    .map(([date, count]) => ({ date, count }))
+    .sort((a, b) => a.date.localeCompare(b.date));
+
+  // Top referrers
+  const topReferrers = allUsers
+    .filter(u => u.referral_count > 0)
+    .sort((a, b) => b.referral_count - a.referral_count)
+    .slice(0, 50);
+
+  // Milestone distribution
+  const milestoneDistribution = [
+    { tier: '0 referrals', count: allUsers.filter(u => (u.referral_count || 0) === 0).length },
+    { tier: '1+ referrals', count: allUsers.filter(u => (u.referral_count || 0) >= 1).length },
+    { tier: '5+ referrals', count: allUsers.filter(u => (u.referral_count || 0) >= 5).length },
+    { tier: '25+ referrals', count: allUsers.filter(u => (u.referral_count || 0) >= 25).length },
+    { tier: '50+ referrals', count: allUsers.filter(u => (u.referral_count || 0) >= 50).length },
+  ];
+
+  // User lookup for enrichment
+  const userMap = {};
+  allUsers.forEach((u, i) => { userMap[u.id] = u; u._rank = i + 1; });
+
+  const enrichedUsers = allUsers.map(u => ({
+    ...u,
+    referrer_email: u.referrer_id && userMap[u.referrer_id] ? userMap[u.referrer_id].email : null,
+  }));
+
+  const enrichedChains = referralChains.map(r => ({
+    ...r,
+    referrer_email: userMap[r.referrer_id] ? userMap[r.referrer_id].email : null,
+    referrer_name: userMap[r.referrer_id] ? userMap[r.referrer_id].full_name : null,
+    referred_email: userMap[r.referred_user_id] ? userMap[r.referred_user_id].email : null,
+    referred_name: userMap[r.referred_user_id] ? userMap[r.referred_user_id].full_name : null,
+  }));
+
+  const enrichedRewards = rewardEvents.map(r => ({
+    ...r,
+    email: userMap[r.user_id] ? userMap[r.user_id].email : null,
+    full_name: userMap[r.user_id] ? userMap[r.user_id].full_name : null,
+  }));
+
+  const enrichedClicks = shareClicksDetail.map(c => ({
+    ...c,
+    email: userMap[c.user_id] ? userMap[c.user_id].email : null,
+    full_name: userMap[c.user_id] ? userMap[c.user_id].full_name : null,
+  }));
+
+  return res.json({
+    overview: {
+      total_users: totalUsers,
+      spots_remaining: MAX_WAITLIST - totalUsers,
+      total_referrals: totalReferrals,
+      total_credits_pending: totalCreditsPending,
+      flagged_count: flaggedUsers.length,
+      vip_count: vipUsers.length,
+      share_clicks: shareClicksDetail.length,
+      international_count: internationalSignups.length,
+    },
+    all_users: enrichedUsers,
+    referral_chains: enrichedChains,
+    reward_events: enrichedRewards,
+    share_clicks_detail: enrichedClicks,
+    share_stats: shareStats,
+    credits_ledger: creditsLedger,
+    flagged_users: flaggedUsers,
+    ip_clusters: ipClusters,
+    signups_by_day: signupsByDay,
+    international_signups: internationalSignups,
+    top_referrers: topReferrers,
+    milestone_distribution: milestoneDistribution,
+  });
+});
+
+// ─── PATCH /api/waitlist/admin/ledger/:id ────────────────────────────
+router.patch('/admin/ledger/:id', (req, res) => {
+  const admin = adminRequireAuth(req, res);
+  if (!admin) return;
+
+  const db = getDb();
+  const id = Number(req.params.id);
+  if (!id) return res.status(400).json({ error: 'Ledger entry id is required.' });
+
+  const { status } = req.body || {};
+  const allowed = ['pending', 'distributed', 'cancelled'];
+  if (!status || !allowed.includes(status)) {
+    return res.status(400).json({ error: 'Status must be one of: pending, distributed, cancelled.' });
+  }
+
+  const result = db.prepare(
+    `UPDATE credits_ledger SET status = ?, last_updated = strftime('%Y-%m-%dT%H:%M:%f','now') WHERE id = ?`
+  ).run(status, id);
+
+  if (result.changes === 0) {
+    return res.status(404).json({ error: 'Ledger entry not found.' });
+  }
+
+  return res.json({ ok: true });
+});
+
+// ─── GET /api/waitlist/admin/review (legacy) ─────────────────────────
+router.get('/admin/review', (req, res) => {
+  const db = getDb();
+  const secret = req.query.secret;
+  if (secret !== (process.env.ADMIN_SECRET || 'admin123')) {
+    return res.status(401).json({ error: 'Unauthorized.' });
+  }
+
+  const totalUsers = db.prepare('SELECT COUNT(*) AS cnt FROM waitlist_users').get().cnt;
+
+  const flaggedUsers = db.prepare(`
+    SELECT id, full_name, email, referral_code, referral_count, ip_address, flagged_reason, created_at
+    FROM waitlist_users WHERE flagged_reason IS NOT NULL ORDER BY id DESC
+  `).all();
+
+  const shareStats = db.prepare(`
+    SELECT channel, COUNT(*) AS clicks FROM share_clicks GROUP BY channel
+  `).all();
+
+  const creditsLedger = db.prepare(`
+    SELECT * FROM credits_ledger ORDER BY total_credits DESC
+  `).all();
+
+  const topReferrers = db.prepare(`
+    SELECT id, full_name, email, referral_code, referral_count, credits_earned, vip_badge, ip_address
+    FROM waitlist_users WHERE referral_count > 0 ORDER BY referral_count DESC LIMIT 20
+  `).all();
+
+  const ipClusters = db.prepare(`
+    SELECT ip_address, COUNT(*) AS cnt, GROUP_CONCAT(email, ', ') AS emails
+    FROM waitlist_users WHERE ip_address IS NOT NULL
+    GROUP BY ip_address HAVING cnt >= 3 ORDER BY cnt DESC LIMIT 20
+  `).all();
+
+  return res.json({
+    total_users: totalUsers,
+    flagged_users: flaggedUsers,
+    share_stats: shareStats,
+    credits_ledger: creditsLedger,
+    top_referrers: topReferrers,
+    ip_clusters: ipClusters,
+  });
+});
+
+// ─── POST /api/waitlist/share-click ──────────────────────────────────
+router.post('/share-click', (req, res) => {
+  const s = prepareStatements();
+  const { user_id, channel } = req.body;
+
+  if (!user_id || !channel) {
+    return res.status(400).json({ error: 'user_id and channel are required.' });
+  }
+
+  const allowed = ['twitter', 'whatsapp', 'copy'];
+  if (!allowed.includes(channel)) {
+    return res.status(400).json({ error: 'Invalid channel.' });
+  }
+
+  const user = s.findById.get(Number(user_id));
+  if (!user) {
+    return res.status(404).json({ error: 'User not found.' });
+  }
+
+  s.insertShareClick.run({ user_id: user.id, channel });
+  return res.json({ ok: true });
 });
 
 module.exports = router;

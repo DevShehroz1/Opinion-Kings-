@@ -385,7 +385,7 @@
         header.innerHTML = '<div class="ok-ms-label">LIVE PRE-LAUNCH MARKETS</div>' +
           '<h2 class="ok-ms-title">Pick a Side.<br><span>Earn $5 If Right.</span></h2>' +
           '<p class="ok-ms-subtitle">These 6 markets resolve by July 31, 2025. Predict correctly and get $5 trading credit at launch. No real money needed \u2014 just your conviction.</p>' +
-          '<div class="ok-ms-banner">\uD83D\uDCA1 Join the waitlist first, then vote · Correct calls = <strong>$5 credit each</strong> · Up to $30 total</div>';
+          '<div class="ok-ms-banner">Join the waitlist, vote on markets, and earn <strong>$5 credit</strong> for every correct prediction — up to <strong>$30 total</strong>.</div>';
         sec.appendChild(header);
         var track = document.createElement('div');
         track.className = 'ok-markets-track';
@@ -1119,7 +1119,7 @@
       letter-spacing: 0.18em;
       color: #D3B17C;
       text-transform: uppercase;
-      margin-bottom: 16px;
+      margin-bottom: 20px;
     }
     .ok-ms-title {
       font-family: "Manrope", sans-serif;
@@ -1128,7 +1128,7 @@
       letter-spacing: -0.03em;
       color: #fff;
       line-height: 1.1;
-      margin: 0 0 24px;
+      margin: 0 0 20px;
     }
     .ok-ms-title span {
       color: #D3B17C;
@@ -1140,23 +1140,23 @@
       color: rgba(255,255,255,0.4);
       line-height: 1.6;
       max-width: 620px;
-      margin: 0 auto 28px;
+      margin: 0 auto 24px;
     }
     .ok-ms-banner {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-family: "Manrope", monospace;
+      display: inline-block;
+      font-family: "Manrope", sans-serif;
       font-size: 14px;
-      color: #4CAF50;
-      background: rgba(76, 175, 80, 0.08);
-      border: 1px solid rgba(76, 175, 80, 0.2);
-      border-radius: 10px;
+      color: rgba(255,255,255,0.55);
+      background: rgba(211, 177, 124, 0.06);
+      border: 1px solid rgba(211, 177, 124, 0.15);
+      border-radius: 12px;
       padding: 14px 28px;
       letter-spacing: 0.01em;
+      line-height: 1.6;
     }
     .ok-ms-banner strong {
-      color: #4CAF50;
+      color: #D3B17C;
+      font-weight: 700;
     }
     .ok-markets-track {
       overflow-x: auto;
@@ -1338,8 +1338,8 @@
     @media (max-width: 809px) {
       #ok-markets-section { padding: 60px 20px; }
       .ok-ms-title { font-size: 40px; }
-      .ok-ms-subtitle { font-size: 15px; }
-      .ok-ms-banner { font-size: 12px; padding: 12px 18px; }
+      .ok-ms-subtitle { font-size: 15px; max-width: 340px; }
+      .ok-ms-banner { font-size: 13px; padding: 12px 20px; }
       .ok-ms-header { margin-bottom: 36px; }
       .ok-market-card { width: 290px; min-width: 290px; padding: 20px; }
       .ok-mc-question { font-size: 16px; min-height: 44px; }

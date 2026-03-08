@@ -198,6 +198,28 @@
           }
         }
       }
+      function fixFooterCredit() {
+        var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+        while (walker.nextNode()) {
+          var node = walker.currentNode;
+          if (node.nodeValue && node.nodeValue.indexOf('Kadir Calik') !== -1) {
+            node.nodeValue = node.nodeValue.replace('Kadir Calik', 'Opinion Kings');
+          }
+          if (node.nodeValue && node.nodeValue.indexOf('kadirov') !== -1) {
+            node.nodeValue = node.nodeValue.replace(/hello@kadirov\.design/g, 'support@opinionkings.com');
+          }
+        }
+        // Add policy links to footer bottom area
+        var footerPs = document.querySelectorAll('.framer-c03ypj p, .framer-cl8wm7 p, .framer-1oxflbe p');
+        for (var i = 0; i < footerPs.length; i++) {
+          var p = footerPs[i];
+          var txt = p.textContent || '';
+          if (txt.indexOf('Opinion Kings') !== -1 && txt.indexOf('2026') !== -1 && !p.dataset.policyDone) {
+            p.dataset.policyDone = 'true';
+            p.innerHTML = p.innerHTML + ' &middot; <a href="/privacy.html" style="color:rgba(211,177,124,0.7);text-decoration:none;">Privacy</a> &middot; <a href="/terms.html" style="color:rgba(211,177,124,0.7);text-decoration:none;">Terms</a>';
+          }
+        }
+      }
       function removeSections() {
         var selectors = ['section.framer-z1txfs', 'section.framer-1yiaf5k', 'section.framer-1slr64', 'section.framer-i7twhp', 'section.framer-iti230', '.framer-1x984x1-container'];
         for (var i = 0; i < selectors.length; i++) {
@@ -785,6 +807,7 @@
         sweepAllImages();
         removeSections();
         unlinkFooter();
+        fixFooterCredit();
         fixNavbar();
         fixHeroText();
         fixFaq();

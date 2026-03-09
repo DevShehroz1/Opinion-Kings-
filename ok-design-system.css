@@ -1,0 +1,635 @@
+/* ================================================================
+   Opinion Kings — Design System
+   Consistent typography, spacing, colors, and layout tokens
+   ================================================================ */
+
+/* ── Design Tokens (CSS Variables) ── */
+:root {
+  /* Colors */
+  --ok-gold: #D3B17C;
+  --ok-gold-hover: #c9a46e;
+  --ok-bg: #060608;
+  --ok-card-bg: rgba(13, 13, 13, 0.9);
+  --ok-card-bg-hover: rgba(22, 20, 16, 0.95);
+  --ok-white: #fff;
+  --ok-green: #4CAF50;
+  --ok-red: #E53935;
+
+  /* Text Colors - Standardized opacity levels */
+  --ok-text-primary: #fff;
+  --ok-text-secondary: rgba(255, 255, 255, 0.55);
+  --ok-text-tertiary: rgba(255, 255, 255, 0.4);
+  --ok-text-muted: rgba(255, 255, 255, 0.25);
+
+  /* Gold variants */
+  --ok-gold-10: rgba(211, 177, 124, 0.10);
+  --ok-gold-15: rgba(211, 177, 124, 0.15);
+  --ok-gold-25: rgba(211, 177, 124, 0.25);
+
+  /* Typography */
+  --ok-font: "Manrope", sans-serif;
+  --ok-tracking-tight: -0.03em;
+  --ok-tracking-normal: -0.01em;
+
+  /* Font Sizes - Standardized scale */
+  --ok-text-xs: 11px;
+  --ok-text-sm: 13px;
+  --ok-text-base: 15px;
+  --ok-text-md: 16px;
+  --ok-text-lg: 18px;
+  --ok-text-xl: 22px;
+
+  /* Heading Sizes */
+  --ok-heading-xl: 48px;
+  --ok-heading-lg: 42px;
+  --ok-heading-md: 32px;
+
+  /* Line Heights */
+  --ok-leading-tight: 1.1;
+  --ok-leading-normal: 1.5;
+  --ok-leading-relaxed: 1.65;
+
+  /* Spacing - Consistent section gaps */
+  --ok-section-pad-y: 100px;
+  --ok-section-pad-x: 40px;
+  --ok-section-max-width: 1200px;
+  --ok-section-header-gap: 48px;
+  --ok-label-gap: 16px;
+
+  /* Border Radius - Standardized */
+  --ok-radius-sm: 8px;
+  --ok-radius-md: 12px;
+  --ok-radius-lg: 16px;
+  --ok-radius-pill: 100px;
+
+  /* Borders */
+  --ok-border-subtle: 1px solid rgba(255, 255, 255, 0.06);
+  --ok-border-card: 1px solid rgba(255, 255, 255, 0.08);
+  --ok-border-gold: 1px solid rgba(211, 177, 124, 0.15);
+}
+
+
+/* ── Section Labels (e.g. "REFERRAL REWARDS", "FAQ") ── */
+.ok-ms-label,
+.ok-rp-label,
+.ok-hye-label,
+.ok-perks-label,
+.ok-rt-label,
+.ok-faq-label {
+  font-family: var(--ok-font) !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.14em !important;
+  color: var(--ok-gold) !important;
+  text-transform: uppercase !important;
+  margin-bottom: var(--ok-label-gap) !important;
+}
+
+
+/* ── Section Headings ── */
+.ok-ms-title,
+.ok-rp-heading,
+.ok-hye-heading,
+.ok-perks-heading,
+.ok-rt-heading,
+.ok-faq-heading {
+  font-family: var(--ok-font) !important;
+  font-weight: 800 !important;
+  letter-spacing: var(--ok-tracking-tight) !important;
+  color: var(--ok-text-primary) !important;
+  line-height: var(--ok-leading-tight) !important;
+  margin-top: 0 !important;
+  margin-bottom: var(--ok-section-header-gap) !important;
+}
+
+/* Centered section headings */
+.ok-hye-heading,
+.ok-perks-heading,
+.ok-rt-heading,
+.ok-faq-heading {
+  text-align: center !important;
+  font-size: var(--ok-heading-xl) !important;
+}
+
+/* Markets title stays bigger since it's a hero-level section */
+.ok-ms-title {
+  font-size: 56px !important;
+  text-align: center !important;
+}
+
+/* Referral heading is left-aligned */
+.ok-rp-heading {
+  font-size: var(--ok-heading-xl) !important;
+}
+
+/* Heading accent spans */
+.ok-ms-title span,
+.ok-hye-heading span,
+.ok-perks-heading span,
+.ok-rt-heading span,
+.ok-faq-heading span {
+  color: var(--ok-gold) !important;
+}
+
+
+/* ── Section Subtitles / Descriptions ── */
+.ok-ms-subtitle,
+.ok-hye-subtitle,
+.ok-rp-desc,
+.ok-cta-sub {
+  font-family: var(--ok-font) !important;
+  font-size: var(--ok-text-md) !important;
+  font-weight: 400 !important;
+  color: var(--ok-text-secondary) !important;
+  line-height: var(--ok-leading-relaxed) !important;
+}
+
+.ok-ms-subtitle,
+.ok-hye-subtitle {
+  text-align: center !important;
+  max-width: 580px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  margin-bottom: 28px !important;
+}
+
+
+/* ── Section Containers — Consistent Padding ── */
+#ok-markets-section,
+#ok-how-you-earn,
+#ok-perks-section,
+#ok-referral-tiers,
+#ok-faq-section,
+#ok-referral-section {
+  width: 100% !important;
+  max-width: var(--ok-section-max-width) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding: var(--ok-section-pad-y) var(--ok-section-pad-x) !important;
+}
+
+/* Markets section needs wider max-width for horizontal scroll */
+#ok-markets-section {
+  max-width: 1400px !important;
+}
+
+
+/* ── Card Styles — Standardized ── */
+.ok-market-card,
+.ok-hye-card,
+.ok-rt-card {
+  background: var(--ok-card-bg) !important;
+  border-radius: var(--ok-radius-lg) !important;
+  border: 1px solid rgba(211, 177, 124, 0.10) !important;
+  transition: border-color 0.3s, transform 0.25s, box-shadow 0.3s !important;
+}
+
+.ok-hye-card:hover,
+.ok-rt-card:hover {
+  border-color: var(--ok-gold-25) !important;
+  transform: translateY(-4px) !important;
+  box-shadow: 0 12px 36px rgba(211, 177, 124, 0.08) !important;
+}
+
+
+/* ── Card Titles ── */
+.ok-hye-card h3,
+.ok-perk-title {
+  font-family: var(--ok-font) !important;
+  font-size: var(--ok-text-lg) !important;
+  font-weight: 700 !important;
+  color: var(--ok-text-primary) !important;
+  letter-spacing: var(--ok-tracking-normal) !important;
+  margin-bottom: 10px !important;
+}
+
+
+/* ── Card Body Text ── */
+.ok-hye-card p,
+.ok-perk-desc,
+.ok-rt-desc,
+.ok-rp-step p,
+.ok-faq-a p {
+  font-family: var(--ok-font) !important;
+  font-size: var(--ok-text-base) !important;
+  color: var(--ok-text-tertiary) !important;
+  line-height: var(--ok-leading-relaxed) !important;
+  margin: 0 !important;
+}
+
+
+/* ── Card Step Titles ── */
+.ok-rp-step strong {
+  font-family: var(--ok-font) !important;
+  font-size: var(--ok-text-md) !important;
+  font-weight: 700 !important;
+  color: var(--ok-text-primary) !important;
+}
+
+
+/* ── FAQ Questions ── */
+.ok-faq-q {
+  font-family: var(--ok-font) !important;
+  font-size: var(--ok-text-lg) !important;
+  font-weight: 600 !important;
+  color: var(--ok-text-primary) !important;
+  padding: 24px 0 !important;
+}
+
+
+/* ── Markets Card Question ── */
+.ok-mc-question {
+  font-family: var(--ok-font) !important;
+  font-size: var(--ok-text-lg) !important;
+  font-weight: 600 !important;
+  color: var(--ok-text-primary) !important;
+  letter-spacing: var(--ok-tracking-normal) !important;
+  line-height: 1.35 !important;
+}
+
+
+/* ── Buttons — Standardized ── */
+#ok-wl-submit,
+.ok-cta-btn,
+#ok-waitlist-form button,
+#ok-waitlist-form div:last-child {
+  font-family: var(--ok-font) !important;
+  font-weight: 700 !important;
+  font-size: var(--ok-text-base) !important;
+  letter-spacing: 0.01em !important;
+  transition: background 0.2s, transform 0.15s !important;
+}
+
+
+/* ── Perks Grid — Match HYE card style ── */
+.ok-perk {
+  padding: 36px 32px !important;
+  transition: background 0.2s !important;
+}
+
+
+/* ── Hero Stats — Consistent sizing ── */
+.ok-hero-stat-num {
+  font-family: var(--ok-font) !important;
+  font-size: 36px !important;
+  font-weight: 800 !important;
+  color: var(--ok-gold) !important;
+  letter-spacing: -0.02em !important;
+}
+
+.ok-hero-stat-lbl {
+  font-family: var(--ok-font) !important;
+  font-size: var(--ok-text-xs) !important;
+  font-weight: 600 !important;
+  color: var(--ok-text-muted) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.08em !important;
+}
+
+
+/* ── Footer — Standardized ── */
+#ok-site-footer {
+  background: var(--ok-bg) !important;
+  border-top: var(--ok-border-subtle) !important;
+  padding: 60px var(--ok-section-pad-x) 0 !important;
+  font-family: var(--ok-font) !important;
+}
+
+.ok-footer-desc {
+  font-size: var(--ok-text-sm) !important;
+  line-height: var(--ok-leading-relaxed) !important;
+  color: var(--ok-text-tertiary) !important;
+}
+
+.ok-footer-links a {
+  font-size: var(--ok-text-sm) !important;
+  color: var(--ok-text-tertiary) !important;
+}
+
+.ok-footer-links h4 {
+  font-size: var(--ok-text-sm) !important;
+  letter-spacing: 0.06em !important;
+}
+
+.ok-footer-bottom {
+  font-size: var(--ok-text-sm) !important;
+  color: var(--ok-text-muted) !important;
+  padding: 24px 0 !important;
+}
+
+
+/* ── Leaderboard — Consistent text ── */
+.ok-rp-lb-name {
+  font-size: var(--ok-text-base) !important;
+}
+
+.ok-rp-lb-joined {
+  font-size: var(--ok-text-xs) !important;
+  color: var(--ok-text-muted) !important;
+}
+
+
+/* ── Banner / Badge text ── */
+.ok-ms-banner {
+  font-family: var(--ok-font) !important;
+  font-size: var(--ok-text-sm) !important;
+  color: var(--ok-text-secondary) !important;
+  border-radius: var(--ok-radius-md) !important;
+  padding: 14px 28px !important;
+  line-height: var(--ok-leading-relaxed) !important;
+}
+
+
+/* ── Referral Tiers — Reward value sizing ── */
+.ok-rt-reward-val {
+  font-family: var(--ok-font) !important;
+  font-size: 48px !important;
+  font-weight: 800 !important;
+  letter-spacing: var(--ok-tracking-tight) !important;
+  line-height: 1 !important;
+  margin-bottom: 14px !important;
+}
+
+
+/* ── CTA Footer ── */
+#ok-cta-footer {
+  padding: 120px var(--ok-section-pad-x) !important;
+  text-align: center !important;
+}
+
+.ok-cta-bigtext {
+  font-family: var(--ok-font) !important;
+  font-size: clamp(48px, 7vw, 84px) !important;
+  font-weight: 800 !important;
+  line-height: 0.95 !important;
+  letter-spacing: var(--ok-tracking-tight) !important;
+  color: var(--ok-text-primary) !important;
+  margin-bottom: 28px !important;
+}
+
+.ok-cta-sub {
+  max-width: 440px !important;
+  margin: 0 auto 44px !important;
+}
+
+
+/* ── Ticker ── */
+.ok-tk-item {
+  font-family: var(--ok-font) !important;
+  font-size: var(--ok-text-xs) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.06em !important;
+}
+
+
+/* ── Hint / Micro text — Standardized ── */
+.ok-mc-hint,
+.ok-wl-micro,
+.ok-wl-ref-label {
+  font-family: var(--ok-font) !important;
+  font-size: var(--ok-text-sm) !important;
+  color: var(--ok-text-muted) !important;
+}
+
+
+/* ── Waitlist Page — Consistent styling ── */
+#ok-wl-app {
+  font-family: var(--ok-font) !important;
+}
+
+.ok-wl-input-wrap {
+  border-radius: var(--ok-radius-md) !important;
+}
+
+.ok-wl-input-wrap input {
+  font-family: var(--ok-font) !important;
+  font-size: var(--ok-text-base) !important;
+}
+
+#ok-wl-submit {
+  border-radius: var(--ok-radius-md) !important;
+}
+
+.ok-wl-error {
+  font-family: var(--ok-font) !important;
+  font-size: var(--ok-text-sm) !important;
+}
+
+
+/* ── Dashboard — Consistent sizing ── */
+.ok-dash-badge {
+  font-family: var(--ok-font) !important;
+  font-size: var(--ok-text-sm) !important;
+  border-radius: var(--ok-radius-pill) !important;
+}
+
+.ok-dash-stat-label {
+  font-family: var(--ok-font) !important;
+  font-size: var(--ok-text-xs) !important;
+  color: var(--ok-text-muted) !important;
+}
+
+.ok-dash-stat-value {
+  font-family: var(--ok-font) !important;
+  font-size: 24px !important;
+  font-weight: 700 !important;
+  color: var(--ok-text-primary) !important;
+}
+
+.ok-dash-reflabel {
+  font-family: var(--ok-font) !important;
+  font-size: 12px !important;
+  color: var(--ok-text-tertiary) !important;
+}
+
+.ok-dash-refrow {
+  border-radius: var(--ok-radius-md) !important;
+}
+
+.ok-dash-lb {
+  border-radius: var(--ok-radius-lg) !important;
+}
+
+
+/* ── Smooth Scroll ── */
+html {
+  scroll-behavior: smooth;
+}
+
+
+/* ================================================================
+   RESPONSIVE — Mobile (max-width: 809px)
+   ================================================================ */
+@media (max-width: 809px) {
+  :root {
+    --ok-section-pad-y: 64px;
+    --ok-section-pad-x: 20px;
+    --ok-section-header-gap: 36px;
+    --ok-heading-xl: 34px;
+    --ok-heading-lg: 30px;
+  }
+
+  /* Section headings on mobile */
+  .ok-ms-title {
+    font-size: 36px !important;
+  }
+
+  .ok-rp-heading {
+    font-size: 32px !important;
+  }
+
+  .ok-hye-heading,
+  .ok-perks-heading,
+  .ok-rt-heading,
+  .ok-faq-heading {
+    font-size: var(--ok-heading-xl) !important;
+  }
+
+  /* Subtitles */
+  .ok-ms-subtitle,
+  .ok-hye-subtitle,
+  .ok-rp-desc {
+    font-size: var(--ok-text-base) !important;
+    max-width: 340px !important;
+  }
+
+  /* FAQ */
+  .ok-faq-q {
+    font-size: var(--ok-text-md) !important;
+    padding: 20px 0 !important;
+  }
+
+  /* Grids */
+  .ok-hye-grid,
+  .ok-perks-grid,
+  .ok-rt-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Cards */
+  .ok-hye-card {
+    padding: 32px 24px 28px !important;
+  }
+
+  .ok-rt-card {
+    padding: 28px 24px 24px !important;
+  }
+
+  .ok-perk {
+    padding: 28px 24px !important;
+  }
+
+  /* Referral tiers value */
+  .ok-rt-reward-val {
+    font-size: 38px !important;
+  }
+
+  /* CTA */
+  #ok-cta-footer {
+    padding: 80px 20px !important;
+  }
+
+  /* Hero stats */
+  .ok-hero-stat-num {
+    font-size: 28px !important;
+  }
+
+  #ok-hero-stats {
+    gap: 24px !important;
+  }
+
+  /* Referral layout */
+  .ok-rp-layout {
+    flex-direction: column !important;
+    gap: 40px !important;
+  }
+
+  .ok-rp-right {
+    width: 100% !important;
+  }
+
+  .ok-rp-step-num {
+    font-size: 26px !important;
+    min-width: 40px !important;
+  }
+
+  /* Market cards */
+  .ok-market-card {
+    width: 290px !important;
+    min-width: 290px !important;
+    padding: 20px !important;
+  }
+
+  .ok-mc-pct-val {
+    font-size: 18px !important;
+  }
+
+  .ok-ms-banner {
+    font-size: 12px !important;
+    padding: 12px 20px !important;
+  }
+
+  .ok-ms-header {
+    margin-bottom: 36px !important;
+  }
+
+  /* Footer */
+  #ok-site-footer {
+    padding: 40px 20px 0 !important;
+  }
+
+  .ok-footer-inner {
+    flex-direction: column !important;
+    gap: 36px !important;
+  }
+
+  /* Dashboard */
+  #ok-rank-num {
+    font-size: 52px !important;
+  }
+
+  .ok-dash-stats {
+    gap: 16px !important;
+  }
+
+  .ok-dash-stat-value {
+    font-size: 18px !important;
+  }
+
+  .ok-dash-share {
+    flex-direction: column !important;
+  }
+}
+
+
+/* ================================================================
+   Contact Page — Form Styling
+   ================================================================ */
+.ok-contact-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.ok-contact-hero {
+  padding: 120px var(--ok-section-pad-x) 60px;
+  text-align: center;
+}
+
+.ok-contact-hero h1 {
+  font-family: var(--ok-font);
+  font-size: var(--ok-heading-xl);
+  font-weight: 800;
+  color: var(--ok-text-primary);
+  letter-spacing: var(--ok-tracking-tight);
+  margin-bottom: 16px;
+}
+
+.ok-contact-hero p {
+  font-family: var(--ok-font);
+  font-size: var(--ok-text-md);
+  color: var(--ok-text-secondary);
+  line-height: var(--ok-leading-relaxed);
+  max-width: 480px;
+  margin: 0 auto;
+}

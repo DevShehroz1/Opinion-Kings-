@@ -16,11 +16,11 @@ app.use(express.json());
 
 // ─── Rate limiting ──────────────────────────────────────────────────
 const joinLimiter = rateLimit({
-  windowMs: 60 * 1000,
-  max: 10,
+  windowMs: 60 * 60 * 1000,
+  max: 3,
   standardHeaders: true,
   legacyHeaders: false,
-  message: { error: 'Too many requests. Please wait a minute.' },
+  message: { error: 'Too many signup attempts. Please try again later.' },
   keyGenerator: (req) => req.ip,
 });
 

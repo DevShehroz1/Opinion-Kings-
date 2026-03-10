@@ -30,7 +30,7 @@ module.exports = async function handler(req, res) {
   try {
     const ip = getClientIP(req);
 
-    if (!rateLimit(ip, 5, 3600000)) {
+    if (!rateLimit(ip, 3, 3600000)) {
       return res.status(429).json({ error: 'Too many signup attempts. Please try again later.' });
     }
 
@@ -111,6 +111,15 @@ module.exports = async function handler(req, res) {
       }
     }
 
+    // Detect IP-based referral loops
+    let flaggedReason = null;
+    if (referrer && ip && ip !== 'unknown') {
+      const sameIpUsers = await db.get(`waitlist_users?select=id,referral_code&ip_address=eq.${encodeURIComponent(ip)}&limit=10`);
+      if (sameIpUsers.some(u => u.referral_code === referral_code.trim().toUpperCase())) {
+        flaggedReason = 'self_referral_ip';
+      }
+    }
+
     const prefix = full_name.trim().replace(/[^A-Za-z]/g, '').slice(0, 2).toUpperCase();
     const newCode = prefix + generateCode();
     const inserted = await db.post('waitlist_users', {
@@ -121,6 +130,7 @@ module.exports = async function handler(req, res) {
       referrer_id: referrer ? referrer.id : null,
       country_code: country,
       ip_address: ip,
+      flagged_reason: flaggedReason,
     });
     const user = inserted[0];
 
@@ -146,6 +156,22 @@ module.exports = async function handler(req, res) {
           }
         }
       }
+
+      // Upsert credits ledger for the referrer
+      const finalRef = (await db.get(`waitlist_users?select=*&id=eq.${referrer.id}&limit=1`))[0];
+      try {
+        await db.upsert('credits_ledger', {
+          user_id: finalRef.id,
+          email: finalRef.email,
+          full_name: finalRef.full_name,
+          referral_code: finalRef.referral_code,
+          referral_count: finalRef.referral_count,
+          total_credits: finalRef.credits_earned,
+          vip_badge: !!finalRef.vip_badge,
+          status: 'pending',
+          last_updated: new Date().toISOString(),
+        });
+      } catch (_) { /* ledger upsert is non-critical */ }
     }
 
     const freshUser = (await db.get(`waitlist_users?select=*&id=eq.${user.id}&limit=1`))[0];

@@ -349,12 +349,12 @@
         }
       }
       var marketsData = [
-        { cat: 'CRYPTO', sub: 'BITCOIN', color: '#D3B17C', q: 'Will Bitcoin set a new all-time high before July 31, 2025?', resolve: 'RESOLVES JUL 31, 2025', yes: 63, no: 37, vol: '$1.4M', voters: '8,241' },
-        { cat: 'CRYPTO', sub: 'ETHEREUM', color: '#627EEA', q: 'Will Ethereum trade above $5,000 before July 31, 2025?', resolve: 'RESOLVES JUL 31, 2025', yes: 48, no: 52, vol: '$890K', voters: '5,019' },
-        { cat: 'CRYPTO', sub: 'SOLANA', color: '#00FFA3', q: 'Will Solana reach $300 or higher before July 31, 2025?', resolve: 'RESOLVES JUL 31, 2025', yes: 54, no: 46, vol: '$620K', voters: '4,102' },
-        { cat: 'COMMODITIES', sub: 'GOLD', color: '#D3B17C', q: 'Will Gold hit $3,500/oz before July 31, 2025?', resolve: 'RESOLVES JUL 31, 2025', yes: 41, no: 59, vol: '$310K', voters: '2,884' },
-        { cat: 'EQUITIES', sub: 'S&P 500', color: '#4CAF50', q: 'Will the S&P 500 close above 6,000 before July 31, 2025?', resolve: 'RESOLVES JUL 31, 2025', yes: 57, no: 43, vol: '$540K', voters: '3,712' },
-        { cat: 'POLITICS', sub: 'US ELECTION', color: '#E53935', q: 'Will a third-party candidate poll above 15% before Dec 2025?', resolve: 'RESOLVES DEC 31, 2025', yes: 22, no: 78, vol: '$1.1M', voters: '9,430' }
+        { cat: 'CRYPTO', sub: 'BITCOIN', color: '#D3B17C', q: 'Will Bitcoin set a new all-time high before July 31, 2025?', resolve: 'RESOLVES JUL 31, 2025', yes: 63, no: 37, vol: '$1.4M', voters: '8,241', video: 'https://cdn.shopify.com/videos/c/o/v/f5793c96f89445e0ba356a71a5e68934.mp4' },
+        { cat: 'CRYPTO', sub: 'ETHEREUM', color: '#627EEA', q: 'Will Ethereum trade above $5,000 before July 31, 2025?', resolve: 'RESOLVES JUL 31, 2025', yes: 48, no: 52, vol: '$890K', voters: '5,019', video: 'https://cdn.shopify.com/videos/c/o/v/9e3673e6650642e683899da8a4143304.mp4' },
+        { cat: 'CRYPTO', sub: 'SOLANA', color: '#00FFA3', q: 'Will Solana reach $300 or higher before July 31, 2025?', resolve: 'RESOLVES JUL 31, 2025', yes: 54, no: 46, vol: '$620K', voters: '4,102', video: 'https://cdn.shopify.com/videos/c/o/v/13b3dcfde3b443a6b92a2dc98192ca2b.mp4' },
+        { cat: 'COMMODITIES', sub: 'GOLD', color: '#D3B17C', q: 'Will Gold hit $3,500/oz before July 31, 2025?', resolve: 'RESOLVES JUL 31, 2025', yes: 41, no: 59, vol: '$310K', voters: '2,884', video: 'https://cdn.shopify.com/videos/c/o/v/77c46c1f13c1444d93ab15ebd85d6c5c.mp4' },
+        { cat: 'EQUITIES', sub: 'S&P 500', color: '#4CAF50', q: 'Will the S&P 500 close above 6,000 before July 31, 2025?', resolve: 'RESOLVES JUL 31, 2025', yes: 57, no: 43, vol: '$540K', voters: '3,712', video: 'https://cdn.shopify.com/videos/c/o/v/435e3b437de94e97b9f982ed59857209.mp4' },
+        { cat: 'POLITICS', sub: 'US ELECTION', color: '#E53935', q: 'Will a third-party candidate poll above 15% before Dec 2025?', resolve: 'RESOLVES DEC 31, 2025', yes: 22, no: 78, vol: '$1.1M', voters: '9,430', video: 'https://cdn.shopify.com/videos/c/o/v/661f11d196e64344af277c27672ba35a.mp4' }
       ];
       function injectMarkets() {
         if (!document.body) return;
@@ -382,7 +382,7 @@
             + '<h3 class="ok-mc-question">' + m.q + '</h3>'
             + '<div class="ok-mc-resolve">' + m.resolve + '</div>'
             // Video reel
-            + '<div class="ok-mc-reel"><video src="https://cdn.shopify.com/videos/c/o/v/6a3f8e09f831467084c05e4159ee45fe.mp4" autoplay muted loop playsinline></video></div>'
+            + '<div class="ok-mc-reel"><video src="' + m.video + '" autoplay muted loop playsinline></video></div>'
             // Percentage boxes (YES / NO)
             + '<div class="ok-mc-pcts">'
             + '<div class="ok-mc-pct yes"><span class="ok-mc-pct-val">' + m.yes + '%</span><span class="ok-mc-pct-label">YES</span></div>'

@@ -20,7 +20,7 @@ function migrate(db) {
     CREATE TABLE IF NOT EXISTS waitlist_users (
       id              INTEGER PRIMARY KEY AUTOINCREMENT,
       full_name       TEXT NOT NULL DEFAULT '',
-      email           TEXT UNIQUE,
+      
       phone           TEXT UNIQUE,
       created_at      TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%f','now')),
       referral_code   TEXT UNIQUE NOT NULL,
